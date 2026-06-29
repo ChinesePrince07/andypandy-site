@@ -50,7 +50,6 @@ Personal portfolio and blog built with Next.js 15. Features an about page, proje
 | Styling | Tailwind CSS 4, custom CSS |
 | Content | Markdown (gray-matter + marked), GitHub API |
 | Fonts | Inter, JetBrains Mono |
-| Deployment | Vercel |
 
 ## Getting Started
 
@@ -129,12 +128,6 @@ personal-site/
 ## Content Workflow
 
 Blog posts are written as markdown files in `content/blog/` and pushed to GitHub. The site fetches content from the GitHub API at request time with 60-second ISR revalidation, so updates appear within a minute of pushing.
-
-## Deployment
-
-**Deploy by pushing to `main` only.** Vercel auto-builds the `site/` root on every push, so the live deployment always matches a tracked commit.
-
-**Do not run `vercel deploy` / `vercel --prod` from a CLI working copy.** A CLI deploy creates an *untracked* production deployment (no git commit) that supersedes the git deployment and silently serves only whatever files were in that local copy. This already bit us once: a CLI deploy made after the album work landed in git clobbered the git deployment, dropping the `app/api/admin/albums/` routes — so `/api/admin/albums/` returned 404 in production even though the code was committed and built fine. If you must hotfix, commit to `main` and let Vercel deploy it.
 
 ## Scripts
 
