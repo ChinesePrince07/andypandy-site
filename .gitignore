@@ -6,4 +6,5 @@ node_modules/
 *.swo
 .vercel
 .env*.local
+.env.vercel
 tsconfig.tsbuildinfo
