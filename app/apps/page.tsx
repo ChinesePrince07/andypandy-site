@@ -43,7 +43,11 @@ export default async function AppsPage() {
                     <p className="font-semibold">{app.appName}</p>
                     <p className="text-xs text-gray-500">
                       v{app.version} ({app.build}) · {formatSize(app.sizeBytes)} ·{' '}
-                      {new Date(app.uploadedAt).toLocaleString()}
+                      {new Date(app.uploadedAt).toLocaleString('en-HK', {
+                        timeZone: 'Asia/Hong_Kong',
+                        dateStyle: 'medium',
+                        timeStyle: 'short',
+                      })}
                     </p>
                   </div>
                 </div>
