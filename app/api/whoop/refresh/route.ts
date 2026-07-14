@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
   })
   const json = await r.json().catch(() => ({}))
   if (!r.ok || !json.access_token) {
-    return Response.json({ error: 'whoop refresh failed' }, { status: 502 })
+    const reason = json.error_description || json.error || 'whoop refresh failed'
+    return Response.json({ error: reason, whoopStatus: r.status }, { status: 502 })
   }
   return Response.json({
     access_token: json.access_token,

@@ -40,7 +40,12 @@ export async function POST(req: NextRequest) {
   })
   const json = await r.json().catch(() => ({}))
   if (!r.ok || !json.access_token) {
-    return Response.json({ error: 'whoop exchange failed' }, { status: 502 })
+    // Surface WHOOP's real reason (invalid_client = stale/wrong secret,
+    // redirect_uri_mismatch = dashboard, invalid_grant = expired code) so the
+    // app can show it instead of a generic failure.
+    const reason = json.error_description || json.error || 'whoop exchange failed'
+    const hasSecret = Boolean(process.env.WHOOP_CLIENT_ID && process.env.WHOOP_CLIENT_SECRET)
+    return Response.json({ error: reason, whoopStatus: r.status, configured: hasSecret }, { status: 502 })
   }
   return Response.json({
     access_token: json.access_token,
