@@ -18,7 +18,7 @@ export const projects: Project[] = [
     slug: "andy-swiss-knife",
     repo: "ChinesePrince07/Andy-Swiss-Knife",
     description:
-      "A single iOS app that swallowed five of mine — todos, class schedule, dining menu, pomodoro, athletics, school events, and Canvas assignments. Built it so I'd stop juggling tabs between classes.",
+      "A personal iOS Swiss-army app for todos, classes, dining, pomodoro, school events, and Canvas assignments.",
     tags: ["Swift", "iOS"],
     emoji: "🔪",
   },
@@ -27,7 +27,7 @@ export const projects: Project[] = [
     slug: "servo-light-switch",
     repo: "ChinesePrince07/servo-light-switch",
     description:
-      "A tiny robot finger that flips my dorm light switch when I ask Siri. XIAO ESP32C3 + MG90S servo + HomeKit, because getting out of bed is hard.",
+      "A voice-controlled dorm light switch built with a XIAO ESP32C3, MG90S servo, and Apple HomeKit via HomeSpan.",
     tags: ["C++", "ESP32", "HomeKit"],
     emoji: "💡",
   },
@@ -36,7 +36,7 @@ export const projects: Project[] = [
     slug: "ti-84-gpt-hack",
     repo: "ChinesePrince07/TI-84-GPT-HACK",
     description:
-      "A mod that gives your TI-84 Wi-Fi, ChatGPT, and the ability to disappoint your math teacher in ways never thought possible.",
+      "A mod that gives a TI-84 Wi-Fi and ChatGPT. Reconstructed from Chromalock's original project after its repository was taken down.",
     tags: ["C", "ESP32", "Hardware"],
     emoji: "🧮",
   },
@@ -45,30 +45,20 @@ export const projects: Project[] = [
     slug: "desmos-bezier-renderer",
     repo: "ChinesePrince07/DesmosBezierRenderer-mac",
     description:
-      "Transform any image into mathematical art on Desmos. Uses Canny edge detection and Potrace to convert images into parametric Bezier curve equations.",
+      "Transforms images into Desmos art using Canny edge detection and Potrace to create parametric Bézier curves. Optimized for macOS.",
     tags: ["HTML", "Math", "macOS"],
     emoji: "📐",
-    demo: "https://desmos.andypandy.org/calculator",
+    demo: "https://desmos-renderer.vercel.app",
   },
   {
     name: "Suffield Drive",
     slug: "suffield-drive",
-    repo: "ChinesePrince07/Suffield-Drive",
+    repo: "ChinesePrince07/andypandy-suffield-drive",
     description:
-      "A shared drive for Suffield students to access and share school resources.",
+      "A drive for Suffield students to access and share school resources.",
     tags: ["TypeScript", "Web"],
     emoji: "☁️",
     demo: "https://suffield-drive.vercel.app",
-  },
-  {
-    name: "EXIF Photo Blog",
-    slug: "exif-photo-blog",
-    repo: "ChinesePrince07/exif-photo-blog-real",
-    description:
-      "A photography blog that reports camera details like aperture, shutter speed, and ISO for each image.",
-    tags: ["TypeScript", "Next.js", "Photography"],
-    emoji: "📷",
-    demo: "https://exif-photo-blog-real.vercel.app",
   },
   {
     name: "Taylor Series Visualizer",
@@ -90,15 +80,6 @@ export const projects: Project[] = [
     demo: "https://music-landing-page-commissioned.vercel.app",
   },
   {
-    name: "Stroke Prediction",
-    slug: "stroke-prediction",
-    repo: "ChinesePrince07/Stroke-Prediction",
-    description:
-      "ML model that predicts stroke likelihood based on patient data like age, BMI, glucose level, and smoking status.",
-    tags: ["Python", "ML", "Jupyter"],
-    emoji: "🧠",
-  },
-  {
     name: "Chatbot UI",
     slug: "chatbot-ui",
     repo: "ChinesePrince07/chatbot-ui",
@@ -106,6 +87,35 @@ export const projects: Project[] = [
     tags: ["TypeScript", "AI"],
     emoji: "💬",
     demo: "https://chatbot-ui-phi-one-74.vercel.app",
+  },
+  {
+    name: "Composerdle",
+    slug: "composerdle",
+    repo: "ChinesePrince07/composerdle",
+    description:
+      "A daily classical-composer guessing game with fact clues and public-domain recordings with redacted scores.",
+    tags: ["JavaScript", "Web", "Music"],
+    emoji: "🎼",
+    demo: "https://composerdle.andypandy.org",
+  },
+  {
+    name: "FitCheck",
+    slug: "fitcheck",
+    repo: "ChinesePrince07/fitcheck",
+    description:
+      "An AI virtual try-on app for previewing clothing on your own photo before you buy.",
+    tags: ["JavaScript", "AI", "Web"],
+    emoji: "👔",
+    demo: "https://fitcheck.andypandy.org",
+  },
+  {
+    name: "AI Usage Monitor",
+    slug: "ai-usage-monitor",
+    repo: "ChinesePrince07/ai-usage-monitor",
+    description:
+      "An ESP32 desk dashboard that tracks Claude, Codex, and Gemini CLI usage alongside live host statistics.",
+    tags: ["C", "ESP32", "Hardware"],
+    emoji: "📟",
   },
 ];
 
