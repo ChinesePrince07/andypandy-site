@@ -1,4 +1,8 @@
 import { unstable_cache } from "next/cache";
+import {
+  normalizeLiveSitesConfig,
+  type LiveSitesConfig,
+} from "./live-sites";
 import { r2GetText } from "./r2-storage";
 
 export interface Project {
@@ -10,6 +14,8 @@ export interface Project {
   demo?: string;
   repo: string;
   pinned?: boolean;
+  liveSiteOrder?: number;
+  liveSiteHidden?: boolean;
 }
 
 export const projects: Project[] = [
@@ -140,6 +146,7 @@ export const projects: Project[] = [
 
 export const PINNED_KEY = "content/pinned-projects.json";
 export const DELETED_KEY = "content/deleted-projects.json";
+export const LIVE_SITES_KEY = "content/live-projects.json";
 
 const loadPinnedSlugs = unstable_cache(
   async (): Promise<string[]> => {
@@ -177,15 +184,45 @@ export async function getDeletedSlugs(): Promise<string[]> {
   return loadDeletedSlugs();
 }
 
+const loadLiveSitesConfig = unstable_cache(
+  async (): Promise<LiveSitesConfig> => {
+    try {
+      const text = await r2GetText(LIVE_SITES_KEY);
+      const saved = text
+        ? (JSON.parse(text) as Partial<LiveSitesConfig>)
+        : null;
+      return normalizeLiveSitesConfig(projects, saved);
+    } catch {
+      return normalizeLiveSitesConfig(projects, null);
+    }
+  },
+  ["live-projects-config"],
+  { tags: ["live-projects"], revalidate: 60 },
+);
+
+export async function getLiveSitesConfig(): Promise<LiveSitesConfig> {
+  return loadLiveSitesConfig();
+}
+
 // Public projects follow GitHub creation date (newest first), with soft-deleted projects hidden.
 export async function getProjectsWithPins(): Promise<Project[]> {
-  const [pinned, deleted] = await Promise.all([
+  const [pinned, deleted, liveSites] = await Promise.all([
     getPinnedSlugs(),
     getDeletedSlugs(),
+    getLiveSitesConfig(),
   ]);
+  const liveSiteOrder = new Map(
+    liveSites.order.map((slug, index) => [slug, index]),
+  );
+  const hiddenLiveSites = new Set(liveSites.hidden);
   const withPins = projects
     .filter((p) => !deleted.includes(p.slug))
-    .map((p) => ({ ...p, pinned: pinned.includes(p.slug) }));
+    .map((p) => ({
+      ...p,
+      pinned: pinned.includes(p.slug),
+      liveSiteOrder: liveSiteOrder.get(p.slug),
+      liveSiteHidden: hiddenLiveSites.has(p.slug),
+    }));
   return withPins;
 }
 
@@ -193,14 +230,21 @@ export async function getProjectsWithPins(): Promise<Project[]> {
 export async function getProjectsForAdmin(): Promise<
   (Project & { deleted: boolean })[]
 > {
-  const [pinned, deleted] = await Promise.all([
+  const [pinned, deleted, liveSites] = await Promise.all([
     getPinnedSlugs(),
     getDeletedSlugs(),
+    getLiveSitesConfig(),
   ]);
+  const liveSiteOrder = new Map(
+    liveSites.order.map((slug, index) => [slug, index]),
+  );
+  const hiddenLiveSites = new Set(liveSites.hidden);
   const all = projects.map((p) => ({
     ...p,
     pinned: pinned.includes(p.slug),
     deleted: deleted.includes(p.slug),
+    liveSiteOrder: liveSiteOrder.get(p.slug),
+    liveSiteHidden: hiddenLiveSites.has(p.slug),
   }));
   return [
     ...all.filter((p) => p.pinned && !p.deleted),

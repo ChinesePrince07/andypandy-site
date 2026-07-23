@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { normalizeLiveSitesConfig } from "./live-sites";
+import {
+  normalizeLiveSitesConfig,
+  selectVisibleLiveSites,
+} from "./live-sites";
 
 const projects = [
   { slug: "alpha", demo: "https://alpha.example.com" },
@@ -38,5 +41,18 @@ describe("normalizeLiveSitesConfig", () => {
       order: ["gamma", "alpha", "beta"],
       hidden: ["beta"],
     });
+  });
+});
+
+describe("selectVisibleLiveSites", () => {
+  it("returns visible demo projects in the configured order", () => {
+    const config = normalizeLiveSitesConfig(projects, {
+      order: ["gamma", "beta", "alpha"],
+      hidden: ["beta"],
+    });
+
+    expect(
+      selectVisibleLiveSites(projects, config).map((project) => project.slug),
+    ).toEqual(["gamma", "alpha"]);
   });
 });

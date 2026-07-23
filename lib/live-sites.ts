@@ -40,3 +40,16 @@ export function normalizeLiveSitesConfig(
     hidden: uniqueKnownSlugs(config?.hidden, known),
   };
 }
+
+export function selectVisibleLiveSites<T extends LiveSiteProject>(
+  projects: T[],
+  config: LiveSitesConfig,
+): T[] {
+  const bySlug = new Map(projects.map((project) => [project.slug, project]));
+  const hidden = new Set(config.hidden);
+
+  return config.order.flatMap((slug) => {
+    const project = bySlug.get(slug);
+    return project?.demo && !hidden.has(slug) ? [project] : [];
+  });
+}

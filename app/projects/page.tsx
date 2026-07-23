@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getProjectsWithPins } from "@/lib/projects";
+import { selectVisibleLiveSites } from "@/lib/live-sites";
+import { getLiveSitesConfig, getProjectsWithPins } from "@/lib/projects";
 
 export const dynamic = "force-dynamic";
 
@@ -9,8 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-  const projects = await getProjectsWithPins();
-  const liveProjects = projects.filter((project) => project.demo);
+  const [projects, liveSitesConfig] = await Promise.all([
+    getProjectsWithPins(),
+    getLiveSitesConfig(),
+  ]);
+  const liveProjects = selectVisibleLiveSites(projects, liveSitesConfig);
 
   return (
     <div className="space-y-10">

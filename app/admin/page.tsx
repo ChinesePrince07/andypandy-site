@@ -31,6 +31,9 @@ export default async function AdminPage() {
         emoji: p.emoji,
         pinned: p.pinned ?? false,
         deleted: p.deleted ?? false,
+        demo: p.demo,
+        liveSiteOrder: p.liveSiteOrder,
+        liveSiteHidden: p.liveSiteHidden ?? false,
       }))}
     />
   );
