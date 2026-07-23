@@ -3,6 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import LiveSitesManager, {
+  type LiveSiteProjectItem,
+} from "./live-sites-manager";
 
 interface Post {
   slug: string;
@@ -12,12 +15,8 @@ interface Post {
   pinned: boolean;
 }
 
-interface ProjectItem {
-  slug: string;
-  name: string;
-  emoji: string;
+interface ProjectItem extends LiveSiteProjectItem {
   pinned: boolean;
-  deleted: boolean;
 }
 
 export default function PostList({
@@ -195,6 +194,8 @@ export default function PostList({
           <p className="text-center text-gray-400 py-6">No posts yet.</p>
         )}
       </div>
+
+      <LiveSitesManager projects={projects} />
 
       {/* Projects */}
       <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">

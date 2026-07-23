@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  moveVisibleLiveSite,
   normalizeLiveSitesConfig,
   selectVisibleLiveSites,
+  setLiveSiteHidden,
 } from "./live-sites";
 
 const projects = [
@@ -54,5 +56,37 @@ describe("selectVisibleLiveSites", () => {
     expect(
       selectVisibleLiveSites(projects, config).map((project) => project.slug),
     ).toEqual(["gamma", "alpha"]);
+  });
+});
+
+describe("live site admin ordering", () => {
+  const items = [
+    { slug: "alpha", liveSiteHidden: false },
+    { slug: "beta", liveSiteHidden: false },
+    { slug: "gamma", liveSiteHidden: true },
+  ];
+
+  it("moves a visible site within the visible order", () => {
+    expect(
+      moveVisibleLiveSite(items, "beta", -1).map((item) => item.slug),
+    ).toEqual(["beta", "alpha", "gamma"]);
+  });
+
+  it("does not move a site beyond the visible list boundary", () => {
+    expect(moveVisibleLiveSite(items, "alpha", -1)).toEqual(items);
+  });
+
+  it("moves hidden sites after visible sites and restores them at the end", () => {
+    const hidden = setLiveSiteHidden(items, "beta", true);
+    expect(hidden.map((item) => item.slug)).toEqual(["alpha", "beta", "gamma"]);
+    expect(hidden[1].liveSiteHidden).toBe(true);
+
+    const restored = setLiveSiteHidden(hidden, "gamma", false);
+    expect(restored.map((item) => item.slug)).toEqual([
+      "alpha",
+      "gamma",
+      "beta",
+    ]);
+    expect(restored[1].liveSiteHidden).toBe(false);
   });
 });

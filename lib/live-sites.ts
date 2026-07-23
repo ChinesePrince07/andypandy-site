@@ -8,6 +8,11 @@ interface LiveSiteProject {
   demo?: string;
 }
 
+interface LiveSiteAdminItem {
+  slug: string;
+  liveSiteHidden: boolean;
+}
+
 function uniqueKnownSlugs(values: unknown, known: Set<string>): string[] {
   if (!Array.isArray(values)) return [];
 
@@ -52,4 +57,36 @@ export function selectVisibleLiveSites<T extends LiveSiteProject>(
     const project = bySlug.get(slug);
     return project?.demo && !hidden.has(slug) ? [project] : [];
   });
+}
+
+export function moveVisibleLiveSite<T extends LiveSiteAdminItem>(
+  items: T[],
+  slug: string,
+  direction: -1 | 1,
+): T[] {
+  const visible = items.filter((item) => !item.liveSiteHidden);
+  const hidden = items.filter((item) => item.liveSiteHidden);
+  const index = visible.findIndex((item) => item.slug === slug);
+  const target = index + direction;
+
+  if (index < 0 || target < 0 || target >= visible.length) {
+    return items;
+  }
+
+  [visible[index], visible[target]] = [visible[target], visible[index]];
+  return [...visible, ...hidden];
+}
+
+export function setLiveSiteHidden<T extends LiveSiteAdminItem>(
+  items: T[],
+  slug: string,
+  hidden: boolean,
+): T[] {
+  const updated = items.map((item) =>
+    item.slug === slug ? { ...item, liveSiteHidden: hidden } : item,
+  );
+  return [
+    ...updated.filter((item) => !item.liveSiteHidden),
+    ...updated.filter((item) => item.liveSiteHidden),
+  ];
 }
