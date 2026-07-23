@@ -33,6 +33,25 @@ export const projects: Project[] = [
     emoji: "📟",
   },
   {
+    name: "Cbum Transformation",
+    slug: "cbum-transformation",
+    repo: "ChinesePrince07/Andy-Cbum-Transformation",
+    description:
+      "A local-first iOS training system for programming workouts, logging sets, and measuring readiness against personal health baselines.",
+    tags: ["TypeScript", "React Native", "iOS"],
+    emoji: "💪",
+  },
+  {
+    name: "Concert Creator",
+    slug: "concert-creator",
+    repo: "ChinesePrince07/concert-creator-ai",
+    description:
+      "Turns piano audio or MIDI into a locally rendered 3D virtual-pianist performance with automated fingering, choreography, and cameras.",
+    tags: ["TypeScript", "Three.js", "Music"],
+    emoji: "🎹",
+    demo: "https://concert-creator-ai.vercel.app",
+  },
+  {
     name: "FitCheck",
     slug: "fitcheck",
     repo: "ChinesePrince07/fitcheck",
