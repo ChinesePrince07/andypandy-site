@@ -14,6 +14,35 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    name: "Composerdle",
+    slug: "composerdle",
+    repo: "ChinesePrince07/composerdle",
+    description:
+      "A daily classical-composer guessing game with fact clues and public-domain recordings with redacted scores.",
+    tags: ["JavaScript", "Web", "Music"],
+    emoji: "🎼",
+    demo: "https://composerdle.andypandy.org",
+  },
+  {
+    name: "AI Usage Monitor",
+    slug: "ai-usage-monitor",
+    repo: "ChinesePrince07/ai-usage-monitor",
+    description:
+      "An ESP32 desk dashboard that tracks Claude, Codex, and Gemini CLI usage alongside live host statistics.",
+    tags: ["C", "ESP32", "Hardware"],
+    emoji: "📟",
+  },
+  {
+    name: "FitCheck",
+    slug: "fitcheck",
+    repo: "ChinesePrince07/fitcheck",
+    description:
+      "An AI virtual try-on app for previewing clothing on your own photo before you buy.",
+    tags: ["JavaScript", "AI", "Web"],
+    emoji: "👔",
+    demo: "https://fitcheck.andypandy.org",
+  },
+  {
     name: "Andy's Swiss Knife",
     slug: "andy-swiss-knife",
     repo: "ChinesePrince07/Andy-Swiss-Knife",
@@ -61,6 +90,15 @@ export const projects: Project[] = [
     demo: "https://suffield-drive.vercel.app",
   },
   {
+    name: "Music Landing Page",
+    slug: "music-landing-page",
+    repo: "ChinesePrince07/music-landing-page-commissioned",
+    description: "A commissioned landing page for a music artist.",
+    tags: ["HTML", "Design"],
+    emoji: "🎵",
+    demo: "https://music-landing-page-commissioned.vercel.app",
+  },
+  {
     name: "Taylor Series Visualizer",
     slug: "taylor-series",
     repo: "ChinesePrince07/taylorseries-CALCBC",
@@ -71,15 +109,6 @@ export const projects: Project[] = [
     demo: "https://taylorseries-calcbc.vercel.app",
   },
   {
-    name: "Music Landing Page",
-    slug: "music-landing-page",
-    repo: "ChinesePrince07/music-landing-page-commissioned",
-    description: "A commissioned landing page for a music artist.",
-    tags: ["HTML", "Design"],
-    emoji: "🎵",
-    demo: "https://music-landing-page-commissioned.vercel.app",
-  },
-  {
     name: "Chatbot UI",
     slug: "chatbot-ui",
     repo: "ChinesePrince07/chatbot-ui",
@@ -87,35 +116,6 @@ export const projects: Project[] = [
     tags: ["TypeScript", "AI"],
     emoji: "💬",
     demo: "https://chatbot-ui-phi-one-74.vercel.app",
-  },
-  {
-    name: "Composerdle",
-    slug: "composerdle",
-    repo: "ChinesePrince07/composerdle",
-    description:
-      "A daily classical-composer guessing game with fact clues and public-domain recordings with redacted scores.",
-    tags: ["JavaScript", "Web", "Music"],
-    emoji: "🎼",
-    demo: "https://composerdle.andypandy.org",
-  },
-  {
-    name: "FitCheck",
-    slug: "fitcheck",
-    repo: "ChinesePrince07/fitcheck",
-    description:
-      "An AI virtual try-on app for previewing clothing on your own photo before you buy.",
-    tags: ["JavaScript", "AI", "Web"],
-    emoji: "👔",
-    demo: "https://fitcheck.andypandy.org",
-  },
-  {
-    name: "AI Usage Monitor",
-    slug: "ai-usage-monitor",
-    repo: "ChinesePrince07/ai-usage-monitor",
-    description:
-      "An ESP32 desk dashboard that tracks Claude, Codex, and Gemini CLI usage alongside live host statistics.",
-    tags: ["C", "ESP32", "Hardware"],
-    emoji: "📟",
   },
 ];
 
@@ -158,7 +158,7 @@ export async function getDeletedSlugs(): Promise<string[]> {
   return loadDeletedSlugs();
 }
 
-// Public projects: pinned first, with soft-deleted projects hidden.
+// Public projects follow GitHub creation date (newest first), with soft-deleted projects hidden.
 export async function getProjectsWithPins(): Promise<Project[]> {
   const [pinned, deleted] = await Promise.all([
     getPinnedSlugs(),
@@ -167,10 +167,7 @@ export async function getProjectsWithPins(): Promise<Project[]> {
   const withPins = projects
     .filter((p) => !deleted.includes(p.slug))
     .map((p) => ({ ...p, pinned: pinned.includes(p.slug) }));
-  return [
-    ...withPins.filter((p) => p.pinned),
-    ...withPins.filter((p) => !p.pinned),
-  ];
+  return withPins;
 }
 
 // Admin view: every project with pinned + deleted flags (deleted shown last).
