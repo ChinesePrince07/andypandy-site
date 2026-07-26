@@ -53,6 +53,27 @@ const HONOURS = [
   { what: "Carnegie Hall — first place, NYGCMA", year: "2024" },
 ];
 
+// GPA by school. Kept here rather than in about.json because that file is
+// R2-backed and its stored copy has no gpa field — a default would be
+// silently overridden by the saved data.
+const GPA: Record<string, string> = {
+  "Suffield Academy": "GPA 4.14",
+};
+
+// Summer programmes, deliberately quieter than the degrees above them.
+const SUMMER_COURSES = [
+  {
+    school: "University of Chicago",
+    detail: "PHIL 20218 — Philosophy of Life and Death",
+    grade: "A · 4.0",
+  },
+  {
+    school: "Portland State University",
+    detail: "INTL 404 — field research credit",
+    grade: "A",
+  },
+];
+
 function skillLine(
   skills: { category: string; items: string[] }[],
   category: string,
@@ -197,14 +218,43 @@ export default async function FrontPage() {
                 />
               </span>
             )}
-            <div className="min-w-0">
-              <div className="headline text-[17px] leading-tight">
-                {entry.school}
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="headline truncate text-[17px] leading-tight">
+                  {entry.school}
+                </span>
+                {GPA[entry.school] && (
+                  <span className="mono shrink-0 text-[9px] tracking-[0.1em] text-accent">
+                    {GPA[entry.school]}
+                  </span>
+                )}
               </div>
               <div className="mono text-[8.5px] uppercase tracking-[0.14em] text-faint">
                 {entry.year} &middot; {entry.location}
               </div>
             </div>
+          </div>
+        ))}
+
+        <div className="mono mt-2 text-[8px] uppercase tracking-[0.16em] text-faint">
+          Summer courses
+        </div>
+        {SUMMER_COURSES.map((c) => (
+          <div
+            key={c.school}
+            className="flex items-baseline justify-between gap-2 border-b border-hairline py-1"
+          >
+            <span className="min-w-0">
+              <span className="block truncate text-[12px] leading-tight text-body">
+                {c.school}
+              </span>
+              <span className="mono block truncate text-[8px] uppercase tracking-[0.12em] text-faint">
+                {c.detail}
+              </span>
+            </span>
+            <span className="mono shrink-0 text-[8.5px] tracking-[0.1em] text-faint">
+              {c.grade}
+            </span>
           </div>
         ))}
       </div>
