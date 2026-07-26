@@ -44,6 +44,15 @@ const LINKS = [
   },
 ];
 
+// Selected honours, kept short on purpose — the fuller record is the CV.
+const HONOURS = [
+  { what: "USAMO qualifier — AIME 12/15", year: "2026" },
+  { what: "John Locke Essay Competition, shortlisted", year: "2025" },
+  { what: "National Merit Semifinalist — perfect PSAT", year: "2025" },
+  { what: "First place, NY Golden Classical Music Award", year: "2024" },
+  { what: "AAPT Physics Bowl, top 10%", year: "2025" },
+];
+
 function shortDate(value: string): string {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
@@ -128,6 +137,22 @@ export default async function FrontPage() {
             </p>
           ))}
         </div>
+
+        <div data-reveal className="kicker mt-4">
+          Selected honours
+        </div>
+        <div data-rule className="rule-bar mt-1.5" />
+        {HONOURS.map((h) => (
+          <div
+            key={h.what}
+            className="flex items-baseline justify-between gap-3 border-b border-hairline py-[5px]"
+          >
+            <span className="text-[13px] leading-snug text-body">{h.what}</span>
+            <span className="mono shrink-0 text-[9px] tabular-nums tracking-[0.12em] text-faint">
+              {h.year}
+            </span>
+          </div>
+        ))}
       </div>
     ),
     spec: (

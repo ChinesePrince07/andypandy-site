@@ -23,24 +23,32 @@ export default async function BlogPage() {
 
   return (
     <div>
-      <section className="border-b border-rule px-4 py-10 sm:px-11 sm:py-[68px]">
-        <div data-reveal className="kicker">
-          The blog
-        </div>
-        <h1
-          data-reveal
-          data-parallax="0.04"
-          className="headline mt-2.5 max-w-[820px]"
-          style={{ fontSize: "clamp(40px, 6vw, 74px)" }}
-        >
-          Thoughts, tutorials, and updates
-        </h1>
-        <p data-reveal className="label mt-3 text-[10.5px]">
-          {posts.length} {posts.length === 1 ? "dispatch" : "dispatches"}{" "}
-          &middot;{" "}
-          <Link href="/feed.xml" className="text-accent">
-            RSS at /feed.xml
+      <section className="border-b border-rule px-4 py-5 sm:px-11 sm:py-6">
+        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+          <div className="min-w-0">
+            <div data-reveal className="kicker">
+              The blog
+            </div>
+            <h1
+              data-reveal
+              data-parallax="0.04"
+              className="headline mt-1.5"
+              style={{ fontSize: "clamp(34px, 4.4vw, 56px)" }}
+            >
+              Blog
+            </h1>
+          </div>
+          <Link
+            href="/feed.xml"
+            data-reveal
+            className="mono shrink-0 border-b border-accent pb-px text-[10px] uppercase tracking-[0.16em] text-accent"
+          >
+            RSS &#8599;
           </Link>
+        </div>
+        <p data-reveal className="label mt-2 text-[10.5px]">
+          {posts.length} {posts.length === 1 ? "dispatch" : "dispatches"}{" "}
+
         </p>
       </section>
 
