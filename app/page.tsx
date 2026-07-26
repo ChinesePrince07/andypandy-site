@@ -325,6 +325,24 @@ export default async function FrontPage() {
               </div>
             </div>
 
+            {(!isHidden("portrait", frontPage) || admin) && (
+              <div
+                data-block="portrait"
+                data-block-hidden={hiddenAttr("portrait")}
+                className="hidden sm:block"
+              >
+                <Portrait size={188} config={frontPage} />
+              </div>
+            )}
+            {(!isHidden("portrait", frontPage) || admin) && (
+              <div
+                data-block="portrait"
+                data-block-hidden={hiddenAttr("portrait")}
+                className="sm:hidden"
+              >
+                <Portrait size={92} config={frontPage} />
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -399,21 +417,7 @@ export default async function FrontPage() {
         </section>
 
         {/* Schooling, correspondence, pictures */}
-        <section className="px-4 py-4 sm:px-7 sm:py-3.5">
-          {(!isHidden("portrait", frontPage) || admin) && (
-            <div
-              data-block="portrait"
-              data-block-hidden={hiddenAttr("portrait")}
-              className="mb-5"
-            >
-              <div className="hidden lg:block">
-                <Portrait size={252} config={frontPage} />
-              </div>
-              <div className="lg:hidden">
-                <Portrait size={168} config={frontPage} />
-              </div>
-            </div>
-          )}
+        <section className="px-4 py-4 sm:px-7 sm:py-3.5 lg:pt-12">
           {sidebarOrder.map((id, i) =>
             i === 0 ? (
               sidebarBlocks[id]
