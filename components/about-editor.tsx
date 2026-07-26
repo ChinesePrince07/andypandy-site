@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { AboutData } from "@/lib/about";
 
 type Section = null | "bio" | "education" | "skills" | "timeline";
+
+/**
+ * The page overlay owns the only floating button on the front page, so it
+ * opens this picker by event rather than through a prop — the component
+ * between them (app/page.tsx) is a server component and cannot hold state.
+ */
+export const EDIT_ABOUT_EVENT = "andypandy:edit-about";
 
 const inputClass =
   "w-full border border-rule bg-wash px-3 py-2 text-sm ";
@@ -13,6 +20,12 @@ export default function AboutEditor({ data }: { data: AboutData }) {
   const [editing, setEditing] = useState<Section>(null);
   const [draft, setDraft] = useState<AboutData>(data);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    const show = () => setOpen(true);
+    window.addEventListener(EDIT_ABOUT_EVENT, show);
+    return () => window.removeEventListener(EDIT_ABOUT_EVENT, show);
+  }, []);
 
   function startEdit(section: Section) {
     setDraft(data);
@@ -39,30 +52,10 @@ export default function AboutEditor({ data }: { data: AboutData }) {
 
   return (
     <>
-      {/* FAB */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-[190] flex h-12 w-12 items-center justify-center rounded-full bg-ink text-paper transition-transform hover:scale-105 active:scale-95 "
-        aria-label="Edit page"
-      >
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-          />
-        </svg>
-      </button>
-
-      {/* FAB menu */}
+      {/* Section picker, opened by the page overlay. Sits beside the pill
+          rather than above it, where the pill's own menu lives. */}
       {open && (
-        <div className="fixed bottom-20 right-6 z-[190] flex flex-col gap-2 border border-rule bg-paper p-2 ">
+        <div className="fixed bottom-6 right-[8.5rem] z-[190] flex flex-col gap-2 border border-rule bg-paper p-2 ">
           {(["bio", "education", "skills", "timeline"] as const).map((s) => (
             <button
               key={s}
@@ -72,6 +65,12 @@ export default function AboutEditor({ data }: { data: AboutData }) {
               {s}
             </button>
           ))}
+          <button
+            onClick={() => setOpen(false)}
+            className="px-4 py-2 text-left text-sm font-medium text-faint hover:bg-wash"
+          >
+            Close
+          </button>
         </div>
       )}
 

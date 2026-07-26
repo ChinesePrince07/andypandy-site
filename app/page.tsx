@@ -2,6 +2,7 @@ import Link from "next/link";
 import TypingRoles from "@/components/typing-roles";
 import Portrait from "@/components/portrait";
 import AboutEditor from "@/components/about-editor";
+import PageEditor from "@/components/page-editor";
 import Copy from "@/components/copy";
 import { getAboutData } from "@/lib/about";
 import { getAllPosts } from "@/lib/blog";
@@ -305,7 +306,7 @@ export default async function FrontPage() {
                 data-block-hidden={hiddenAttr("portrait")}
                 className="hidden sm:block"
               >
-                <Portrait size={140} />
+                <Portrait size={140} config={frontPage} />
               </div>
             )}
             {(!isHidden("portrait", frontPage) || admin) && (
@@ -314,7 +315,7 @@ export default async function FrontPage() {
                 data-block-hidden={hiddenAttr("portrait")}
                 className="sm:hidden"
               >
-                <Portrait size={92} />
+                <Portrait size={92} config={frontPage} />
               </div>
             )}
           </div>
@@ -432,10 +433,13 @@ export default async function FrontPage() {
         </section>
       )}
 
+      {/* Both editors draw only fixed-position chrome, so the admin's copy
+          of the page has the same layout as the visitor's. */}
       {admin && (
-        <div className="border-t border-rule px-4 py-8 sm:px-11">
+        <>
+          <PageEditor hidden={frontPage.hidden} />
           <AboutEditor data={about} />
-        </div>
+        </>
       )}
     </div>
   );

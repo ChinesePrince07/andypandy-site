@@ -1,5 +1,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
+import Copy from "@/components/copy";
+import type { FrontPageConfig } from "@/lib/front-page";
 
 // ponytail: existence check instead of a config flag — drop a photo at
 // public/portrait.jpg and the plate picks it up, no code change.
@@ -10,7 +12,13 @@ const hasPhoto = existsSync(path.join(process.cwd(), "public", "portrait.jpg"));
  * Fig. 1 — halftone author plate. Two offset impressions of the same
  * image plus an accent pass, so it misregisters like cheap colour print.
  */
-export default function Portrait({ size = 250 }: { size?: number }) {
+export default function Portrait({
+  size = 250,
+  config,
+}: {
+  size?: number;
+  config: FrontPageConfig;
+}) {
   return (
     <aside data-reveal className="shrink-0" style={{ width: size, marginTop: 4 }}>
       <div
@@ -76,7 +84,7 @@ export default function Portrait({ size = 250 }: { size?: number }) {
         )}
       </div>
       <div className="mono mt-[9px] flex items-baseline justify-between gap-2.5 border-t border-rule pt-2 text-[9.5px] uppercase tracking-[0.14em]">
-        <span className="text-muted">The author</span>
+        <Copy k="portrait.caption" config={config} className="text-muted" />
         <span className="text-faint">Fig. 1</span>
       </div>
     </aside>
