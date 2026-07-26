@@ -204,7 +204,12 @@ export async function getProjectsWithPins(): Promise<Project[]> {
       liveSiteOrder: liveSiteOrder.get(p.slug),
       liveSiteHidden: hiddenLiveSites.has(p.slug),
     }));
-  return withPins;
+  // Pinned first, otherwise source order. Stable, so unpinned projects keep
+  // their existing sequence rather than shuffling when something is pinned.
+  return [
+    ...withPins.filter((p) => p.pinned),
+    ...withPins.filter((p) => !p.pinned),
+  ];
 }
 
 // Admin view: every project with pinned + deleted flags (deleted shown last).

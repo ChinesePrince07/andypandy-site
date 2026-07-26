@@ -331,7 +331,7 @@ export default async function FrontPage() {
         <section
           data-block="hero"
           data-block-hidden={hiddenAttr("hero")}
-          className="border-b border-rule px-4 py-5 sm:px-11 sm:py-[14px]"
+          className="border-b border-rule px-4 py-4 sm:px-11 sm:py-2.5"
         >
           <div className="flex items-start justify-between gap-6 sm:gap-12">
             <div className="min-w-0">
@@ -343,7 +343,7 @@ export default async function FrontPage() {
                 data-parallax="0.04"
                 className="headline mt-1.5"
                 style={{
-                  fontSize: "clamp(46px, 6vw, 84px)",
+                  fontSize: "clamp(40px, 5.2vw, 72px)",
                   lineHeight: 0.88,
                   letterSpacing: "-0.04em",
                 }}
@@ -352,9 +352,9 @@ export default async function FrontPage() {
               </h1>
               <p
                 data-reveal
-                className="headline mt-2 max-w-[640px]"
+                className="headline mt-1.5 max-w-[640px]"
                 style={{
-                  fontSize: "clamp(19px, 2.1vw, 25px)",
+                  fontSize: "clamp(18px, 1.85vw, 22px)",
                   lineHeight: 1.14,
                   letterSpacing: "-0.015em",
                 }}
@@ -363,7 +363,7 @@ export default async function FrontPage() {
               </p>
               <div
                 data-reveal
-                className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
+                className="mt-2 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
               >
                 <span className="mono flex items-center gap-2.5 text-[10px]">
                   <span className="shrink-0 bg-accent px-2 py-0.5 uppercase tracking-[0.14em] text-paper">
@@ -384,7 +384,7 @@ export default async function FrontPage() {
                 data-block-hidden={hiddenAttr("portrait")}
                 className="hidden sm:block"
               >
-                <Portrait size={140} config={frontPage} />
+                <Portrait size={124} config={frontPage} />
               </div>
             )}
             {(!isHidden("portrait", frontPage) || admin) && (
