@@ -60,7 +60,7 @@ export default async function BlogPostPage({
             href="/blog"
             className="text-faint transition-colors hover:text-accent"
           >
-            &larr; The notebook
+            &larr; The blog
           </Link>
           {admin && (
             <Link

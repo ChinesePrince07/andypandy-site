@@ -48,16 +48,6 @@ export const projects: Project[] = [
     emoji: "💪",
   },
   {
-    name: "Concert Creator",
-    slug: "concert-creator",
-    repo: "ChinesePrince07/concert-creator-ai",
-    description:
-      "Turns piano audio or MIDI into a locally rendered 3D virtual-pianist performance with automated fingering, choreography, and cameras.",
-    tags: ["TypeScript", "Three.js", "Music"],
-    emoji: "🎹",
-    demo: "https://concert-creator-ai.vercel.app",
-  },
-  {
     name: "FitCheck",
     slug: "fitcheck",
     repo: "ChinesePrince07/fitcheck",
@@ -102,7 +92,7 @@ export const projects: Project[] = [
       "Transforms images into Desmos art using Canny edge detection and Potrace to create parametric Bézier curves. Optimized for macOS.",
     tags: ["HTML", "Math", "macOS"],
     emoji: "📐",
-    demo: "https://desmos-renderer.vercel.app",
+    demo: "https://desmos.andypandy.org",
   },
   {
     name: "Suffield Drive",
@@ -112,16 +102,7 @@ export const projects: Project[] = [
       "A drive for Suffield students to access and share school resources.",
     tags: ["TypeScript", "Web"],
     emoji: "☁️",
-    demo: "https://suffield-drive.vercel.app",
-  },
-  {
-    name: "Music Landing Page",
-    slug: "music-landing-page",
-    repo: "ChinesePrince07/music-landing-page-commissioned",
-    description: "A commissioned landing page for a music artist.",
-    tags: ["HTML", "Design"],
-    emoji: "🎵",
-    demo: "https://music-landing-page-commissioned.vercel.app",
+    demo: "https://study.andypandy.org",
   },
   {
     name: "Taylor Series Visualizer",

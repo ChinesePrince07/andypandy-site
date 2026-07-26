@@ -25,7 +25,7 @@ export default async function BlogPage() {
     <div>
       <section className="border-b border-rule px-4 py-10 sm:px-11 sm:py-[68px]">
         <div data-reveal className="kicker">
-          The notebook
+          The blog
         </div>
         <h1
           data-reveal

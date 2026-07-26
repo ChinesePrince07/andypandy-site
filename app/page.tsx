@@ -87,12 +87,12 @@ export default async function FrontPage() {
       getFrontPageConfig(),
     ]);
   const live = selectVisibleLiveSites(projects, liveConfig);
-  const topPosts = posts.slice(0, 3);
+  const topPosts = posts.slice(0, 5);
 
   // The ledger is derived, not written down twice — it cannot drift from
   // what the directory and the notebook actually contain.
   const spec = [
-    { k: "Base", v: "Berkeley, California" },
+    { k: "Base", v: "Hong Kong" },
     { k: "Builds", v: `${projects.length} projects, ${live.length} live` },
     {
       k: "Writing",
@@ -344,7 +344,7 @@ export default async function FrontPage() {
         <section
           data-block="notebook"
           data-block-hidden={hiddenAttr("notebook")}
-          className="border-b border-rule px-4 py-4 sm:px-7 sm:py-3.5 lg:border-b-0 lg:border-r"
+          className="border-b border-rule px-4 py-4 sm:px-7 sm:py-3.5 lg:min-h-0 lg:overflow-hidden lg:border-b-0 lg:border-r"
         >
           {(!isHidden("notebook", frontPage) || admin) && (
             <>

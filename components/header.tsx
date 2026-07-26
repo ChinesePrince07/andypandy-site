@@ -24,7 +24,7 @@ const LINKS = [
 function pageLabel(pathname: string): string {
   if (pathname === "/") return "The Front Page";
   if (pathname.startsWith("/projects")) return "The Directory";
-  if (pathname.startsWith("/blog")) return "The Notebook";
+  if (pathname.startsWith("/blog")) return "The Blog";
   if (pathname.startsWith("/travels")) return "The Itinerary";
   if (pathname.startsWith("/photos")) return "The Plates";
   if (pathname.startsWith("/admin")) return "The Composing Room";
@@ -162,9 +162,9 @@ export default function Header() {
             {dateline.long ? (
               <>
                 <span className="hidden sm:inline">
-                  {dateline.long} · Berkeley, California
+                  {dateline.long} · Hong Kong
                 </span>
-                <span className="sm:hidden">Berkeley · {dateline.short}</span>
+                <span className="sm:hidden">Hong Kong · {dateline.short}</span>
               </>
             ) : (
               " "
