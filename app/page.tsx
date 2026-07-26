@@ -53,38 +53,62 @@ const HONOURS = [
   { what: "AAPT Physics Bowl, top 10%", year: "2025" },
 ];
 
-// Experience, front-loaded for someone skimming. The blog lives behind the
-// nav; this column earns its space with work history instead.
+// Experience, newest first. `detail` is revealed by a native <details>, so
+// the column stays compact until something is clicked.
 const EXPERIENCE = [
   {
-    role: "Research Intern",
-    org: "InnoBridge Institute & MIT",
-    when: "Summer 2024",
-    note: "Neural-network models predicting stroke risk from clinical biomarkers. Built the preprocessing pipeline and a clinician-facing web app; co-authored the paper.",
+    role: "Co-founder · Captain",
+    org: "Suffield Robotics & Math Team",
+    when: "2024 —",
+    note: "Qualified for the FTC Wolcott Qualifier. Run school-wide AMC prep and weekly contests.",
+    detail: [
+      "Co-founded the robotics team and qualified for the FTC Wolcott Qualifier, programming and teleoperating the controls in Java.",
+      "Captain of the math team: organise practices, AMC preparation and weekly school-wide contests.",
+      "President of the chess club and a school-appointed peer tutor for maths and science.",
+    ],
   },
   {
     role: "Conservation Intern",
     org: "BioSur Foundation, Costa Rica",
     when: "Summer 2025",
-    note: "Biodiversity surveys and habitat monitoring in the Osa Peninsula. Passed with distinction; 2 credits through Portland State.",
-  },
-  {
-    role: "Summer Intern",
-    org: "PwC YouPlus Programme",
-    when: "Summer 2023",
-    note: "Accounting fundamentals, Power BI and Excel modelling. Built a business plan for Buy42, a donation-based charity shop in Shanghai.",
+    note: "Biodiversity surveys and habitat monitoring in the Osa Peninsula.",
+    detail: [
+      "Three-week field internship in the Osa Peninsula, home to 2.5% of global biodiversity, under Jim Córdoba-Alfaro, founder of the BioSur Foundation.",
+      "Biodiversity surveys, habitat monitoring and field data collection; planted new trees and cleared invasive roots.",
+      "Final presentation passed with distinction, earning 2 credits through Portland State University (INTL 404, grade A).",
+    ],
   },
   {
     role: "Summer Immersion",
     org: "University of Chicago",
     when: "Summer 2025",
     note: "PHIL 20218, Philosophy of Life and Death. Grade A.",
+    detail: [
+      "PHIL 20218, Introduction to the Philosophy of Life and Death — a university-level seminar taken alongside undergraduates.",
+      "Final grade A, GPA 4.0.",
+    ],
   },
   {
-    role: "Co-founder · Captain",
-    org: "Suffield Robotics & Math Team",
-    when: "2024 —",
-    note: "Qualified for the FTC Wolcott Qualifier. Run school-wide AMC prep and weekly contests; peer tutor and mentor leader.",
+    role: "Research Intern",
+    org: "InnoBridge Institute & MIT",
+    when: "Summer 2024",
+    note: "Neural-network models predicting stroke risk from clinical biomarkers.",
+    detail: [
+      "Developed neural-network models predicting stroke risk from clinical biomarker datasets, supervised by Dr. Shalaginov in Cambridge, MA.",
+      "Implemented the data preprocessing pipeline and built the clinician-facing web application around the model.",
+      "Co-authored the resulting research paper.",
+    ],
+  },
+  {
+    role: "Summer Intern",
+    org: "PwC YouPlus Programme",
+    when: "Summer 2023",
+    note: "Accounting fundamentals, Power BI and Excel modelling.",
+    detail: [
+      "Accounting fundamentals, Power BI and advanced Excel for business analysis.",
+      "Built a business plan for Buy42, a donation-based charity shop in Shanghai that employs people with disabilities.",
+      "Ran market surveys with the owners and customers, then presented recommendations to PwC mentors.",
+    ],
   },
 ];
 
@@ -402,24 +426,44 @@ export default async function FrontPage() {
               </div>
               <div data-rule className="rule-bar mt-1.5" />
 
-              {EXPERIENCE.map((e) => (
-                <div
-                  key={`${e.role}-${e.org}`}
-                  data-reveal
-                  className="border-b border-hairline py-2.5"
-                >
-                  <div className="mono flex items-baseline justify-between gap-3 text-[9px] uppercase tracking-[0.12em] text-faint">
-                    <span className="truncate">{e.org}</span>
-                    <span className="shrink-0 tabular-nums">{e.when}</span>
-                  </div>
-                  <h3 className="headline mt-0.5 text-[19px] leading-[1.1]">
-                    {e.role}
-                  </h3>
-                  <p className="mt-1 line-clamp-2 text-[12.5px] leading-snug text-body-soft">
-                    {e.note}
-                  </p>
-                </div>
-              ))}
+              <div className="relative mt-1 pl-4">
+                {/* the spine */}
+                <span className="absolute left-[3px] top-2 bottom-2 w-px bg-rule" />
+                {EXPERIENCE.map((e) => (
+                  <details
+                    key={`${e.role}-${e.org}`}
+                    data-reveal
+                    className="group relative border-b border-hairline py-2"
+                  >
+                    <span className="absolute -left-4 top-[13px] h-[7px] w-[7px] rounded-full border border-paper bg-accent" />
+                    <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                      <span className="mono flex items-baseline justify-between gap-3 text-[9px] uppercase tracking-[0.12em] text-faint">
+                        <span className="truncate">{e.org}</span>
+                        <span className="shrink-0 tabular-nums">{e.when}</span>
+                      </span>
+                      <span className="headline mt-0.5 flex items-baseline gap-2 text-[19px] leading-[1.1]">
+                        {e.role}
+                        <span className="mono shrink-0 text-[9px] text-accent transition-transform group-open:rotate-90">
+                          &rsaquo;
+                        </span>
+                      </span>
+                      <span className="mt-1 block line-clamp-2 text-[12.5px] leading-snug text-body-soft group-open:hidden">
+                        {e.note}
+                      </span>
+                    </summary>
+                    <ul className="mt-1.5 flex flex-col gap-1.5">
+                      {e.detail.map((d) => (
+                        <li
+                          key={d}
+                          className="text-[12.5px] leading-snug text-body-soft"
+                        >
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ))}
+              </div>
             </>
           )}
         </section>
