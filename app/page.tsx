@@ -329,53 +329,55 @@ export default async function FrontPage() {
         </section>
 
         {/* From the notebook */}
-        {(!isHidden("notebook", frontPage) || admin) && (
-          <section
-            data-block="notebook"
-            data-block-hidden={hiddenAttr("notebook")}
-            className="border-b border-rule px-4 py-4 sm:px-7 sm:py-3.5 lg:border-b-0 lg:border-r"
-          >
-            <div
-              data-reveal
-              className="mono flex items-baseline justify-between gap-4 text-[10px] uppercase tracking-[0.2em]"
-            >
-              <span className="text-accent">
-                <Copy k="notebook.kicker" config={frontPage} />
-              </span>
-              <Link href="/blog" className="text-faint hover:text-accent">
-                All {posts.length} &rarr;
-              </Link>
-            </div>
-            <div data-rule className="rule-bar mt-1.5" />
-
-            {topPosts.length === 0 ? (
-              <p className="mt-4 text-[14px] italic text-muted">
-                No dispatches filed yet. Check back soon.
-              </p>
-            ) : (
-              topPosts.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  data-reveal
-                  className="block border-b border-hairline py-3 transition-colors hover:text-accent"
-                >
-                  <div className="mono text-[9px] tabular-nums tracking-[0.12em] text-faint">
-                    {shortDate(post.date)}
-                  </div>
-                  <h3 className="headline mt-0.5 text-[21px] leading-[1.1]">
-                    {post.title}
-                  </h3>
-                  {post.description && (
-                    <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-body-soft">
-                      {post.description}
-                    </p>
-                  )}
+        <section
+          data-block="notebook"
+          data-block-hidden={hiddenAttr("notebook")}
+          className="border-b border-rule px-4 py-4 sm:px-7 sm:py-3.5 lg:border-b-0 lg:border-r"
+        >
+          {(!isHidden("notebook", frontPage) || admin) && (
+            <>
+              <div
+                data-reveal
+                className="mono flex items-baseline justify-between gap-4 text-[10px] uppercase tracking-[0.2em]"
+              >
+                <span className="text-accent">
+                  <Copy k="notebook.kicker" config={frontPage} />
+                </span>
+                <Link href="/blog" className="text-faint hover:text-accent">
+                  All {posts.length} &rarr;
                 </Link>
-              ))
-            )}
-          </section>
-        )}
+              </div>
+              <div data-rule className="rule-bar mt-1.5" />
+
+              {topPosts.length === 0 ? (
+                <p className="mt-4 text-[14px] italic text-muted">
+                  No dispatches filed yet. Check back soon.
+                </p>
+              ) : (
+                topPosts.map((post) => (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    data-reveal
+                    className="block border-b border-hairline py-3 transition-colors hover:text-accent"
+                  >
+                    <div className="mono text-[9px] tabular-nums tracking-[0.12em] text-faint">
+                      {shortDate(post.date)}
+                    </div>
+                    <h3 className="headline mt-0.5 text-[21px] leading-[1.1]">
+                      {post.title}
+                    </h3>
+                    {post.description && (
+                      <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-body-soft">
+                        {post.description}
+                      </p>
+                    )}
+                  </Link>
+                ))
+              )}
+            </>
+          )}
+        </section>
 
         {/* Schooling, correspondence, pictures */}
         <section className="px-4 py-4 sm:px-7 sm:py-3.5">
