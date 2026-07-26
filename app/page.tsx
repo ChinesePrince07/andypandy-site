@@ -331,7 +331,7 @@ export default async function FrontPage() {
                 data-block-hidden={hiddenAttr("portrait")}
                 className="hidden sm:block"
               >
-                <Portrait size={188} config={frontPage} />
+                <Portrait size={140} config={frontPage} />
               </div>
             )}
             {(!isHidden("portrait", frontPage) || admin) && (
@@ -417,7 +417,7 @@ export default async function FrontPage() {
         </section>
 
         {/* Schooling, correspondence, pictures */}
-        <section className="px-4 py-4 sm:px-7 sm:py-3.5 lg:pt-12">
+        <section className="px-4 py-4 sm:px-7 sm:py-3.5">
           {sidebarOrder.map((id, i) =>
             i === 0 ? (
               sidebarBlocks[id]
