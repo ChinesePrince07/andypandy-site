@@ -82,19 +82,14 @@ export default async function ProjectsPage() {
                   Pinned
                 </span>
               )}
+              {/* The rail carries the live URLs; here a marker is enough. */}
+              {project.demo && (
+                <span className="mono flex shrink-0 items-center gap-1.5 text-[8.5px] uppercase tracking-[0.14em] text-faint">
+                  <span className="h-1 w-1 rounded-full bg-accent" />
+                  Live
+                </span>
+              )}
             </div>
-
-            {project.demo && (
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mono mt-1 inline-flex items-center gap-1.5 text-[9.5px] tracking-[0.1em] text-accent transition-opacity hover:opacity-70"
-              >
-                <span className="h-1 w-1 shrink-0 rounded-full bg-accent" />
-                {new URL(project.demo).hostname} &#8599;
-              </a>
-            )}
 
             <p className="mt-1 max-w-[620px] text-[14.5px] leading-snug text-body-soft">
               {project.description}

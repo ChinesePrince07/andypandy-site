@@ -22,13 +22,19 @@ export default async function Rail() {
           href={project.demo}
           target="_blank"
           rel="noopener noreferrer"
-          className="mx-5 flex items-baseline gap-[11px] border-b border-hairline py-3 transition-colors hover:text-accent"
+          className="mx-5 flex items-baseline gap-[11px] border-b border-hairline py-2.5 transition-colors hover:text-accent"
         >
           <span className="mono w-[15px] shrink-0 text-[9.5px] tabular-nums text-accent">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span className="min-w-0 flex-1 text-[15.5px] leading-tight">
-            {project.name}
+          <span className="min-w-0 flex-1">
+            <span className="block text-[15.5px] leading-tight">
+              {project.name}
+            </span>
+            {/* selectVisibleLiveSites only returns entries with a demo. */}
+            <span className="mono block truncate text-[9px] tracking-[0.06em] text-faint">
+              {new URL(project.demo!).hostname}
+            </span>
           </span>
           <span className="text-[11px] text-accent">&#8599;</span>
         </a>
