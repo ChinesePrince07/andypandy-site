@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Every scroll/pointer effect in the Broadsheet layout, driven off data
@@ -21,8 +21,29 @@ import { useEffect } from "react";
  */
 export default function BroadsheetFx() {
   const pathname = usePathname();
+  // The editor overlay flips body[data-editing]; re-run the effect on it.
+  const [editing, setEditing] = useState(0);
 
   useEffect(() => {
+    const observer = new MutationObserver(() => setEditing((n) => n + 1));
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-editing"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (document.body.dataset.editing) {
+      // Reveals hold at opacity:0 until scrolled into view; in edit mode
+      // that would mean clicking invisible blocks.
+      document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+      return;
+    }
+
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -164,7 +185,7 @@ export default function BroadsheetFx() {
     cleanups.push(() => cancelAnimationFrame(frame));
 
     return () => cleanups.forEach((fn) => fn());
-  }, [pathname]);
+  }, [pathname, editing]);
 
   return null;
 }

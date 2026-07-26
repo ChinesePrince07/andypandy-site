@@ -1,16 +1,23 @@
 import { selectVisibleLiveSites } from "@/lib/live-sites";
 import { getLiveSitesConfig, getProjectsWithPins } from "@/lib/projects";
+import { getFrontPageConfig } from "@/lib/front-page-store";
+import { isHidden } from "@/lib/front-page";
 
 /** Standing "Live now" column down the left edge of every page. */
 export default async function Rail() {
-  const [projects, config] = await Promise.all([
+  const [projects, config, frontPage] = await Promise.all([
     getProjectsWithPins(),
     getLiveSitesConfig(),
+    getFrontPageConfig(),
   ]);
+  if (isHidden("rail", frontPage)) return null;
   const live = selectVisibleLiveSites(projects, config);
 
   return (
-    <aside className="hidden w-[226px] shrink-0 border-r border-rule py-[30px] lg:block">
+    <aside
+      data-block="rail"
+      className="hidden w-[226px] shrink-0 border-r border-rule py-[30px] lg:block"
+    >
       <div className="mono mx-5 mb-3 flex items-baseline justify-between border-b-2 border-ink pb-2 text-[10px] uppercase tracking-[0.2em]">
         <span className="text-accent">Live now</span>
         <span className="tabular-nums text-faint">{live.length}</span>
