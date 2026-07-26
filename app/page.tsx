@@ -78,6 +78,7 @@ const SUMMER_COURSES = [
     school: "Portland State University",
     detail: "INTL 404 — field research credit",
     grade: "A · 4.0",
+    logo: "/logos/psu.svg",
   },
 ];
 

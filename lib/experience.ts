@@ -29,6 +29,7 @@ export interface Experience {
 export const experience: Experience[] = [
   {
     slug: "biosur-costa-rica",
+    logo: "/logos/biosur.png",
     role: "Conservation Intern",
     org: "BioSur Foundation",
     when: "Summer 2025",
