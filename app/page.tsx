@@ -5,7 +5,7 @@ import AboutEditor from "@/components/about-editor";
 import PageEditor from "@/components/page-editor";
 import Copy from "@/components/copy";
 import OrgMark from "@/components/org-mark";
-import { getAboutData } from "@/lib/about";
+import { getAboutData, educationSlug } from "@/lib/about";
 import { getAllPosts } from "@/lib/blog";
 import { selectVisibleLiveSites } from "@/lib/live-sites";
 import { getLiveSitesConfig, getProjectsWithPins } from "@/lib/projects";
@@ -61,6 +61,8 @@ const SCHOOL_LOGOS: Record<string, string> = {
   "UC Berkeley": "/logos/berkeley.svg",
   "Suffield Academy": "/logos/suffield.png",
 };
+
+const CURRENT_SCHOOL = "UC Berkeley";
 
 const GPA: Record<string, string> = {
   "Suffield Academy": "GPA 4.14",
@@ -208,9 +210,10 @@ export default async function FrontPage() {
         </div>
         <div data-rule className="rule-bar mt-1.5" />
         {about.education.map((entry) => (
-          <div
+          <Link
             key={entry.school}
-            className="flex items-center gap-3 border-b border-hairline py-2"
+            href={`/education/${educationSlug(entry.school)}`}
+            className="flex items-center gap-3 border-b border-hairline py-2 transition-colors hover:text-accent"
           >
             <OrgMark
               name={entry.school}
@@ -231,8 +234,14 @@ export default async function FrontPage() {
               <div className="mono text-[8.5px] uppercase tracking-[0.14em] text-faint">
                 {entry.year} &middot; {entry.location}
               </div>
+              {entry.school === CURRENT_SCHOOL && (
+                <div className="mono mt-0.5 flex items-center gap-1.5 text-[8.5px] uppercase tracking-[0.14em] text-accent">
+                  <span className="h-1 w-1 rounded-full bg-accent animate-pulse-dot" />
+                  Currently attending
+                </div>
+              )}
             </div>
-          </div>
+          </Link>
         ))}
 
         <div className="mono mt-2 text-[8px] uppercase tracking-[0.16em] text-faint">

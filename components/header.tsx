@@ -25,6 +25,8 @@ function pageLabel(pathname: string): string {
   if (pathname === "/") return "The Front Page";
   if (pathname.startsWith("/projects")) return "The Directory";
   if (pathname.startsWith("/blog")) return "The Blog";
+  if (pathname.startsWith("/experience")) return "The Record";
+  if (pathname.startsWith("/education")) return "Schooling";
   if (pathname.startsWith("/travels")) return "The Itinerary";
   if (pathname.startsWith("/photos")) return "The Plates";
   if (pathname.startsWith("/admin")) return "The Composing Room";

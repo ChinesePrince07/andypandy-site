@@ -3,11 +3,30 @@ import { r2GetText, r2Put } from "./r2-storage";
 
 const ABOUT_KEY = "content/about.json";
 
+export interface EducationMedia {
+  type: "image" | "video";
+  src: string;
+  caption?: string;
+}
+
 export interface EducationEntry {
   school: string;
   location: string;
   year: string;
   logo?: string;
+  /** Paragraphs shown on the detail page. */
+  body?: string[];
+  /** Uploaded through the admin uploader on /education/<slug>. */
+  media?: EducationMedia[];
+}
+
+/** Stable url segment for a school. The route and every link derive from
+ *  this same function, so they cannot disagree. */
+export function educationSlug(school: string): string {
+  return school
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 export interface AboutData {
