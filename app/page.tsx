@@ -4,6 +4,7 @@ import Portrait from "@/components/portrait";
 import AboutEditor from "@/components/about-editor";
 import PageEditor from "@/components/page-editor";
 import Copy from "@/components/copy";
+import OrgMark from "@/components/org-mark";
 import { getAboutData } from "@/lib/about";
 import { getAllPosts } from "@/lib/blog";
 import { selectVisibleLiveSites } from "@/lib/live-sites";
@@ -56,6 +57,11 @@ const HONOURS = [
 // GPA by school. Kept here rather than in about.json because that file is
 // R2-backed and its stored copy has no gpa field — a default would be
 // silently overridden by the saved data.
+const SCHOOL_LOGOS: Record<string, string> = {
+  "UC Berkeley": "/logos/berkeley.svg",
+  "Suffield Academy": "/logos/suffield.png",
+};
+
 const GPA: Record<string, string> = {
   "Suffield Academy": "GPA 4.14",
 };
@@ -66,11 +72,12 @@ const SUMMER_COURSES = [
     school: "University of Chicago",
     detail: "PHIL 20218 — Philosophy of Life and Death",
     grade: "A · 4.0",
+    logo: "/logos/uchicago.svg",
   },
   {
     school: "Portland State University",
     detail: "INTL 404 — field research credit",
-    grade: "A",
+    grade: "A · 4.0",
   },
 ];
 
@@ -204,20 +211,11 @@ export default async function FrontPage() {
             key={entry.school}
             className="flex items-center gap-3 border-b border-hairline py-2"
           >
-            {entry.logo && (
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={entry.logo}
-                  alt={entry.school}
-                  className="max-h-full max-w-full object-contain"
-                  style={{
-                    mixBlendMode: "var(--seal-blend)" as never,
-                    filter: "var(--seal-filter)",
-                  }}
-                />
-              </span>
-            )}
+            <OrgMark
+              name={entry.school}
+              src={SCHOOL_LOGOS[entry.school] ?? entry.logo}
+              size={36}
+            />
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-2">
                 <span className="headline truncate text-[17px] leading-tight">
@@ -244,12 +242,15 @@ export default async function FrontPage() {
             key={c.school}
             className="flex items-baseline justify-between gap-2 border-b border-hairline py-1"
           >
-            <span className="min-w-0">
+            <span className="flex min-w-0 items-center gap-2">
+              <OrgMark name={c.school} src={c.logo} size={18} />
+              <span className="min-w-0">
               <span className="block truncate text-[12px] leading-tight text-body">
                 {c.school}
               </span>
               <span className="mono block truncate text-[8px] uppercase tracking-[0.12em] text-faint">
                 {c.detail}
+              </span>
               </span>
             </span>
             <span className="mono shrink-0 text-[8.5px] tracking-[0.1em] text-faint">
@@ -431,7 +432,10 @@ export default async function FrontPage() {
                   >
                     <span className="absolute -left-4 top-[13px] h-[7px] w-[7px] rounded-full border border-paper bg-accent" />
                     <span className="mono flex items-baseline justify-between gap-3 text-[9px] uppercase tracking-[0.12em] text-faint">
-                      <span className="truncate">{e.org}</span>
+                      <span className="flex min-w-0 items-center gap-1.5">
+                        <OrgMark name={e.org} src={e.logo} size={14} />
+                        <span className="truncate">{e.org}</span>
+                      </span>
                       <span className="shrink-0 tabular-nums">{e.when}</span>
                     </span>
                     <span className="headline mt-0.5 flex items-baseline gap-2 text-[19px] leading-[1.1]">

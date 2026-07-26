@@ -6,6 +6,8 @@ export interface ExperienceMedia {
 }
 
 export interface Experience {
+  /** Local file under public/logos/. Omitted orgs fall back to a monogram. */
+  logo?: string;
   slug: string;
   role: string;
   org: string;
@@ -41,6 +43,7 @@ export const experience: Experience[] = [
   },
   {
     slug: "uchicago-summer-immersion",
+    logo: "/logos/uchicago.svg",
     role: "Summer Immersion",
     org: "University of Chicago",
     when: "Summer 2025",
@@ -54,6 +57,7 @@ export const experience: Experience[] = [
   },
   {
     slug: "innobridge-mit",
+    logo: "/logos/mit.svg",
     role: "Research Intern",
     org: "InnoBridge Institute & MIT",
     when: "Summer 2024",
@@ -68,6 +72,7 @@ export const experience: Experience[] = [
   },
   {
     slug: "pwc-youplus",
+    logo: "/logos/pwc.svg",
     role: "Summer Intern",
     org: "PricewaterhouseCoopers",
     when: "Summer 2023",

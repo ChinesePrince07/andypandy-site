@@ -24,6 +24,8 @@
   --portrait-filter: grayscale(1) contrast(1.06) brightness(1.04);
   --seal-filter: none;
   --seal-blend: multiply;
+  --logo-filter: grayscale(1) contrast(1.45) brightness(0.92);
+  --logo-blend: multiply;
 }
 
 .dark {
@@ -43,6 +45,8 @@
   --portrait-filter: grayscale(1) contrast(1.1) brightness(0.94);
   --seal-filter: grayscale(1) invert(1) brightness(1.25) contrast(1.05);
   --seal-blend: screen;
+  --logo-filter: grayscale(1) invert(1) brightness(1.15) contrast(1.05);
+  --logo-blend: screen;
 }
 
 @theme inline {
