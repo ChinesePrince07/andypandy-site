@@ -63,8 +63,6 @@ export default function Header() {
 
   return (
     <header>
-      <div className="h-1 bg-ink sm:h-[5px]" />
-
       {/* masthead */}
       <div className="flex h-12 items-center justify-between border-b border-rule px-4 sm:h-[52px] sm:px-11">
         <Link href="/" className="relative inline-block">
