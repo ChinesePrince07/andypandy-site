@@ -36,6 +36,10 @@ export async function createSession(): Promise<string> {
 }
 
 export async function verifySession(token: string): Promise<boolean> {
+  // No secret configured means no session can be valid. Without this guard
+  // importKey() throws on the zero-length key and 500s every page a stale
+  // admin cookie is sent to. Matches bearerMatchesSecret() below.
+  if (SECRET === "") return false;
   const [expiresStr, sig] = token.split(".");
   if (!expiresStr || !sig) return false;
   const expires = Number(expiresStr);
