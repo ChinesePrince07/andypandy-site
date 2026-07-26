@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { selectVisibleLiveSites } from "@/lib/live-sites";
 import { getLiveSitesConfig, getProjectsWithPins } from "@/lib/projects";
 import { getFrontPageConfig } from "@/lib/front-page-store";
@@ -12,11 +13,14 @@ export default async function Rail() {
   ]);
   if (isHidden("rail", frontPage)) return null;
   const live = selectVisibleLiveSites(projects, config);
+  // Hardware, embedded and iOS work has nothing to open in a tab, so it
+  // never appeared in the rail. It still deserves to be on the page.
+  const workshop = projects.filter((p) => !p.demo);
 
   return (
     <aside
       data-block="rail"
-      className="hidden w-[226px] shrink-0 border-r border-rule py-[30px] lg:block"
+      className="hidden w-[226px] shrink-0 border-r border-rule py-5 lg:block"
     >
       <div className="mono mx-5 mb-3 flex items-baseline justify-between border-b-2 border-ink pb-2 text-[10px] uppercase tracking-[0.2em]">
         <span className="text-accent">Live now</span>
@@ -47,17 +51,31 @@ export default async function Rail() {
         </a>
       ))}
 
-      <p className="mx-5 mt-[22px] text-[13px] italic leading-normal text-muted">
-        Hardware and iOS builds live on{" "}
-        <a
-          href="https://github.com/ChinesePrince07"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mono text-[10.5px] not-italic text-accent"
+      <div className="mono mx-5 mb-2.5 mt-5 flex items-baseline justify-between border-b-2 border-ink pb-2 text-[10px] uppercase tracking-[0.2em]">
+        <span className="text-accent">In the workshop</span>
+        <span className="tabular-nums text-faint">{workshop.length}</span>
+      </div>
+
+      {workshop.map((project, i) => (
+        <Link
+          key={project.slug}
+          href={`/projects/${project.slug}`}
+          className="mx-5 flex items-baseline gap-[11px] border-b border-hairline py-2 transition-colors hover:text-accent"
         >
-          GitHub &#8599;
-        </a>
-      </p>
+          <span className="mono w-[15px] shrink-0 text-[9.5px] tabular-nums text-faint">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[14px] leading-tight">
+              {project.name}
+            </span>
+            <span className="mono block truncate text-[8.5px] uppercase tracking-[0.1em] text-faint">
+              {project.tags[project.tags.length - 1]}
+            </span>
+          </span>
+          <span className="text-[10px] text-faint">&rarr;</span>
+        </Link>
+      ))}
     </aside>
   );
 }

@@ -48,10 +48,11 @@ const LINKS = [
 
 // Selected honours, kept short on purpose — the fuller record is the CV.
 const HONOURS = [
-  { what: "USAMO qualifier (AIME 12/15)", year: "2026" },
-  { what: "John Locke Essay — shortlisted", year: "2025" },
-  { what: "National Merit Semifinalist", year: "2025" },
-  { what: "Carnegie Hall — first place, NYGCMA", year: "2024" },
+  { what: "USAMO qualifier — AIME 12/15", year: "2026" },
+  { what: "John Locke Essay Competition, shortlisted", year: "2025" },
+  { what: "National Merit Semifinalist — perfect PSAT", year: "2025" },
+  { what: "First place, NY Golden Classical Music Award", year: "2024" },
+  { what: "AAPT Physics Bowl, top 10%", year: "2025" },
 ];
 
 // GPA by school. Kept here rather than in about.json because that file is
@@ -121,7 +122,7 @@ export default async function FrontPage() {
   // The ledger is derived, not written down twice — it cannot drift from
   // what the directory and the notebook actually contain.
   const spec = [
-    { k: "Base", v: "Hong Kong" },
+    { k: "Base", v: "Hong Kong → Berkeley" },
     { k: "Builds", v: `${projects.length} projects, ${live.length} live` },
     {
       k: "Writing",
@@ -167,7 +168,7 @@ export default async function FrontPage() {
             key={h.what}
             className="flex items-baseline justify-between gap-3 border-b border-hairline py-[3px]"
           >
-            <span className="truncate text-[12.5px] leading-snug text-body">
+            <span className="text-[12.5px] leading-snug text-body">
               {h.what}
             </span>
             <span className="mono shrink-0 text-[9px] tabular-nums tracking-[0.12em] text-faint">
