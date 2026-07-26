@@ -103,7 +103,14 @@ export function parseConfig(raw: unknown): FrontPageConfig {
   if (src.order && typeof src.order === "object" && !Array.isArray(src.order)) {
     for (const [g, ids] of Object.entries(src.order)) {
       if (!isGroupId(g) || !Array.isArray(ids)) continue;
-      const known = ids.filter(isBlockId).filter((id) => groupOf(id) === g);
+      const seen = new Set<BlockId>();
+      const known: BlockId[] = [];
+      for (const id of ids) {
+        if (isBlockId(id) && groupOf(id) === g && !seen.has(id)) {
+          seen.add(id);
+          known.push(id);
+        }
+      }
       if (known.length) order[g] = known;
     }
   }

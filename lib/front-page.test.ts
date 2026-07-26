@@ -29,6 +29,16 @@ describe("parseConfig", () => {
       copy: { "hero.tagline": "hi" },
     });
   });
+
+  it("dedupes repeated ids in a saved order", () => {
+    expect(
+      parseConfig({ order: { sidebar: ["pictures", "pictures", "schooling"] } }),
+    ).toEqual({
+      hidden: [],
+      order: { sidebar: ["pictures", "schooling"] },
+      copy: {},
+    });
+  });
 });
 
 describe("isHidden", () => {
@@ -62,6 +72,15 @@ describe("orderedGroup", () => {
   it("omits hidden blocks", () => {
     const c: FrontPageConfig = { ...EMPTY_CONFIG, hidden: ["schooling"] };
     expect(orderedGroup("sidebar", c)).toEqual(["correspondence", "pictures"]);
+  });
+
+  it("keeps every block when the saved order repeats one", () => {
+    const c = parseConfig({ order: { sidebar: ["pictures", "pictures"] } });
+    expect(orderedGroup("sidebar", c)).toEqual([
+      "pictures",
+      "schooling",
+      "correspondence",
+    ]);
   });
 });
 
