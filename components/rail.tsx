@@ -20,6 +20,7 @@ export default async function Rail() {
   return (
     <aside
       data-block="rail"
+      data-rail-hidden={config.hidden.join(",")}
       className="hidden w-[226px] shrink-0 border-r border-rule py-5 lg:block"
     >
       <div className="mono mx-5 mb-3 flex items-baseline justify-between border-b-2 border-ink pb-2 text-[10px] uppercase tracking-[0.2em]">
@@ -30,6 +31,7 @@ export default async function Rail() {
       {live.map((project, i) => (
         <a
           key={project.slug}
+          data-rail={project.slug}
           href={project.demo}
           target="_blank"
           rel="noopener noreferrer"
@@ -60,18 +62,13 @@ export default async function Rail() {
         <Link
           key={project.slug}
           href={`/projects/${project.slug}`}
-          className="mx-5 flex items-baseline gap-[11px] border-b border-hairline py-2 transition-colors hover:text-accent"
+          className="mx-5 flex items-baseline gap-[11px] border-b border-hairline py-1.5 transition-colors hover:text-accent"
         >
           <span className="mono w-[15px] shrink-0 text-[9.5px] tabular-nums text-faint">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-[14px] leading-tight">
-              {project.name}
-            </span>
-            <span className="mono block truncate text-[8.5px] uppercase tracking-[0.1em] text-faint">
-              {project.tags[project.tags.length - 1]}
-            </span>
+          <span className="min-w-0 flex-1 truncate text-[14px] leading-tight">
+            {project.name}
           </span>
           <span className="text-[10px] text-faint">&rarr;</span>
         </Link>

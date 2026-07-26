@@ -39,6 +39,7 @@ export async function POST(req: Request) {
   }
 
   revalidateTag("live-projects");
+  revalidatePath("/"); // the rail renders on every page
   revalidatePath("/projects");
   revalidatePath("/admin");
 

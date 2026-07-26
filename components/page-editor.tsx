@@ -118,6 +118,9 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
   const router = useRouter();
   const [on, setOn] = useState(false);
   const [boxes, setBoxes] = useState<Box[]>([]);
+  const [railBoxes, setRailBoxes] = useState<
+    { slug: string; top: number; left: number; width: number; height: number }[]
+  >([]);
   const [menu, setMenu] = useState<BlockId | null>(null);
   const [note, setNote] = useState<{ text: string; bad: boolean } | null>(null);
   // A ref (not just the `busy` state below) so the reentrancy check inside
@@ -166,6 +169,55 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
     [router],
   );
 
+  // The rail's order lives in a different store from the front-page config,
+  // so it gets its own call. Current order is read from the DOM, which is
+  // the rendered truth, then two neighbours swap.
+  const moveRail = useCallback(
+    async (slug: string, dir: -1 | 1) => {
+      if (busyRef.current) return;
+      busyRef.current = true;
+      setBusy(true);
+      let text = "Saved";
+      let bad = false;
+      try {
+        const order = [...document.querySelectorAll<HTMLElement>("[data-rail]")]
+          .map((el) => el.dataset.rail!)
+          .filter(Boolean);
+        const i = order.indexOf(slug);
+        const j = i + dir;
+        if (i < 0 || j < 0 || j >= order.length) {
+          busyRef.current = false;
+          setBusy(false);
+          return;
+        }
+        [order[i], order[j]] = [order[j], order[i]];
+        const railEl = document.querySelector<HTMLElement>('[data-block="rail"]');
+        const hiddenSlugs = (railEl?.dataset.railHidden || "")
+          .split(",")
+          .filter(Boolean);
+        const res = await fetch("/api/admin/projects/live-sites/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order, hidden: hiddenSlugs }),
+        });
+        if (!res.ok) {
+          bad = true;
+          const data = await res.json().catch(() => null);
+          text = data?.error || `Save failed (${res.status})`;
+        }
+      } catch (err) {
+        bad = true;
+        text = err instanceof Error ? err.message : "Network error";
+      } finally {
+        busyRef.current = false;
+        setBusy(false);
+      }
+      setNote({ text, bad });
+      router.refresh();
+    },
+    [router],
+  );
+
   useEffect(() => {
     if (!note) return;
     const t = setTimeout(() => setNote(null), note.bad ? 4000 : 1500);
@@ -196,6 +248,22 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
         });
       });
       setBoxes((prev) => (sameBoxes(prev, next) ? prev : next));
+
+      const rails = [...document.querySelectorAll<HTMLElement>("[data-rail]")]
+        .map((el) => {
+          const r = el.getBoundingClientRect();
+          return {
+            slug: el.dataset.rail!,
+            top: r.top,
+            left: r.left,
+            width: r.width,
+            height: r.height,
+          };
+        })
+        .filter((b) => b.width && b.height);
+      setRailBoxes((prev) =>
+        JSON.stringify(prev) === JSON.stringify(rails) ? prev : rails,
+      );
     };
 
     let frame = 0;
@@ -271,6 +339,31 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
               data-editor-ui
               className="pointer-events-none fixed inset-0 z-[180]"
             >
+              {railBoxes.map((b, i) => (
+                <div
+                  key={b.slug}
+                  className="absolute flex flex-col"
+                  style={{ top: b.top + 2, left: b.left + b.width - 15 }}
+                >
+                  <button
+                    onClick={() => void moveRail(b.slug, -1)}
+                    disabled={busy || i === 0}
+                    aria-label={`Move ${b.slug} up`}
+                    className="mono pointer-events-auto flex h-[13px] w-[15px] items-center justify-center border border-rule bg-paper text-[8px] leading-none text-accent hover:bg-wash disabled:pointer-events-none disabled:opacity-30"
+                  >
+                    &#9650;
+                  </button>
+                  <button
+                    onClick={() => void moveRail(b.slug, 1)}
+                    disabled={busy || i === railBoxes.length - 1}
+                    aria-label={`Move ${b.slug} down`}
+                    className="mono pointer-events-auto flex h-[13px] w-[15px] items-center justify-center border border-rule border-t-0 bg-paper text-[8px] leading-none text-accent hover:bg-wash disabled:pointer-events-none disabled:opacity-30"
+                  >
+                    &#9660;
+                  </button>
+                </div>
+              ))}
+
               {boxes.map((b) => (
                 <div
                   key={b.id}

@@ -63,10 +63,10 @@ export default function Header() {
 
   return (
     <header>
-      <div className="h-[5px] bg-ink sm:h-[6px]" />
+      <div className="h-1 bg-ink sm:h-[5px]" />
 
       {/* masthead */}
-      <div className="flex h-14 items-center justify-between border-b border-rule px-4 sm:h-16 sm:px-11">
+      <div className="flex h-12 items-center justify-between border-b border-rule px-4 sm:h-[52px] sm:px-11">
         <Link href="/" className="relative inline-block">
           <span
             data-ghost
@@ -158,7 +158,7 @@ export default function Header() {
 
       {/* dateline + reading progress */}
       <div className="sticky top-0 z-30 bg-paper">
-        <div className="label flex h-[30px] items-center justify-between gap-3 border-b border-rule px-4 text-[9px] sm:h-[34px] sm:px-11 sm:text-[10px]">
+        <div className="label flex h-6 items-center justify-between gap-3 border-b border-rule px-4 text-[9px] sm:h-7 sm:px-11 sm:text-[10px]">
           <span>{pageLabel(pathname)}</span>
           <span className="truncate">
             {dateline.long ? (
