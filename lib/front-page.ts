@@ -37,7 +37,7 @@ export const COPY_DEFAULTS = {
   "portrait.caption": "The author",
   "about.kicker": "About",
   "spec.kicker": "Specification",
-  "notebook.kicker": "From the blog",
+  "notebook.kicker": "Experience",
   "schooling.kicker": "Schooling",
   "correspondence.kicker": "Correspondence",
   "pictures.kicker": "Pictures",

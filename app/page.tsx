@@ -53,15 +53,40 @@ const HONOURS = [
   { what: "AAPT Physics Bowl, top 10%", year: "2025" },
 ];
 
-function shortDate(value: string): string {
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return value;
-  return d.toLocaleDateString("en-US", {
-    month: "2-digit",
-    day: "2-digit",
-    year: "2-digit",
-  });
-}
+// Experience, front-loaded for someone skimming. The blog lives behind the
+// nav; this column earns its space with work history instead.
+const EXPERIENCE = [
+  {
+    role: "Research Intern",
+    org: "InnoBridge Institute & MIT",
+    when: "Summer 2024",
+    note: "Neural-network models predicting stroke risk from clinical biomarkers. Built the preprocessing pipeline and a clinician-facing web app; co-authored the paper.",
+  },
+  {
+    role: "Conservation Intern",
+    org: "BioSur Foundation, Costa Rica",
+    when: "Summer 2025",
+    note: "Biodiversity surveys and habitat monitoring in the Osa Peninsula. Passed with distinction; 2 credits through Portland State.",
+  },
+  {
+    role: "Summer Intern",
+    org: "PwC YouPlus Programme",
+    when: "Summer 2023",
+    note: "Accounting fundamentals, Power BI and Excel modelling. Built a business plan for Buy42, a donation-based charity shop in Shanghai.",
+  },
+  {
+    role: "Summer Immersion",
+    org: "University of Chicago",
+    when: "Summer 2025",
+    note: "PHIL 20218, Philosophy of Life and Death. Grade A.",
+  },
+  {
+    role: "Co-founder · Captain",
+    org: "Suffield Robotics & Math Team",
+    when: "2024 —",
+    note: "Qualified for the FTC Wolcott Qualifier. Run school-wide AMC prep and weekly contests; peer tutor and mentor leader.",
+  },
+];
 
 function skillLine(
   skills: { category: string; items: string[] }[],
@@ -96,7 +121,6 @@ export default async function FrontPage() {
       getFrontPageConfig(),
     ]);
   const live = selectVisibleLiveSites(projects, liveConfig);
-  const topPosts = posts.slice(0, 5);
 
   // The ledger is derived, not written down twice — it cannot drift from
   // what the directory and the notebook actually contain.
@@ -373,45 +397,29 @@ export default async function FrontPage() {
         >
           {(!isHidden("notebook", frontPage) || admin) && (
             <>
-              <div
-                data-reveal
-                className="mono flex items-baseline justify-between gap-4 text-[10px] uppercase tracking-[0.2em]"
-              >
-                <span className="text-accent">
-                  <Copy k="notebook.kicker" config={frontPage} />
-                </span>
-                <Link href="/blog" className="text-faint hover:text-accent">
-                  All {posts.length} &rarr;
-                </Link>
+              <div data-reveal className="kicker">
+                <Copy k="notebook.kicker" config={frontPage} />
               </div>
               <div data-rule className="rule-bar mt-1.5" />
 
-              {topPosts.length === 0 ? (
-                <p className="mt-4 text-[14px] italic text-muted">
-                  No dispatches filed yet. Check back soon.
-                </p>
-              ) : (
-                topPosts.map((post) => (
-                  <Link
-                    key={post.slug}
-                    href={`/blog/${post.slug}`}
-                    data-reveal
-                    className="block border-b border-hairline py-3 transition-colors hover:text-accent"
-                  >
-                    <div className="mono text-[9px] tabular-nums tracking-[0.12em] text-faint">
-                      {shortDate(post.date)}
-                    </div>
-                    <h3 className="headline mt-0.5 text-[21px] leading-[1.1]">
-                      {post.title}
-                    </h3>
-                    {post.description && (
-                      <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-body-soft">
-                        {post.description}
-                      </p>
-                    )}
-                  </Link>
-                ))
-              )}
+              {EXPERIENCE.map((e) => (
+                <div
+                  key={`${e.role}-${e.org}`}
+                  data-reveal
+                  className="border-b border-hairline py-2.5"
+                >
+                  <div className="mono flex items-baseline justify-between gap-3 text-[9px] uppercase tracking-[0.12em] text-faint">
+                    <span className="truncate">{e.org}</span>
+                    <span className="shrink-0 tabular-nums">{e.when}</span>
+                  </div>
+                  <h3 className="headline mt-0.5 text-[19px] leading-[1.1]">
+                    {e.role}
+                  </h3>
+                  <p className="mt-1 line-clamp-2 text-[12.5px] leading-snug text-body-soft">
+                    {e.note}
+                  </p>
+                </div>
+              ))}
             </>
           )}
         </section>
