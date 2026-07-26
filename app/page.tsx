@@ -132,7 +132,7 @@ export default async function FrontPage() {
     ),
     spec: (
       <div key="spec" data-block="spec" data-block-hidden={hiddenAttr("spec")}>
-        <div data-reveal className="kicker mt-4">
+        <div data-reveal className="kicker">
           <Copy k="spec.kicker" config={frontPage} />
         </div>
         <div data-rule className="rule-bar mt-1.5" />
@@ -199,7 +199,7 @@ export default async function FrontPage() {
         data-block="correspondence"
         data-block-hidden={hiddenAttr("correspondence")}
       >
-        <div data-reveal className="kicker mt-4">
+        <div data-reveal className="kicker">
           <Copy k="correspondence.kicker" config={frontPage} />
         </div>
         <div data-rule className="rule-bar mt-1.5" />
@@ -230,7 +230,7 @@ export default async function FrontPage() {
           target="_blank"
           rel="noopener noreferrer"
           data-reveal
-          className="mt-4 block border border-rule px-3 py-2 transition-colors hover:border-accent"
+          className="block border border-rule px-3 py-2 transition-colors hover:border-accent"
         >
           <div className="label text-[9px]">
             <Copy k="pictures.kicker" config={frontPage} />
@@ -326,7 +326,18 @@ export default async function FrontPage() {
       <div className="grid lg:min-h-0 lg:flex-1 lg:grid-cols-[1.25fr_1.1fr_1fr]">
         {/* About + specification */}
         <section className="border-b border-rule px-4 py-4 sm:px-7 sm:py-3.5 lg:border-b-0 lg:border-r">
-          {mainOrder.map((id) => mainBlocks[id])}
+          {/* Spacing lives between siblings, not baked into a block's own
+              first child — otherwise reordering or hiding a block drags its
+              margin along with it. */}
+          {mainOrder.map((id, i) =>
+            i === 0 ? (
+              mainBlocks[id]
+            ) : (
+              <div key={id} className="mt-4">
+                {mainBlocks[id]}
+              </div>
+            ),
+          )}
         </section>
 
         {/* From the notebook */}
@@ -382,7 +393,15 @@ export default async function FrontPage() {
 
         {/* Schooling, correspondence, pictures */}
         <section className="px-4 py-4 sm:px-7 sm:py-3.5">
-          {sidebarOrder.map((id) => sidebarBlocks[id])}
+          {sidebarOrder.map((id, i) =>
+            i === 0 ? (
+              sidebarBlocks[id]
+            ) : (
+              <div key={id} className="mt-4">
+                {sidebarBlocks[id]}
+              </div>
+            ),
+          )}
         </section>
       </div>
 

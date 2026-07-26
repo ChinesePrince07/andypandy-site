@@ -42,7 +42,6 @@ export const COPY_DEFAULTS = {
   "correspondence.kicker": "Correspondence",
   "pictures.kicker": "Pictures",
   "pictures.title": "pics.andypandy.org",
-  "pictures.sub": "Albums, EXIF, map — kept on its own host.",
   "livestrip.kicker": "Live now",
 } as const;
 

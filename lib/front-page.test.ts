@@ -74,6 +74,14 @@ describe("orderedGroup", () => {
     expect(orderedGroup("sidebar", c)).toEqual(["correspondence", "pictures"]);
   });
 
+  it("returns an empty list when every block in the group is hidden", () => {
+    const c: FrontPageConfig = {
+      ...EMPTY_CONFIG,
+      hidden: ["schooling", "correspondence", "pictures"],
+    };
+    expect(orderedGroup("sidebar", c)).toEqual([]);
+  });
+
   it("keeps every block when the saved order repeats one", () => {
     const c = parseConfig({ order: { sidebar: ["pictures", "pictures"] } });
     expect(orderedGroup("sidebar", c)).toEqual([
@@ -134,6 +142,15 @@ describe("applyOp", () => {
       "correspondence",
       "pictures",
     ]);
+  });
+
+  it("strips control characters from copy values", () => {
+    const c = applyOp(EMPTY_CONFIG, {
+      op: "copy",
+      key: "hero.tagline",
+      value: "Hello\x00World\x1f!",
+    });
+    expect(c.copy["hero.tagline"]).toBe("HelloWorld!");
   });
 
   it("stores copy, capping length", () => {

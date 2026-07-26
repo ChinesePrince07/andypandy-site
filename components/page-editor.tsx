@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { EDIT_ABOUT_EVENT } from "@/components/about-editor";
@@ -31,7 +31,13 @@ body[data-editing] [data-copy][contenteditable]{outline:1px solid var(--accent);
 `;
 
 const ITEM =
-  "mono block w-full px-2.5 py-1.5 text-left text-[9px] uppercase tracking-[0.14em] text-muted hover:bg-wash hover:text-accent";
+  "mono block w-full px-2.5 py-1.5 text-left text-[9px] uppercase tracking-[0.14em] text-muted hover:bg-wash hover:text-accent disabled:pointer-events-none disabled:opacity-40";
+
+/** Only these blocks are gated by a viewport media query rather than the
+ * config's `hidden` list — whichever the current width doesn't render
+ * measures zero and never gets a handle, so they need a way in regardless
+ * of hidden state. */
+const VIEWPORT_GATED: readonly BlockId[] = ["livestrip", "rail"];
 
 interface Box {
   id: BlockId;
@@ -58,7 +64,7 @@ function sameBoxes(a: Box[], b: Box[]): boolean {
 }
 
 /** Edit one string in place. Enter or blur commits, Escape puts it back. */
-function editCopy(el: HTMLElement, send: (op: EditorOp) => void) {
+function editCopy(el: HTMLElement, send: (op: EditorOp) => Promise<boolean>) {
   const key = el.dataset.copy as CopyKey;
   const before = el.textContent ?? "";
   let cancelled = false;
@@ -73,7 +79,12 @@ function editCopy(el: HTMLElement, send: (op: EditorOp) => void) {
   selection?.addRange(range);
 
   const onKey = (ev: KeyboardEvent) => {
-    if (ev.key === "Enter" && !ev.shiftKey) {
+    // Every copy key is a single line (kicker, title, tagline — see
+    // COPY_DEFAULTS), so Shift+Enter commits exactly like plain Enter
+    // rather than inserting a newline: a <br> here would live in the DOM
+    // but vanish the moment anything reads el.textContent (the save path,
+    // and the restore-on-reject path below), silently desyncing the two.
+    if (ev.key === "Enter") {
       ev.preventDefault();
       el.blur();
     } else if (ev.key === "Escape") {
@@ -90,7 +101,13 @@ function editCopy(el: HTMLElement, send: (op: EditorOp) => void) {
     const value = (el.textContent ?? "").trim();
     // An emptied string is a deliberate "give me the code default back" —
     // applyOp drops the override for an empty value.
-    if (!cancelled && value !== before.trim()) send({ op: "copy", key, value });
+    if (cancelled || value === before.trim()) return;
+    void send({ op: "copy", key, value }).then((ok) => {
+      // router.refresh() re-renders the same server string React already
+      // has committed, so on a rejected save nothing else will put the old
+      // text back — this has to do it explicitly.
+      if (!ok) el.textContent = before;
+    });
   };
 
   el.addEventListener("keydown", onKey);
@@ -103,9 +120,20 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
   const [boxes, setBoxes] = useState<Box[]>([]);
   const [menu, setMenu] = useState<BlockId | null>(null);
   const [note, setNote] = useState<{ text: string; bad: boolean } | null>(null);
+  // A ref (not just the `busy` state below) so the reentrancy check inside
+  // `send` always reads the live value — `send` is memoized once with
+  // `[router]`, so a stale `busy` closure would never see a later op arrive.
+  const busyRef = useRef(false);
+  const [busy, setBusy] = useState(false);
 
   const send = useCallback(
-    async (op: EditorOp) => {
+    async (op: EditorOp): Promise<boolean> => {
+      // Two rapid clicks (e.g. two "move" presses) would otherwise both
+      // read the config before either write lands, and the second save
+      // clobbers the first. Block a second op until this one settles.
+      if (busyRef.current) return false;
+      busyRef.current = true;
+      setBusy(true);
       setMenu(null);
       let text = "Saved";
       let bad = false;
@@ -125,11 +153,15 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
       } catch (err) {
         bad = true;
         text = err instanceof Error ? err.message : "Network error";
+      } finally {
+        busyRef.current = false;
+        setBusy(false);
       }
       setNote({ text, bad });
       // Refresh either way: on failure the page must resynchronise with
       // whatever the store actually holds.
       router.refresh();
+      return !bad;
     },
     [router],
   );
@@ -192,12 +224,13 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
       const target = ev.target as HTMLElement | null;
       if (target?.closest("[data-editor-ui]")) return; // our own chrome
       setMenu(null);
+      if (busyRef.current) return; // a save is already in flight
       const el = target?.closest<HTMLElement>("[data-copy]");
       if (!el || el.isContentEditable) return;
       // Several editable strings sit inside links.
       ev.preventDefault();
       ev.stopPropagation();
-      editCopy(el, (op) => void send(op));
+      editCopy(el, send);
     };
     document.addEventListener("click", onClick, true);
 
@@ -212,8 +245,11 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
   }, [on, send]);
 
   // Blocks hidden in the config that are not in the DOM at all (the rail
-  // renders nothing when hidden) would otherwise be unreachable.
-  const offPage = hidden.filter((id) => !boxes.some((b) => b.id === id));
+  // renders nothing when hidden), plus the viewport-gated pair that is
+  // never both on screen at once, would otherwise be unreachable.
+  const offPage = [...new Set([...hidden, ...VIEWPORT_GATED])].filter(
+    (id) => !boxes.some((b) => b.id === id),
+  );
 
   return (
     <>
@@ -249,15 +285,17 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
                   {b.hidden ? (
                     <button
                       onClick={() => void send({ op: "show", block: b.id })}
-                      className="mono pointer-events-auto absolute right-0 top-0 border border-accent bg-paper px-1.5 py-[3px] text-[8.5px] uppercase tracking-[0.14em] text-accent hover:bg-wash"
+                      disabled={busy}
+                      className="mono pointer-events-auto absolute right-0 top-0 border border-accent bg-paper px-1.5 py-[3px] text-[8.5px] uppercase tracking-[0.14em] text-accent hover:bg-wash disabled:pointer-events-none disabled:opacity-40"
                     >
                       Show
                     </button>
                   ) : (
                     <button
                       onClick={() => setMenu(menu === b.id ? null : b.id)}
+                      disabled={busy}
                       aria-label={`Edit ${b.id} block`}
-                      className="mono pointer-events-auto absolute right-0 top-0 flex h-[19px] w-[19px] items-center justify-center border border-rule bg-paper text-[12px] leading-none text-accent hover:bg-wash"
+                      className="mono pointer-events-auto absolute right-0 top-0 flex h-[19px] w-[19px] items-center justify-center border border-rule bg-paper text-[12px] leading-none text-accent hover:bg-wash disabled:pointer-events-none disabled:opacity-40"
                     >
                       &#8942;
                     </button>
@@ -270,6 +308,7 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
                       </div>
                       <button
                         onClick={() => void send({ op: "hide", block: b.id })}
+                        disabled={busy}
                         className={ITEM}
                       >
                         {/* The rail is on every page, so this is not a
@@ -282,6 +321,7 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
                             onClick={() =>
                               void send({ op: "move", block: b.id, dir: -1 })
                             }
+                            disabled={busy}
                             className={ITEM}
                           >
                             Move up
@@ -290,6 +330,7 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
                             onClick={() =>
                               void send({ op: "move", block: b.id, dir: 1 })
                             }
+                            disabled={busy}
                             className={ITEM}
                           >
                             Move down
@@ -307,37 +348,48 @@ export default function PageEditor({ hidden }: { hidden: BlockId[] }) {
               data-editor-ui
               className="fixed bottom-[4.4rem] right-6 z-[190] w-[186px] border border-rule bg-paper"
             >
-              {note && (
+              {(busy || note) && (
                 <div
                   className={`mono border-b border-hairline px-2.5 py-1.5 text-[9px] uppercase tracking-[0.14em] ${
-                    note.bad ? "text-accent" : "text-muted"
+                    !busy && note?.bad ? "text-accent" : "text-muted"
                   }`}
                 >
-                  {note.text}
+                  {busy ? "Saving…" : note!.text}
                 </div>
               )}
               <button
                 onClick={() =>
                   window.dispatchEvent(new Event(EDIT_ABOUT_EVENT))
                 }
+                disabled={busy}
                 className={ITEM}
               >
                 Edit about text
               </button>
-              {offPage.map((id) => (
-                <button
-                  key={id}
-                  onClick={() => void send({ op: "show", block: id })}
-                  className={ITEM}
-                >
-                  Show {id}
-                </button>
-              ))}
+              {offPage.map((id) => {
+                const isHidden = hidden.includes(id);
+                return (
+                  <button
+                    key={id}
+                    onClick={() =>
+                      void send({ op: isHidden ? "show" : "hide", block: id })
+                    }
+                    disabled={busy}
+                    className={ITEM}
+                  >
+                    {isHidden ? "Show" : "Hide"} {id}
+                    {/* The rail is on every page, so hiding it from here is
+                        not a front-page-only edit. */}
+                    {!isHidden && id === "rail" ? " (site-wide)" : ""}
+                  </button>
+                );
+              })}
               <button
                 onClick={() => {
                   if (confirm("Restore the front page to its code defaults?"))
                     void send({ op: "reset" });
                 }}
+                disabled={busy}
                 className={`${ITEM} border-t border-hairline text-accent`}
               >
                 Restore defaults
