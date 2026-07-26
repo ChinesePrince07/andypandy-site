@@ -47,8 +47,7 @@ export default async function BlogPage() {
           </Link>
         </div>
         <p data-reveal className="label mt-2 text-[10.5px]">
-          {posts.length} {posts.length === 1 ? "dispatch" : "dispatches"}{" "}
-
+          {posts.length} {posts.length === 1 ? "post" : "posts"}
         </p>
       </section>
 

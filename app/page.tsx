@@ -47,11 +47,10 @@ const LINKS = [
 
 // Selected honours, kept short on purpose — the fuller record is the CV.
 const HONOURS = [
-  { what: "USAMO qualifier — AIME 12/15", year: "2026" },
-  { what: "John Locke Essay Competition, shortlisted", year: "2025" },
-  { what: "National Merit Semifinalist — perfect PSAT", year: "2025" },
-  { what: "First place, NY Golden Classical Music Award", year: "2024" },
-  { what: "AAPT Physics Bowl, top 10%", year: "2025" },
+  { what: "USAMO qualifier (AIME 12/15)", year: "2026" },
+  { what: "John Locke Essay — shortlisted", year: "2025" },
+  { what: "National Merit Semifinalist", year: "2025" },
+  { what: "Carnegie Hall — first place, NYGCMA", year: "2024" },
 ];
 
 function skillLine(
@@ -128,16 +127,18 @@ export default async function FrontPage() {
           ))}
         </div>
 
-        <div data-reveal className="kicker mt-4">
+        <div data-reveal className="kicker mt-3">
           Selected honours
         </div>
         <div data-rule className="rule-bar mt-1.5" />
         {HONOURS.map((h) => (
           <div
             key={h.what}
-            className="flex items-baseline justify-between gap-3 border-b border-hairline py-[5px]"
+            className="flex items-baseline justify-between gap-3 border-b border-hairline py-[3px]"
           >
-            <span className="text-[13px] leading-snug text-body">{h.what}</span>
+            <span className="truncate text-[12.5px] leading-snug text-body">
+              {h.what}
+            </span>
             <span className="mono shrink-0 text-[9px] tabular-nums tracking-[0.12em] text-faint">
               {h.year}
             </span>
@@ -154,7 +155,7 @@ export default async function FrontPage() {
         {spec.map((row) => (
           <div
             key={row.k}
-            className="mono flex items-baseline justify-between gap-3 border-b border-hairline py-1.5 text-[10px]"
+            className="mono flex items-baseline justify-between gap-3 border-b border-hairline py-1 text-[10px]"
           >
             <span className="shrink-0 uppercase tracking-[0.14em] text-faint">
               {row.k}
@@ -226,7 +227,7 @@ export default async function FrontPage() {
             rel={
               link.href.startsWith("http") ? "noopener noreferrer" : undefined
             }
-            className="mono flex items-baseline justify-between gap-2.5 border-b border-hairline py-1.5 text-[10px] transition-colors hover:text-accent"
+            className="mono flex items-baseline justify-between gap-2.5 border-b border-hairline py-1 text-[10px] transition-colors hover:text-accent"
           >
             <span className="uppercase tracking-[0.12em]">{link.label}</span>
             <span className="truncate text-faint">{link.handle}</span>
@@ -280,7 +281,7 @@ export default async function FrontPage() {
                 data-parallax="0.04"
                 className="headline mt-1.5"
                 style={{
-                  fontSize: "clamp(48px, 6.4vw, 92px)",
+                  fontSize: "clamp(46px, 6vw, 84px)",
                   lineHeight: 0.88,
                   letterSpacing: "-0.04em",
                 }}
