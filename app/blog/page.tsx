@@ -8,88 +8,85 @@ export const metadata: Metadata = {
   title: "Blog",
 };
 
+function longDate(value: string): string {
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  return d.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 export default async function BlogPage() {
   const posts = await getAllPosts();
 
   return (
-    <div className="space-y-10">
-      <div className="animate-fade-in">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Blog</h1>
-        <p className="mt-3 text-gray-500 dark:text-gray-400">
-          Thoughts, tutorials, and updates.
+    <div>
+      <section className="border-b border-rule px-4 py-10 sm:px-11 sm:py-[68px]">
+        <div data-reveal className="kicker">
+          The notebook
+        </div>
+        <h1
+          data-reveal
+          data-parallax="0.04"
+          className="headline mt-2.5 max-w-[820px]"
+          style={{ fontSize: "clamp(40px, 6vw, 74px)" }}
+        >
+          Thoughts, tutorials, and updates
+        </h1>
+        <p data-reveal className="label mt-3 text-[10.5px]">
+          {posts.length} {posts.length === 1 ? "dispatch" : "dispatches"}{" "}
+          &middot;{" "}
+          <Link href="/feed.xml" className="text-accent">
+            RSS at /feed.xml
+          </Link>
         </p>
-      </div>
+      </section>
 
       {posts.length === 0 ? (
-        <div className="animate-fade-in rounded-xl border border-dashed border-gray-200 p-12 text-center dark:border-gray-800">
-          <p className="text-gray-400 dark:text-gray-500">
-            No posts yet. Check back soon!
-          </p>
-        </div>
+        <p className="px-4 py-16 text-center italic text-muted sm:px-11">
+          No dispatches filed yet. Check back soon.
+        </p>
       ) : (
-        <div className="stagger space-y-4">
-          {posts.map((post) => (
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className="card-hover group block rounded-xl border border-gray-200/80 bg-white p-5 shadow-sm dark:border-gray-800/80 dark:bg-gray-900"
-            >
-              <div className="flex items-baseline justify-between gap-4">
-                <div className="flex items-center gap-2 min-w-0">
-                  {post.pinned && (
-                    <span className="pinned-badge shrink-0">
-                      <svg
-                        className="h-2.5 w-2.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6A2.25 2.25 0 016 3.75h1.5m9 0h-9"
-                        />
-                      </svg>
-                      Pinned
-                    </span>
-                  )}
-                  <h2 className="font-semibold text-gray-900 group-hover:gradient-text transition-colors truncate dark:text-gray-100">
-                    {post.title}
-                  </h2>
-                </div>
-                <time className="shrink-0 text-xs tabular-nums text-gray-300 font-mono dark:text-gray-600">
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    month: "2-digit",
-                    day: "2-digit",
-                    year: "2-digit",
-                  })}
-                </time>
-              </div>
+        posts.map((post) => (
+          <Link
+            key={post.slug}
+            href={`/blog/${post.slug}`}
+            data-reveal
+            className="grid gap-2 border-b border-hairline px-4 py-7 transition-colors hover:bg-wash sm:grid-cols-[158px_1fr] sm:gap-6 sm:px-11 sm:py-9"
+          >
+            <div className="mono text-[10.5px] uppercase leading-relaxed tracking-[0.12em] text-faint">
+              {longDate(post.date)}
+              {post.pinned && (
+                <>
+                  <br />
+                  <span className="text-accent">Pinned</span>
+                </>
+              )}
+            </div>
+            <div>
+              <h2
+                className="headline"
+                style={{
+                  fontSize: "clamp(26px, 4vw, 40px)",
+                  lineHeight: 1.04,
+                  letterSpacing: "-0.018em",
+                }}
+              >
+                {post.title}
+              </h2>
               {post.description && (
-                <p className="mt-1.5 text-sm text-gray-500 leading-relaxed dark:text-gray-400">
+                <p className="mt-2 max-w-[620px] text-[15px] leading-relaxed text-body-soft sm:text-base">
                   {post.description}
                 </p>
               )}
-              <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-gray-400 transition-colors group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300">
-                Read more
-                <svg
-                  className="h-3 w-3 transition-transform group-hover:translate-x-0.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                  />
-                </svg>
+              <span className="mono mt-2 inline-block border-b border-accent pb-px text-[10px] uppercase tracking-[0.16em] text-accent">
+                Read the dispatch
               </span>
-            </Link>
-          ))}
-        </div>
+            </div>
+          </Link>
+        ))
       )}
     </div>
   );

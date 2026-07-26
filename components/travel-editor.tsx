@@ -56,8 +56,8 @@ function emptyPlace(): Place {
 }
 
 const inputClass =
-  "w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200";
-const labelClass = "mb-1 block text-xs font-medium text-gray-500";
+  "w-full border border-rule bg-wash px-3 py-2 text-sm ";
+const labelClass = "mb-1 block text-xs font-medium text-muted";
 
 /* --------------------------- image field ------------------------------- */
 
@@ -95,13 +95,13 @@ function ImageField({
       <span className={labelClass}>{label}</span>
       <div className="flex items-start gap-3">
         <div
-          className={`${aspect} max-w-[120px] shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800`}
+          className={`${aspect} max-w-[120px] shrink-0 overflow-hidden border border-rule bg-wash `}
         >
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={value} alt="" className="h-full w-full object-cover" />
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-[10px] text-gray-400">
+            <div className="flex h-full w-full items-center justify-center text-[10px] text-faint">
               none
             </div>
           )}
@@ -118,7 +118,7 @@ function ImageField({
             type="button"
             onClick={() => fileRef.current?.click()}
             disabled={busy}
-            className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="border border-rule px-3 py-1.5 text-xs font-medium text-muted hover:bg-wash disabled:opacity-50"
           >
             {busy ? "Uploading…" : "Upload"}
           </button>
@@ -132,7 +132,7 @@ function ImageField({
             <button
               type="button"
               onClick={() => onChange("")}
-              className="text-xs text-red-400 hover:text-red-600"
+              className="text-xs text-accent text-accent"
             >
               Clear
             </button>
@@ -180,14 +180,14 @@ function PhotoStrip({
         {photos.map((src, i) => (
           <div
             key={i}
-            className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+            className="group relative aspect-square overflow-hidden border border-rule "
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={src} alt="" className="h-full w-full object-cover" />
             <button
               type="button"
               onClick={() => onChange(photos.filter((_, j) => j !== i))}
-              className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100"
+              className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink/60 text-xs text-paper opacity-0 transition-opacity group-hover:opacity-100"
               aria-label="Remove photo"
             >
               ×
@@ -198,7 +198,7 @@ function PhotoStrip({
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={busy}
-          className="flex aspect-square items-center justify-center rounded-lg border border-dashed border-gray-300 text-xs text-gray-400 hover:border-accent hover:text-accent-strong disabled:opacity-50 dark:border-gray-700 dark:hover:border-accent dark:hover:text-accent"
+          className="flex aspect-square items-center justify-center border border-dashed border-rule text-xs text-faint hover:border-accent hover:text-accent disabled:opacity-50"
         >
           {busy ? "…" : "+ Add"}
         </button>
@@ -353,7 +353,7 @@ export default function TravelEditor({ data }: { data: TravelData }) {
       {/* FAB */}
       <button
         onClick={open}
-        className="fixed bottom-6 right-6 z-[190] flex h-12 w-12 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg transition-transform hover:scale-105 active:scale-95 dark:bg-gray-100 dark:text-gray-900"
+        className="fixed bottom-6 right-6 z-[190] flex h-12 w-12 items-center justify-center rounded-full bg-ink text-paper transition-transform hover:scale-105 active:scale-95 "
         aria-label="Edit travels"
       >
         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -362,11 +362,11 @@ export default function TravelEditor({ data }: { data: TravelData }) {
       </button>
 
       {editing && (
-        <div className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-black/40 p-3 backdrop-blur-sm sm:p-6">
-          <div className="relative my-4 w-full max-w-lg rounded-2xl border border-gray-200 bg-white p-5 shadow-2xl dark:border-gray-700 dark:bg-gray-900">
+        <div className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-ink/40 p-3 backdrop-blur-sm sm:p-6">
+          <div className="relative my-4 w-full max-w-lg border border-rule bg-paper p-5 shadow-2xl ">
             <button
               onClick={() => setEditing(false)}
-              className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="absolute right-4 top-4 text-faint hover:text-accent"
               aria-label="Close"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -374,22 +374,22 @@ export default function TravelEditor({ data }: { data: TravelData }) {
               </svg>
             </button>
 
-            <h2 className="mb-4 text-lg font-bold">Edit travels</h2>
+            <h2 className="headline mb-4 text-[21px]">Edit travels</h2>
 
             <div className="space-y-3">
               {draft.trips.map((trip) => (
                 <details
                   key={trip.id}
-                  className="rounded-xl border border-gray-200 dark:border-gray-700"
+                  className="border border-rule "
                 >
-                  <summary className="cursor-pointer select-none rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <summary className="cursor-pointer select-none px-3 py-2.5 text-sm font-semibold hover:bg-wash">
                     {trip.title || "Untitled trip"}
-                    <span className="ml-2 font-normal text-gray-400">
+                    <span className="ml-2 font-normal text-faint">
                       {trip.location}
                     </span>
                   </summary>
 
-                  <div className="space-y-3 border-t border-gray-100 p-3 dark:border-gray-800">
+                  <div className="space-y-3 border-t border-rule p-3 ">
                     <div className="grid grid-cols-2 gap-2">
                       <div className="col-span-2">
                         <label className={labelClass}>Title</label>
@@ -446,20 +446,20 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                     />
 
                     {/* Days */}
-                    <div className="space-y-2 rounded-lg bg-gray-50 p-2 dark:bg-gray-800/50">
-                      <div className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    <div className="space-y-2 bg-wash p-2 ">
+                      <div className="mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
                         Days
                       </div>
                       {trip.days.map((day) => (
                         <details
                           key={day.id}
-                          className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
+                          className="border border-rule bg-paper "
                         >
-                          <summary className="cursor-pointer select-none rounded-lg px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800">
+                          <summary className="cursor-pointer select-none px-3 py-2 text-sm hover:bg-wash">
                             {day.date || "New day"}
                             {day.title ? ` · ${day.title}` : ""}
                           </summary>
-                          <div className="space-y-3 border-t border-gray-100 p-3 dark:border-gray-800">
+                          <div className="space-y-3 border-t border-rule p-3 ">
                             <div className="grid grid-cols-2 gap-2">
                               <div>
                                 <label className={labelClass}>Date</label>
@@ -491,16 +491,16 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                             </div>
 
                             {/* Hotel */}
-                            <div className="rounded-lg border border-gray-100 p-2.5 dark:border-gray-800">
+                            <div className="border border-rule p-2.5 ">
                               <div className="mb-2 flex items-center justify-between">
-                                <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                                <span className="mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
                                   Hotel
                                 </span>
                                 {day.hotel ? (
                                   <button
                                     type="button"
                                     onClick={() => patchDay(trip.id, day.id, { hotel: undefined })}
-                                    className="text-xs text-red-400 hover:text-red-600"
+                                    className="text-xs text-accent text-accent"
                                   >
                                     Remove
                                   </button>
@@ -508,7 +508,7 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                                   <button
                                     type="button"
                                     onClick={() => patchDay(trip.id, day.id, { hotel: emptyPlace() })}
-                                    className="text-xs text-accent-strong hover:underline dark:text-accent"
+                                    className="text-xs text-accent hover:underline"
                                   >
                                     + Add hotel
                                   </button>
@@ -528,9 +528,9 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                             </div>
 
                             {/* Restaurants */}
-                            <div className="rounded-lg border border-gray-100 p-2.5 dark:border-gray-800">
+                            <div className="border border-rule p-2.5 ">
                               <div className="mb-2 flex items-center justify-between">
-                                <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                                <span className="mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
                                   Restaurants
                                 </span>
                                 <button
@@ -538,7 +538,7 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                                   onClick={() =>
                                     mutateRestaurants(trip.id, day.id, (l) => [...l, emptyPlace()])
                                   }
-                                  className="text-xs text-accent-strong hover:underline dark:text-accent"
+                                  className="text-xs text-accent hover:underline"
                                 >
                                   + Add
                                 </button>
@@ -547,7 +547,7 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                                 {(day.restaurants ?? []).map((r, ri) => (
                                   <div
                                     key={ri}
-                                    className="rounded-lg bg-gray-50 p-2.5 dark:bg-gray-800/60"
+                                    className="bg-wash p-2.5 "
                                   >
                                     <div className="mb-1 flex justify-end">
                                       <button
@@ -557,7 +557,7 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                                             l.filter((_, j) => j !== ri),
                                           )
                                         }
-                                        className="text-xs text-red-400 hover:text-red-600"
+                                        className="text-xs text-accent text-accent"
                                       >
                                         Remove
                                       </button>
@@ -589,7 +589,7 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                                   days: trip.days.filter((dd) => dd.id !== day.id),
                                 })
                               }
-                              className="text-xs text-red-400 hover:text-red-600"
+                              className="text-xs text-accent text-accent"
                             >
                               Delete this day
                             </button>
@@ -599,7 +599,7 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                       <button
                         type="button"
                         onClick={() => patchTrip(trip.id, { days: [...trip.days, emptyDay()] })}
-                        className="w-full rounded-lg border border-dashed border-gray-300 py-1.5 text-xs text-gray-400 hover:border-accent hover:text-accent-strong dark:border-gray-700 dark:hover:border-accent dark:hover:text-accent"
+                        className="w-full border border-dashed border-rule py-1.5 text-xs text-faint hover:border-accent hover:text-accent"
                       >
                         + Add day
                       </button>
@@ -610,7 +610,7 @@ export default function TravelEditor({ data }: { data: TravelData }) {
                       onClick={() =>
                         setDraft((d) => ({ trips: d.trips.filter((t) => t.id !== trip.id) }))
                       }
-                      className="text-xs text-red-400 hover:text-red-600"
+                      className="text-xs text-accent text-accent"
                     >
                       Delete trip
                     </button>
@@ -621,23 +621,23 @@ export default function TravelEditor({ data }: { data: TravelData }) {
               <button
                 type="button"
                 onClick={() => setDraft((d) => ({ trips: [...d.trips, emptyTrip()] }))}
-                className="w-full rounded-xl border border-dashed border-gray-300 py-2.5 text-sm font-medium text-gray-500 hover:border-accent hover:text-accent-strong dark:border-gray-700 dark:hover:border-accent dark:hover:text-accent"
+                className="w-full border border-dashed border-rule py-2.5 text-sm font-medium text-muted hover:border-accent hover:text-accent"
               >
                 + Add trip
               </button>
             </div>
 
-            <div className="sticky bottom-0 mt-5 flex justify-end gap-3 border-t border-gray-100 bg-white pt-4 dark:border-gray-800 dark:bg-gray-900">
+            <div className="sticky bottom-0 mt-5 flex justify-end gap-3 border-t border-rule bg-paper pt-4 ">
               <button
                 onClick={() => setEditing(false)}
-                className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
+                className="border border-rule px-4 py-2 text-sm text-muted hover:bg-wash"
               >
                 Cancel
               </button>
               <button
                 onClick={save}
                 disabled={saving}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+                className="bg-ink px-4 py-2 text-sm font-medium text-paper hover:opacity-90 disabled:opacity-50"
               >
                 {saving ? "Saving…" : "Save"}
               </button>

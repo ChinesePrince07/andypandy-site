@@ -163,10 +163,10 @@ export default function EditForm({
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Edit Post</h1>
+        <h1 className="headline text-[30px]">Edit Post</h1>
         <Link
           href="/admin"
-          className="text-sm text-gray-400 hover:text-gray-600"
+          className="text-sm text-faint hover:text-accent"
         >
           Back to admin
         </Link>
@@ -174,62 +174,62 @@ export default function EditForm({
 
       <form onSubmit={handleSave} className="space-y-4">
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">
+          <label className="block text-xs font-medium text-muted mb-1">
             Title
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-900 focus:outline-none"
+            className="w-full border border-rule px-4 py-2.5 text-sm focus:border-accent focus:outline-none"
           />
         </div>
 
         <div className="grid grid-cols-4 gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">
+            <label className="block text-xs font-medium text-muted mb-1">
               Date
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-900 focus:outline-none"
+              className="w-full border border-rule px-4 py-2.5 text-sm focus:border-accent focus:outline-none"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">
+            <label className="block text-xs font-medium text-muted mb-1">
               Time
             </label>
             <input
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-900 focus:outline-none"
+              className="w-full border border-rule px-4 py-2.5 text-sm focus:border-accent focus:outline-none"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">
+            <label className="block text-xs font-medium text-muted mb-1">
               Slug
             </label>
             <input
               type="text"
               value={slug}
               disabled
-              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-400"
+              className="w-full border border-rule bg-wash px-4 py-2.5 text-sm text-faint"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">
+            <label className="block text-xs font-medium text-muted mb-1">
               Pin
             </label>
             <button
               type="button"
               onClick={() => setPinned(!pinned)}
-              className={`w-full rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
+              className={`w-full border px-4 py-2.5 text-sm font-medium transition-colors ${
                 pinned
-                  ? "border-gray-900 bg-gray-900 text-white"
-                  : "border-gray-300 bg-white text-gray-400 hover:border-gray-400"
+                  ? "border-ink bg-ink text-paper"
+                  : "border-rule bg-paper text-faint hover:border-accent"
               }`}
             >
               {pinned ? "Pinned" : "Not pinned"}
@@ -238,7 +238,7 @@ export default function EditForm({
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">
+          <label className="block text-xs font-medium text-muted mb-1">
             Description
           </label>
           <input
@@ -246,24 +246,24 @@ export default function EditForm({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Short description..."
-            className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-gray-900 focus:outline-none"
+            className="w-full border border-rule px-4 py-2.5 text-sm focus:border-accent focus:outline-none"
           />
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-xs font-medium text-gray-500">
+            <label className="block text-xs font-medium text-muted">
               Content (Markdown)
             </label>
             <div className="flex items-center gap-2">
               {uploading && (
-                <span className="text-xs text-gray-400">Uploading...</span>
+                <span className="text-xs text-faint">Uploading...</span>
               )}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="inline-flex items-center gap-1 rounded-md border border-gray-300 px-2.5 py-1 text-xs font-medium text-gray-500 hover:border-gray-400 hover:text-gray-700 disabled:opacity-50"
+                className="inline-flex items-center gap-1 border border-rule px-2.5 py-1 text-xs font-medium text-muted hover:border-accent hover:text-accent disabled:opacity-50"
               >
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
@@ -283,15 +283,15 @@ export default function EditForm({
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={handleDrop}
-            className={`relative rounded-lg border transition-colors ${
+            className={`relative border transition-colors ${
               dragOver
-                ? "border-gray-900 bg-gray-50"
-                : "border-gray-300"
+                ? "border-ink bg-wash"
+                : "border-rule"
             }`}
           >
             {dragOver && (
-              <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-gray-50/90 z-10 pointer-events-none">
-                <span className="text-sm font-medium text-gray-600">Drop to upload</span>
+              <div className="absolute inset-0 flex items-center justify-center bg-wash z-10 pointer-events-none">
+                <span className="text-sm font-medium text-muted">Drop to upload</span>
               </div>
             )}
             <textarea
@@ -300,10 +300,10 @@ export default function EditForm({
               onChange={(e) => setContent(e.target.value)}
               onPaste={handlePaste}
               rows={20}
-              className="w-full rounded-lg px-4 py-3 text-sm font-mono leading-relaxed focus:border-gray-900 focus:outline-none resize-y border-0"
+              className="w-full px-4 py-3 text-sm font-mono leading-relaxed focus:border-accent focus:outline-none resize-y border-0"
             />
           </div>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-faint mt-1">
             Drop or paste images/videos to upload. Supports jpg, png, gif, webp, mp4, mov, webm.
           </p>
         </div>
@@ -312,7 +312,7 @@ export default function EditForm({
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+            className="bg-ink px-5 py-2.5 text-sm font-medium text-paper hover:opacity-90 disabled:opacity-50"
           >
             {saving ? "Saving..." : "Save"}
           </button>
@@ -320,8 +320,8 @@ export default function EditForm({
             <span
               className={`text-sm ${
                 message === "Saved" || message === "Uploaded"
-                  ? "text-green-600"
-                  : "text-red-500"
+                  ? "text-accent"
+                  : "text-accent"
               }`}
             >
               {message}

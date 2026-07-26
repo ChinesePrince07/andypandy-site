@@ -1,15 +1,31 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import { Space_Grotesk } from "next/font/google";
+import { Instrument_Serif, JetBrains_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import Rail from "@/components/rail";
+import BroadsheetFx from "@/components/broadsheet-fx";
 
-const spaceGrotesk = Space_Grotesk({
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-grotesk",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-newsreader",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 
@@ -27,9 +43,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${instrumentSerif.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        <link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd" />
+        <link
+          rel="EditURI"
+          type="application/rsd+xml"
+          title="RSD"
+          href="/xmlrpc.php?rsd"
+        />
         <link rel="https://api.w.org/" href="/wp-json/" />
         <link rel="micropub" href="/api/micropub" />
         <link rel="authorization_endpoint" href="/api/auth" />
@@ -40,14 +65,30 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="noise min-h-screen flex flex-col bg-white text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100 transition-colors duration-300">
-        <div className="relative flex flex-col min-h-screen">
+      <body className="relative min-h-screen bg-paper text-ink antialiased">
+        {/* Paper light. Kept in its own clipping layer so the sticky
+            dateline below still resolves against the viewport. */}
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          <div
+            data-glow
+            className="absolute left-0 top-0 -ml-[500px] -mt-[500px] h-[1000px] w-[1000px] rounded-full"
+            style={{
+              background:
+                "radial-gradient(circle, var(--glow), transparent 64%)",
+            }}
+          />
+        </div>
+
+        <div className="relative z-[2] flex min-h-screen flex-col">
           <Header />
-          <main className="flex-1 mx-auto w-full max-w-2xl px-6 py-5">
-            {children}
-          </main>
+          <div className="flex flex-1 items-stretch">
+            <Rail />
+            <main className="min-w-0 flex-1">{children}</main>
+          </div>
           <Footer />
         </div>
+
+        <BroadsheetFx />
       </body>
     </html>
   );

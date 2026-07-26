@@ -41,7 +41,7 @@ export default function PhotoMap({
   }, [latitude, longitude]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200/80 dark:border-gray-800/80">
+    <div className="overflow-hidden border border-rule ">
       <div ref={mapContainer} className="h-48 w-full" />
     </div>
   );

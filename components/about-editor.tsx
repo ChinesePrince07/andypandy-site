@@ -6,7 +6,7 @@ import type { AboutData } from "@/lib/about";
 type Section = null | "bio" | "education" | "skills" | "timeline";
 
 const inputClass =
-  "w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200";
+  "w-full border border-rule bg-wash px-3 py-2 text-sm ";
 
 export default function AboutEditor({ data }: { data: AboutData }) {
   const [open, setOpen] = useState(false);
@@ -42,7 +42,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
       {/* FAB */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-[190] flex h-12 w-12 items-center justify-center rounded-full bg-gray-900 text-white shadow-lg transition-transform hover:scale-105 active:scale-95 dark:bg-gray-100 dark:text-gray-900"
+        className="fixed bottom-6 right-6 z-[190] flex h-12 w-12 items-center justify-center rounded-full bg-ink text-paper transition-transform hover:scale-105 active:scale-95 "
         aria-label="Edit page"
       >
         <svg
@@ -62,12 +62,12 @@ export default function AboutEditor({ data }: { data: AboutData }) {
 
       {/* FAB menu */}
       {open && (
-        <div className="fixed bottom-20 right-6 z-[190] flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-2 shadow-xl dark:border-gray-700 dark:bg-gray-900">
+        <div className="fixed bottom-20 right-6 z-[190] flex flex-col gap-2 border border-rule bg-paper p-2 ">
           {(["bio", "education", "skills", "timeline"] as const).map((s) => (
             <button
               key={s}
               onClick={() => startEdit(s)}
-              className="rounded-lg px-4 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 capitalize"
+              className="px-4 py-2 text-left text-sm font-medium text-muted hover:bg-wash capitalize"
             >
               {s}
             </button>
@@ -77,11 +77,11 @@ export default function AboutEditor({ data }: { data: AboutData }) {
 
       {/* Editor modal */}
       {editing && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="relative max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl dark:border-gray-700 dark:bg-gray-900">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-ink/40 backdrop-blur-sm">
+          <div className="relative max-h-[85vh] w-full max-w-lg overflow-y-auto border border-rule bg-paper p-6 shadow-2xl ">
             <button
               onClick={() => setEditing(null)}
-              className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="absolute right-4 top-4 text-faint hover:text-accent"
             >
               <svg
                 className="h-5 w-5"
@@ -98,7 +98,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
               </svg>
             </button>
 
-            <h2 className="mb-4 text-lg font-bold capitalize">
+            <h2 className="headline mb-4 text-[21px] capitalize">
               Edit {editing}
             </h2>
 
@@ -107,7 +107,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                 {draft.bio.map((p, i) => (
                   <div key={i}>
                     <div className="mb-1 flex items-center justify-between">
-                      <label className="text-xs font-medium text-gray-500">
+                      <label className="text-xs font-medium text-muted">
                         Paragraph {i + 1}
                       </label>
                       {draft.bio.length > 1 && (
@@ -118,7 +118,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                               bio: draft.bio.filter((_, j) => j !== i),
                             })
                           }
-                          className="text-xs text-red-400 hover:text-red-600"
+                          className="text-xs text-accent text-accent"
                         >
                           Remove
                         </button>
@@ -140,7 +140,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                   onClick={() =>
                     setDraft({ ...draft, bio: [...draft.bio, ""] })
                   }
-                  className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="text-xs text-faint hover:text-accent"
                 >
                   + Add paragraph
                 </button>
@@ -152,10 +152,10 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                 {draft.education.map((entry, i) => (
                   <div
                     key={i}
-                    className="rounded-lg border border-gray-100 p-3 dark:border-gray-800 space-y-3"
+                    className="border border-rule p-3 space-y-3"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      <span className="text-xs font-semibold text-faint uppercase tracking-wider">
                         Entry {i + 1}
                       </span>
                       {draft.education.length > 1 && (
@@ -168,14 +168,14 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                               ),
                             })
                           }
-                          className="text-xs text-red-400 hover:text-red-600"
+                          className="text-xs text-accent text-accent"
                         >
                           Remove
                         </button>
                       )}
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-500">
+                      <label className="mb-1 block text-xs font-medium text-muted">
                         School
                       </label>
                       <input
@@ -192,7 +192,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-500">
+                      <label className="mb-1 block text-xs font-medium text-muted">
                         Location
                       </label>
                       <input
@@ -209,7 +209,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-500">
+                      <label className="mb-1 block text-xs font-medium text-muted">
                         Year
                       </label>
                       <input
@@ -226,7 +226,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-500">
+                      <label className="mb-1 block text-xs font-medium text-muted">
                         Logo URL (optional)
                       </label>
                       <input
@@ -255,7 +255,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                       ],
                     })
                   }
-                  className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="text-xs text-faint hover:text-accent"
                 >
                   + Add entry
                 </button>
@@ -267,7 +267,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                 {draft.skills.map((group, gi) => (
                   <div
                     key={gi}
-                    className="rounded-lg border border-gray-100 p-3 dark:border-gray-800"
+                    className="border border-rule p-3 "
                   >
                     <div className="flex items-center gap-2">
                       <input
@@ -280,7 +280,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                           };
                           setDraft({ ...draft, skills });
                         }}
-                        className="flex-1 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs font-semibold uppercase dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                        className="flex-1 border border-rule bg-wash px-2 py-1 text-xs font-semibold uppercase "
                       />
                       <button
                         onClick={() =>
@@ -289,7 +289,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                             skills: draft.skills.filter((_, i) => i !== gi),
                           })
                         }
-                        className="text-xs text-red-400 hover:text-red-600"
+                        className="text-xs text-accent text-accent"
                       >
                         Remove
                       </button>
@@ -309,7 +309,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                         setDraft({ ...draft, skills });
                       }}
                       placeholder="Comma-separated skills"
-                      className="mt-2 w-full rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                      className="mt-2 w-full border border-rule bg-wash px-2 py-1 text-xs "
                     />
                   </div>
                 ))}
@@ -320,7 +320,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                       skills: [...draft.skills, { category: "New", items: [] }],
                     })
                   }
-                  className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="text-xs text-faint hover:text-accent"
                 >
                   + Add category
                 </button>
@@ -342,11 +342,11 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                         });
                         setDraft({ ...draft, timeline });
                       }}
-                      className="mb-1 flex w-full items-center justify-center gap-1 rounded border border-dashed border-gray-200 py-1 text-[10px] text-gray-400 hover:border-gray-400 hover:text-gray-600 dark:border-gray-700 dark:hover:border-gray-500 dark:hover:text-gray-300"
+                      className="mb-1 flex w-full items-center justify-center gap-1 border border-dashed border-rule py-1 text-[10px] text-faint hover:border-accent hover:text-accent"
                     >
                       + Insert here
                     </button>
-                    <div className="rounded-lg border border-gray-100 p-3 dark:border-gray-800">
+                    <div className="border border-rule p-3 ">
                       <div className="mb-2 flex items-center gap-2">
                         <input
                           value={entry.year}
@@ -359,7 +359,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                             setDraft({ ...draft, timeline });
                           }}
                           placeholder="Year"
-                          className="w-28 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs font-mono dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                          className="w-28 border border-rule bg-wash px-2 py-1 text-xs font-mono "
                         />
                         <input
                           value={entry.title}
@@ -372,7 +372,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                             setDraft({ ...draft, timeline });
                           }}
                           placeholder="Title"
-                          className="flex-1 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                          className="flex-1 border border-rule bg-wash px-2 py-1 text-xs "
                         />
                         <button
                           onClick={() =>
@@ -383,7 +383,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                               ),
                             })
                           }
-                          className="text-xs text-red-400 hover:text-red-600"
+                          className="text-xs text-accent text-accent"
                         >
                           Remove
                         </button>
@@ -400,7 +400,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                           setDraft({ ...draft, timeline });
                         }}
                         placeholder="Description"
-                        className="w-full rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                        className="w-full border border-rule bg-wash px-2 py-1 text-xs "
                       />
                     </div>
                   </div>
@@ -416,7 +416,7 @@ export default function AboutEditor({ data }: { data: AboutData }) {
                       ],
                     })
                   }
-                  className="flex w-full items-center justify-center gap-1 rounded border border-dashed border-gray-200 py-1.5 text-[10px] text-gray-400 hover:border-gray-400 hover:text-gray-600 dark:border-gray-700 dark:hover:border-gray-500 dark:hover:text-gray-300"
+                  className="flex w-full items-center justify-center gap-1 border border-dashed border-rule py-1.5 text-[10px] text-faint hover:border-accent hover:text-accent"
                 >
                   + Insert at end
                 </button>
@@ -426,14 +426,14 @@ export default function AboutEditor({ data }: { data: AboutData }) {
             <div className="mt-5 flex justify-end gap-3">
               <button
                 onClick={() => setEditing(null)}
-                className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
+                className="border border-rule px-4 py-2 text-sm text-muted hover:bg-wash"
               >
                 Cancel
               </button>
               <button
                 onClick={save}
                 disabled={saving}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+                className="bg-ink px-4 py-2 text-sm font-medium text-paper hover:opacity-90 disabled:opacity-50"
               >
                 {saving ? "Saving..." : "Save"}
               </button>

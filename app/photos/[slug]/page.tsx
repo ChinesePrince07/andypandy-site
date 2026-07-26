@@ -39,12 +39,12 @@ export default async function PhotoDetailPage({
     .join("  ·  ");
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 px-4 py-10 sm:px-11">
       {/* Nav */}
       <div className="flex items-center justify-between">
         <Link
           href="/photos"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+          className="inline-flex items-center gap-1.5 text-sm text-faint transition-colors hover:text-muted"
         >
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -54,11 +54,11 @@ export default async function PhotoDetailPage({
       </div>
 
       {/* Photo */}
-      <div className="overflow-hidden rounded-xl">
+      <div className="overflow-hidden ">
         <img
           src={photo.url}
           alt={photo.title || photo.slug}
-          className="w-full rounded-xl"
+          className="w-full "
         />
       </div>
 
@@ -66,10 +66,10 @@ export default async function PhotoDetailPage({
       {(photo.title || photo.taken_at) && (
         <div className="space-y-1">
           {photo.title && (
-            <h1 className="text-2xl font-bold tracking-tight">{photo.title}</h1>
+            <h1 className="headline text-[34px]">{photo.title}</h1>
           )}
           {photo.taken_at && (
-            <time className="text-sm text-gray-400 font-mono dark:text-gray-500">
+            <time className="text-sm text-faint font-mono ">
               {new Date(photo.taken_at).toLocaleDateString("en-US", {
                 weekday: "long",
                 month: "long",
@@ -85,17 +85,17 @@ export default async function PhotoDetailPage({
       {(cameraInfo || exposureInfo) && (
         <div className="space-y-1">
           {cameraInfo && (
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <p className="text-sm font-medium text-muted ">
               {cameraInfo}
             </p>
           )}
           {exposureInfo && (
-            <p className="text-sm text-gray-400 font-mono dark:text-gray-500">
+            <p className="text-sm text-faint font-mono ">
               {exposureInfo}
             </p>
           )}
           {photo.lens && (
-            <p className="text-xs text-gray-400 dark:text-gray-500">{photo.lens}</p>
+            <p className="text-xs text-faint ">{photo.lens}</p>
           )}
         </div>
       )}

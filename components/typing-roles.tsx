@@ -32,16 +32,16 @@ export default function TypingRoles({ className }: { className?: string }) {
       let delay = deleting ? 40 : 80;
       if (!deleting && len === current.length) {
         deleting = true;
-        delay = 1500; // hold the full word
+        delay = 1600; // hold the full word
       } else if (deleting && len === 0) {
         deleting = false;
         word += 1;
-        delay = 350;
+        delay = 320;
       }
       timer = setTimeout(tick, delay);
     };
 
-    timer = setTimeout(tick, 700);
+    timer = setTimeout(tick, 600);
     return () => clearTimeout(timer);
   }, []);
 
@@ -50,7 +50,7 @@ export default function TypingRoles({ className }: { className?: string }) {
       <span aria-hidden="true">{text}</span>
       <span
         aria-hidden="true"
-        className="ml-px inline-block h-[1.05em] w-[2px] translate-y-[0.18em] bg-accent animate-cursor-blink"
+        className="ml-px inline-block h-[11px] w-[7px] translate-y-px bg-accent animate-cursor-blink"
       />
       <span className="sr-only">
         embedded systems, full-stack web apps, and more

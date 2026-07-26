@@ -109,10 +109,10 @@ export default function PostList({
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold">Admin</h1>
+        <h1 className="headline text-[30px]">Admin</h1>
         <button
           onClick={handleLogout}
-          className="text-sm text-gray-400 hover:text-gray-600"
+          className="text-sm text-faint hover:text-accent"
         >
           Sign out
         </button>
@@ -122,50 +122,50 @@ export default function PostList({
       <div className="flex gap-3 mb-8">
         <Link
           href="/admin/r2-photos"
-          className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+          className="border border-rule px-4 py-2 text-sm font-medium hover:bg-wash"
         >
           Upload Photos
         </Link>
         <Link
           href="/apps"
-          className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+          className="border border-rule px-4 py-2 text-sm font-medium hover:bg-wash"
         >
           iOS Apps
         </Link>
       </div>
 
       {/* Posts */}
-      <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">
+      <h2 className="text-sm font-medium text-faint uppercase tracking-wider mb-3">
         Posts
       </h2>
       <div className="space-y-3 mb-10">
         {posts.map((post) => (
           <div
             key={post.slug}
-            className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4"
+            className="flex items-center justify-between border border-rule bg-paper p-4"
           >
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 {post.pinned && (
-                  <span className="h-1.5 w-1.5 rounded-full bg-gray-900 shrink-0" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-ink shrink-0" />
                 )}
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="font-medium text-gray-900 hover:underline"
+                  className="font-medium text-ink hover:underline"
                 >
                   {post.title}
                 </Link>
               </div>
-              <p className="text-xs text-gray-400 mt-0.5">{post.date}</p>
+              <p className="text-xs text-faint mt-0.5">{post.date}</p>
             </div>
             <div className="flex items-center gap-2 ml-4 shrink-0">
               <button
                 onClick={() => handleTogglePostPin(post.slug, post.pinned)}
                 disabled={togglingPost === post.slug}
-                className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
+                className={`border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
                   post.pinned
-                    ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-700"
-                    : "border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-600"
+                    ? "border-ink bg-ink text-paper hover:opacity-90"
+                    : "border-rule text-faint hover:border-accent hover:text-accent"
                 }`}
               >
                 {togglingPost === post.slug
@@ -176,14 +176,14 @@ export default function PostList({
               </button>
               <Link
                 href={`/admin/edit/${post.slug}`}
-                className="rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                className="border border-rule px-3 py-1.5 text-xs font-medium text-muted hover:bg-wash"
               >
                 Edit
               </Link>
               <button
                 onClick={() => handleDelete(post.slug)}
                 disabled={deleting === post.slug}
-                className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-500 hover:bg-red-50 disabled:opacity-50"
+                className="border border-accent px-3 py-1.5 text-xs font-medium text-accent hover:bg-accent hover:text-paper disabled:opacity-50"
               >
                 {deleting === post.slug ? "..." : "Delete"}
               </button>
@@ -191,41 +191,41 @@ export default function PostList({
           </div>
         ))}
         {posts.length === 0 && (
-          <p className="text-center text-gray-400 py-6">No posts yet.</p>
+          <p className="text-center text-faint py-6">No posts yet.</p>
         )}
       </div>
 
       <LiveSitesManager projects={projects} />
 
       {/* Projects */}
-      <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-3">
+      <h2 className="text-sm font-medium text-faint uppercase tracking-wider mb-3">
         Projects
       </h2>
       <div className="space-y-3">
         {projects.map((project) => (
           <div
             key={project.slug}
-            className={`flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 ${
+            className={`flex items-center justify-between border border-rule bg-paper p-4 ${
               project.deleted ? "opacity-60" : ""
             }`}
           >
             <div className="flex items-center gap-3 min-w-0 flex-1">
               {project.pinned && !project.deleted && (
-                <span className="h-1.5 w-1.5 rounded-full bg-gray-900 shrink-0" />
+                <span className="h-1.5 w-1.5 rounded-full bg-ink shrink-0" />
               )}
               <span className="text-lg">{project.emoji}</span>
               <Link
                 href={`/projects/${project.slug}`}
                 className={`font-medium hover:underline ${
                   project.deleted
-                    ? "text-gray-400 line-through"
-                    : "text-gray-900"
+                    ? "text-faint line-through"
+                    : "text-ink"
                 }`}
               >
                 {project.name}
               </Link>
               {project.deleted && (
-                <span className="shrink-0 rounded bg-red-50 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-red-400">
+                <span className="shrink-0 bg-accent px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-paper">
                   Hidden
                 </span>
               )}
@@ -237,10 +237,10 @@ export default function PostList({
                     handleToggleProjectPin(project.slug, project.pinned)
                   }
                   disabled={togglingProject === project.slug}
-                  className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
+                  className={`border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
                     project.pinned
-                      ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-700"
-                      : "border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-600"
+                      ? "border-ink bg-ink text-paper hover:opacity-90"
+                      : "border-rule text-faint hover:border-accent hover:text-accent"
                   }`}
                 >
                   {togglingProject === project.slug
@@ -259,10 +259,10 @@ export default function PostList({
                   )
                 }
                 disabled={deletingProject === project.slug}
-                className={`rounded-md border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
+                className={`border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
                   project.deleted
-                    ? "border-emerald-300 text-emerald-600 hover:bg-emerald-50"
-                    : "border-red-200 text-red-500 hover:bg-red-50"
+                    ? "border-rule text-muted hover:bg-wash"
+                    : "border-accent text-accent hover:bg-accent hover:text-paper"
                 }`}
               >
                 {deletingProject === project.slug

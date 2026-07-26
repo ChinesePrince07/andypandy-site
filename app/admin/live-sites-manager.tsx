@@ -100,17 +100,17 @@ export default function LiveSitesManager({
         <div>
           <h2
             id="live-sites-admin-heading"
-            className="text-sm font-medium uppercase tracking-wider text-gray-400"
+            className="text-sm font-medium uppercase tracking-wider text-faint"
           >
             Live sites
           </h2>
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-faint">
             Set the public order or remove a site from the directory.
           </p>
         </div>
         <Link
           href="/projects"
-          className="shrink-0 text-xs font-medium text-gray-400 hover:text-gray-600"
+          className="shrink-0 text-xs font-medium text-faint hover:text-accent"
         >
           View directory
         </Link>
@@ -120,30 +120,30 @@ export default function LiveSitesManager({
         {visibleSites.map((project, index) => (
           <div
             key={project.slug}
-            className="flex flex-col gap-3 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-3 border border-rule bg-paper p-4 sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex min-w-0 items-center gap-3">
-              <span className="w-5 shrink-0 text-center text-xs font-medium tabular-nums text-gray-300">
+              <span className="w-5 shrink-0 text-center text-xs font-medium tabular-nums text-faint">
                 {index + 1}
               </span>
               <span className="text-lg">{project.emoji}</span>
               <div className="min-w-0">
-                <p className="truncate font-medium text-gray-900">
+                <p className="truncate font-medium text-ink">
                   {project.name}
                 </p>
-                <p className="truncate text-xs text-gray-400">
+                <p className="truncate text-xs text-faint">
                   {new URL(project.demo!).hostname}
                 </p>
               </div>
             </div>
             <div className="ml-8 flex shrink-0 items-center gap-2 sm:ml-4">
-              <div className="flex overflow-hidden rounded-md border border-gray-200">
+              <div className="flex overflow-hidden border border-rule">
                 <button
                   type="button"
                   onClick={() => handleMove(project.slug, -1)}
                   disabled={index === 0 || savingSlug !== null}
                   aria-label={`Move ${project.name} up`}
-                  className="border-r border-gray-200 px-2.5 py-1.5 text-xs text-gray-500 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30"
+                  className="border-r border-rule px-2.5 py-1.5 text-xs text-muted hover:bg-wash disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   ↑
                 </button>
@@ -154,7 +154,7 @@ export default function LiveSitesManager({
                     index === visibleSites.length - 1 || savingSlug !== null
                   }
                   aria-label={`Move ${project.name} down`}
-                  className="px-2.5 py-1.5 text-xs text-gray-500 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30"
+                  className="px-2.5 py-1.5 text-xs text-muted hover:bg-wash disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   ↓
                 </button>
@@ -169,7 +169,7 @@ export default function LiveSitesManager({
                   )
                 }
                 disabled={savingSlug !== null}
-                className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-500 hover:bg-red-50 disabled:opacity-50"
+                className="border border-accent px-3 py-1.5 text-xs font-medium text-accent hover:bg-accent hover:text-paper disabled:opacity-50"
               >
                 {savingSlug === project.slug ? "..." : "Remove"}
               </button>
@@ -180,20 +180,20 @@ export default function LiveSitesManager({
         {hiddenSites.map((project) => (
           <div
             key={project.slug}
-            className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 bg-gray-50 p-4 opacity-70"
+            className="flex items-center justify-between gap-4 border border-rule bg-wash p-4 opacity-70"
           >
             <div className="flex min-w-0 items-center gap-3">
               <span className="text-lg grayscale">{project.emoji}</span>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="truncate font-medium text-gray-500">
+                  <p className="truncate font-medium text-muted">
                     {project.name}
                   </p>
-                  <span className="shrink-0 rounded bg-gray-200 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                  <span className="shrink-0 bg-wash px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted">
                     Removed
                   </span>
                 </div>
-                <p className="truncate text-xs text-gray-400">
+                <p className="truncate text-xs text-faint">
                   {new URL(project.demo!).hostname}
                 </p>
               </div>
@@ -208,7 +208,7 @@ export default function LiveSitesManager({
                 )
               }
               disabled={savingSlug !== null}
-              className="shrink-0 rounded-md border border-emerald-300 px-3 py-1.5 text-xs font-medium text-emerald-600 hover:bg-emerald-50 disabled:opacity-50"
+              className="shrink-0 border border-rule px-3 py-1.5 text-xs font-medium text-muted hover:bg-wash disabled:opacity-50"
             >
               {savingSlug === project.slug ? "..." : "Restore"}
             </button>
@@ -216,7 +216,7 @@ export default function LiveSitesManager({
         ))}
 
         {liveSites.length === 0 && (
-          <p className="py-6 text-center text-sm text-gray-400">
+          <p className="py-6 text-center text-sm text-faint">
             No projects have live sites yet.
           </p>
         )}

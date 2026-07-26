@@ -16,8 +16,8 @@ function ExifRow({
   if (!value) return null;
   return (
     <div className="flex justify-between text-sm">
-      <span className="text-gray-400 dark:text-gray-500">{label}</span>
-      <span className="text-gray-700 font-mono dark:text-gray-300">
+      <span className="text-faint ">{label}</span>
+      <span className="text-muted font-mono ">
         {value}
       </span>
     </div>
@@ -64,7 +64,7 @@ function MiniMap({ lat, lng }: { lat: number; lng: number }) {
   }, [lat, lng]);
 
   return (
-    <div className="overflow-hidden rounded-lg border border-gray-200/80 dark:border-gray-700/80">
+    <div className="overflow-hidden border border-rule ">
       <div ref={container} className="h-48 w-full" />
     </div>
   );
@@ -184,9 +184,9 @@ export default function ExifEditor({ photo, isAdmin }: ExifEditorProps) {
   if (editing) {
     return (
       <div className="space-y-4">
-        <div className="rounded-xl border border-gray-200/80 bg-white p-5 shadow-sm space-y-3 dark:border-gray-800/80 dark:bg-gray-900">
+        <div className="border border-rule bg-paper p-5 space-y-3 ">
           <div className="flex items-center justify-between mb-1">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+            <h3 className="mono text-[9.5px] uppercase tracking-[0.14em] text-faint ">
               Edit Details
             </h3>
             <div className="flex gap-2">
@@ -195,14 +195,14 @@ export default function ExifEditor({ photo, isAdmin }: ExifEditorProps) {
                   resetForm();
                   setEditing(false);
                 }}
-                className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="text-xs text-faint hover:text-accent"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="text-xs font-medium text-blue-500 hover:text-blue-600 disabled:opacity-50"
+                className="text-xs font-medium text-accent hover:text-accent disabled:opacity-50"
               >
                 {saving ? "Saving..." : "Save"}
               </button>
@@ -273,15 +273,15 @@ export default function ExifEditor({ photo, isAdmin }: ExifEditorProps) {
   // View mode
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-gray-200/80 bg-white p-5 shadow-sm space-y-2 dark:border-gray-800/80 dark:bg-gray-900">
+      <div className="border border-rule bg-paper p-5 space-y-2 ">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+          <h3 className="mono text-[9.5px] uppercase tracking-[0.14em] text-faint ">
             Details
           </h3>
           {isAdmin && (
             <button
               onClick={() => setEditing(true)}
-              className="text-xs text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+              className="text-xs text-faint hover:text-accent"
             >
               Edit
             </button>
@@ -346,7 +346,7 @@ function Field({
 }) {
   return (
     <div className="flex items-center justify-between gap-4 text-sm">
-      <label className="text-gray-400 dark:text-gray-500 shrink-0">
+      <label className="text-faint shrink-0">
         {label}
       </label>
       <input
@@ -355,7 +355,7 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         step={step}
-        className="w-0 flex-1 text-right rounded border border-gray-200 bg-gray-50 px-2 py-1 font-mono text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-400"
+        className="w-0 flex-1 text-right border border-rule bg-wash px-2 py-1 font-mono text-sm text-muted focus:outline-none focus:ring-1 focus:ring-accent"
       />
     </div>
   );

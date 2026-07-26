@@ -10,7 +10,7 @@ export default async function AdminPhotosPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Manage Photos</h1>
+      <h1 className="headline mb-6 text-[30px]">Manage Photos</h1>
       <PhotoManager />
     </div>
   );

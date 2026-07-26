@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { selectVisibleLiveSites } from "@/lib/live-sites";
-import { getLiveSitesConfig, getProjectsWithPins } from "@/lib/projects";
+import { getProjectsWithPins } from "@/lib/projects";
 
 export const dynamic = "force-dynamic";
 
@@ -10,155 +9,113 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-  const [projects, liveSitesConfig] = await Promise.all([
-    getProjectsWithPins(),
-    getLiveSitesConfig(),
-  ]);
-  const liveProjects = selectVisibleLiveSites(projects, liveSitesConfig);
+  const projects = await getProjectsWithPins();
 
   return (
-    <div className="space-y-10">
-      <div className="animate-fade-in">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Projects
-        </h1>
-        <p className="mt-3 text-gray-500 dark:text-gray-400">
-          Explore the sites I&apos;ve built, or browse the full project archive.
-        </p>
-      </div>
-
-      <section aria-labelledby="live-sites-heading" className="animate-fade-in">
-        <div className="mb-4 flex items-end justify-between gap-4">
-          <div>
-            <h2
-              id="live-sites-heading"
-              className="text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-100"
+    <div>
+      <section className="border-b border-rule px-4 py-5 sm:px-11 sm:py-6">
+        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+          <div className="min-w-0">
+            <div data-reveal className="kicker">
+              The directory
+            </div>
+            <h1
+              data-reveal
+              data-parallax="0.04"
+              className="headline mt-1.5"
+              style={{ fontSize: "clamp(34px, 4.4vw, 56px)" }}
             >
-              Live sites
-            </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Open a project and try it for yourself.
-            </p>
+              Projects
+            </h1>
           </div>
-          <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
-            {liveProjects.length} sites
-          </span>
+          <a
+            href="https://github.com/ChinesePrince07"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-reveal
+            className="mono shrink-0 border-b border-accent pb-px text-[10px] uppercase tracking-[0.16em] text-accent"
+          >
+            github.com/ChinesePrince07 &#8599;
+          </a>
         </div>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          {liveProjects.map((project) => (
-            <a
-              key={project.slug}
-              href={project.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex min-w-0 items-center gap-3 rounded-xl border border-gray-200/80 bg-white p-4 transition-colors hover:border-gray-300 hover:bg-gray-50/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-800/80 dark:bg-gray-900 dark:hover:border-gray-700 dark:hover:bg-gray-800/70"
-              aria-label={`Visit ${project.name} (opens in a new tab)`}
-            >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-lg dark:bg-gray-800">
-                {project.emoji}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-medium text-gray-900 dark:text-gray-100">
-                  {project.name}
-                </span>
-                <span className="block truncate text-xs text-gray-500 dark:text-gray-400">
-                  {new URL(project.demo!).hostname}
-                </span>
-              </span>
-              <svg
-                aria-hidden="true"
-                className="h-4 w-4 shrink-0 text-gray-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5H19.5V10.5M19 5L10 14M19.5 14.25V18A1.5 1.5 0 0118 19.5H6A1.5 1.5 0 014.5 18V6A1.5 1.5 0 016 4.5H9.75"
-                />
-              </svg>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="project-archive-heading">
-        <h2
-          id="project-archive-heading"
-          className="mb-4 text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-100"
+        <p
+          data-reveal
+          className="mt-2 max-w-[680px] text-[14px] italic text-muted sm:text-[15px]"
         >
-          Project archive
-        </h2>
-        <div className="stagger space-y-4">
-          {projects.map((project) => (
-            <Link
-              key={project.name}
-              href={`/projects/${project.slug}`}
-              className="card-hover group block rounded-xl border border-gray-200/80 bg-white p-5 shadow-sm dark:border-gray-800/80 dark:bg-gray-900"
-            >
-              <div className="flex items-start gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-lg transition-transform group-hover:scale-110 dark:bg-gray-800">
-                  {project.emoji}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    {project.pinned && (
-                      <span className="pinned-badge shrink-0">
-                        <svg
-                          className="h-2.5 w-2.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2.5}
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6A2.25 2.25 0 016 3.75h1.5m9 0h-9"
-                          />
-                        </svg>
-                        Pinned
-                      </span>
-                    )}
-                    <h3 className="font-semibold text-gray-900 transition-colors group-hover:gradient-text dark:text-gray-100">
-                      {project.name}
-                    </h3>
-                    <svg
-                      className="h-3.5 w-3.5 text-gray-300 transition-all group-hover:translate-x-0.5 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                      />
-                    </svg>
-                  </div>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                    {project.description}
-                  </p>
-                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+          Everything I&rsquo;ve built, live or not. Hardware, embedded and iOS
+          builds are catalogued on GitHub.
+        </p>
       </section>
+
+      {/* ------------------------------ the archive ------------------------- */}
+      <section className="px-4 pb-3 pt-6 sm:px-11">
+        <div
+          data-reveal
+          className="mono flex items-baseline justify-between gap-4 text-[10px] uppercase tracking-[0.2em]"
+        >
+          <span className="text-accent">The archive</span>
+          <span className="text-faint">{projects.length} entries</span>
+        </div>
+        <div data-rule className="rule-bar mt-3" />
+      </section>
+
+      {/* The row is a container, not one big link: the live-site link has to
+          sit beside the entry link, and an <a> inside an <a> is invalid. */}
+      {projects.map((project) => (
+        <div
+          key={project.slug}
+          data-reveal
+          className="grid grid-cols-[1fr_16px] items-start gap-x-4 border-b border-hairline px-4 py-5 transition-colors hover:bg-wash sm:grid-cols-[1fr_200px_24px] sm:px-11"
+        >
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-2.5">
+              <h3 className="headline text-[23px] leading-tight">
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="transition-colors hover:text-accent"
+                >
+                  {project.name}
+                </Link>
+              </h3>
+              {project.pinned && (
+                <span className="mono shrink-0 text-[8.5px] uppercase tracking-[0.14em] text-accent">
+                  Pinned
+                </span>
+              )}
+            </div>
+
+            {project.demo && (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mono mt-1 inline-flex items-center gap-1.5 text-[9.5px] tracking-[0.1em] text-accent transition-opacity hover:opacity-70"
+              >
+                <span className="h-1 w-1 shrink-0 rounded-full bg-accent" />
+                {new URL(project.demo).hostname} &#8599;
+              </a>
+            )}
+
+            <p className="mt-1 max-w-[620px] text-[14.5px] leading-snug text-body-soft">
+              {project.description}
+            </p>
+            <div className="mono mt-1.5 text-[9px] uppercase tracking-[0.12em] text-faint sm:hidden">
+              {project.tags.join(" · ")}
+            </div>
+          </div>
+
+          <div className="mono hidden pt-1.5 text-[9px] uppercase tracking-[0.12em] text-faint sm:block">
+            {project.tags.join(" · ")}
+          </div>
+          <Link
+            href={`/projects/${project.slug}`}
+            aria-label={`Open ${project.name}`}
+            className="pt-1 text-right text-[15px] text-accent"
+          >
+            &rarr;
+          </Link>
+        </div>
+      ))}
     </div>
   );
 }

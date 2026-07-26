@@ -36,8 +36,8 @@ interface Photo {
 }
 
 const inputClass =
-  "w-full rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-xs focus:border-gray-400 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100";
-const labelClass = "block text-xs font-medium text-gray-500 mb-1";
+  "w-full border border-rule bg-paper px-2.5 py-1.5 text-xs focus:border-accent focus:outline-none ";
+const labelClass = "block text-xs font-medium text-muted mb-1";
 
 function slugify(name: string) {
   return name
@@ -313,9 +313,9 @@ export default function PhotoManager() {
       {/* Upload / Edit form */}
       <form
         onSubmit={editingSlug ? handleUpdate : handleUpload}
-        className="space-y-4 rounded-xl border border-gray-200/80 bg-white p-5 shadow-sm dark:border-gray-800/80 dark:bg-gray-900"
+        className="space-y-4 border border-rule bg-paper p-5 "
       >
-        <h2 className="text-sm font-semibold">
+        <h2 className="mono text-[10px] uppercase tracking-[0.14em] text-accent">
           {editingSlug ? `Editing: ${editingSlug}` : "Upload Photo"}
         </h2>
 
@@ -329,20 +329,20 @@ export default function PhotoManager() {
             onDragLeave={() => setDragOver(false)}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
-            className={`relative flex items-center justify-center rounded-lg border-2 border-dashed p-8 cursor-pointer transition-colors ${
+            className={`relative flex items-center justify-center border-2 border-dashed p-8 cursor-pointer transition-colors ${
               dragOver
-                ? "border-gray-900 bg-gray-50 dark:border-gray-100 dark:bg-gray-800"
-                : "border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
+                ? "border-ink bg-wash "
+                : "border-rule hover:border-accent"
             }`}
           >
             {previewUrl ? (
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="max-h-48 rounded-lg object-contain"
+                className="max-h-48 object-contain"
               />
             ) : (
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-faint">
                 Drop a photo here or click to select
               </p>
             )}
@@ -361,7 +361,7 @@ export default function PhotoManager() {
           <img
             src={previewUrl}
             alt="Preview"
-            className="max-h-48 rounded-lg object-contain"
+            className="max-h-48 object-contain"
           />
         )}
 
@@ -490,7 +490,7 @@ export default function PhotoManager() {
           <button
             type="submit"
             disabled={uploading || (!editingSlug && !selectedFile)}
-            className="rounded-lg bg-gray-900 px-4 py-2 text-xs font-medium text-white hover:bg-gray-800 disabled:opacity-40 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+            className="bg-ink px-4 py-2 text-xs font-medium text-paper hover:opacity-90 disabled:opacity-40"
           >
             {uploading ? "Saving..." : editingSlug ? "Update" : "Upload"}
           </button>
@@ -498,7 +498,7 @@ export default function PhotoManager() {
             <button
               type="button"
               onClick={resetForm}
-              className="text-xs text-gray-400 hover:text-gray-600"
+              className="text-xs text-faint hover:text-accent"
             >
               Cancel
             </button>
@@ -508,8 +508,8 @@ export default function PhotoManager() {
               className={`text-xs ${
                 message.startsWith("Error") ||
                 message.startsWith("Upload failed")
-                  ? "text-red-500"
-                  : "text-green-600"
+                  ? "text-accent"
+                  : "text-accent"
               }`}
             >
               {message}
@@ -520,26 +520,26 @@ export default function PhotoManager() {
 
       {/* Photo list */}
       <div className="space-y-2">
-        <h2 className="text-sm font-semibold">All Photos ({photos.length})</h2>
+        <h2 className="mono text-[10px] uppercase tracking-[0.14em] text-accent">All Photos ({photos.length})</h2>
         {photos.length === 0 ? (
-          <p className="text-xs text-gray-400">No photos uploaded yet.</p>
+          <p className="text-xs text-faint">No photos uploaded yet.</p>
         ) : (
           <div className="space-y-2">
             {photos.map((photo) => (
               <div
                 key={photo.id}
-                className="flex items-center gap-4 rounded-lg border border-gray-200/80 bg-white p-3 dark:border-gray-800/80 dark:bg-gray-900"
+                className="flex items-center gap-4 border border-rule bg-paper p-3 "
               >
                 <img
                   src={photo.url}
                   alt={photo.title || photo.slug}
-                  className="h-12 w-12 rounded-md object-cover"
+                  className="h-12 w-12 object-cover"
                 />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">
                     {photo.title || photo.slug}
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-faint">
                     {[photo.model, photo.lens].filter(Boolean).join(" · ") ||
                       "No EXIF"}
                   </p>
@@ -547,19 +547,19 @@ export default function PhotoManager() {
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/photos/${photo.slug}`}
-                    className="text-xs text-gray-400 hover:text-gray-600"
+                    className="text-xs text-faint hover:text-accent"
                   >
                     View
                   </Link>
                   <button
                     onClick={() => startEdit(photo)}
-                    className="text-xs text-gray-400 hover:text-gray-600"
+                    className="text-xs text-faint hover:text-accent"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(photo.slug)}
-                    className="text-xs text-red-400 hover:text-red-600"
+                    className="text-xs text-accent text-accent"
                   >
                     Delete
                   </button>

@@ -17,6 +17,23 @@ export async function generateMetadata({
   return { title: post.title, description: post.description };
 }
 
+function dateline(raw: string): string {
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return raw;
+  const day = d.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+  const hasTime = raw.includes("T") || raw.includes(":");
+  if (!hasTime) return day;
+  return `${day} at ${d.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  })}`;
+}
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -28,7 +45,6 @@ export default async function BlogPostPage({
 
   const admin = await isAdmin();
 
-  // Word count from stripped HTML
   const plainText = post.content
     .replace(/<[^>]*>/g, " ")
     .replace(/\s+/g, " ")
@@ -37,84 +53,62 @@ export default async function BlogPostPage({
   const readTime = Math.max(1, Math.round(wordCount / 230));
 
   return (
-    <article className="animate-fade-in">
-      {/* Back link */}
-      <div className="flex items-center justify-between">
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
-        >
-          <svg
-            className="h-3.5 w-3.5"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-            />
-          </svg>
-          Back to blog
-        </Link>
-        {admin && (
+    <article>
+      <header className="border-b border-rule px-4 py-8 sm:px-11 sm:py-12">
+        <div className="mono flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.16em]">
           <Link
-            href={`/admin/edit/${slug}`}
-            className="text-sm text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+            href="/blog"
+            className="text-faint transition-colors hover:text-accent"
           >
-            Edit
+            &larr; The notebook
           </Link>
-        )}
-      </div>
+          {admin && (
+            <Link
+              href={`/admin/edit/${slug}`}
+              className="text-faint transition-colors hover:text-accent"
+            >
+              Edit
+            </Link>
+          )}
+        </div>
 
-      {/* Header */}
-      <header className="mt-8 space-y-3">
-        <time className="text-sm text-gray-400 tabular-nums font-mono tracking-wide dark:text-gray-500">
-          {(() => {
-            const d = new Date(post.date);
-            const dateStr = d.toLocaleDateString("en-US", {
-              weekday: "long",
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            });
-            const hasTime = post.date.includes("T") || post.date.includes(":");
-            if (!hasTime) return dateStr;
-            const timeStr = d.toLocaleTimeString("en-US", {
-              hour: "numeric",
-              minute: "2-digit",
-              second: "2-digit",
-            });
-            return `${dateStr} at ${timeStr}`;
-          })()}
-        </time>
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        <div data-reveal className="kicker mt-8">
+          Dispatch
+        </div>
+        <h1
+          data-reveal
+          className="headline mt-2.5 max-w-[900px]"
+          style={{ fontSize: "clamp(34px, 5.4vw, 64px)", lineHeight: 1.02 }}
+        >
           {post.title}
         </h1>
-        <p className="text-xs text-gray-400 font-mono dark:text-gray-500">
-          {wordCount.toLocaleString()} words &middot; {readTime} min read
+        <p
+          data-reveal
+          className="mono mt-4 text-[10px] uppercase tracking-[0.14em] text-faint"
+        >
+          <time dateTime={post.date}>{dateline(post.date)}</time>
+          {" · "}
+          {wordCount.toLocaleString()} words · {readTime} min read
         </p>
         {post.description && (
-          <p className="text-lg text-gray-500 dark:text-gray-400">
+          <p
+            data-reveal
+            className="mt-4 max-w-[700px] text-lg italic leading-relaxed text-muted"
+          >
             {post.description}
           </p>
         )}
       </header>
 
-      {/* Divider */}
-      <div className="my-8 divider" />
-
-      {/* Content */}
-      <div
-        className="prose max-w-none animate-fade-in"
-        style={{ animationDelay: "200ms" }}
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
-
-      {/* Comments */}
-      <Comments slug={slug} isAdmin={admin} />
+      <div className="px-4 py-10 sm:px-11">
+        <div
+          className="prose max-w-[760px]"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+        <div className="max-w-[760px]">
+          <Comments slug={slug} isAdmin={admin} />
+        </div>
+      </div>
     </article>
   );
 }

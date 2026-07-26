@@ -117,7 +117,7 @@ function PlaceImage({
   const Icon = kind === "hotel" ? BedIcon : ForkIcon;
   return (
     <div
-      className={`flex items-center justify-center bg-accent/5 text-accent-strong dark:bg-accent/10 dark:text-accent ${className ?? ""}`}
+      className={`flex items-center justify-center bg-accent/5 text-accent ${className ?? ""}`}
     >
       <Icon className="h-6 w-6 opacity-60" />
     </div>
@@ -126,23 +126,23 @@ function PlaceImage({
 
 function HotelRow({ hotel }: { hotel: Place }) {
   const inner = (
-    <div className="flex items-center gap-3 rounded-xl border border-gray-200/80 bg-white p-2.5 shadow-sm transition-colors hover:border-accent/40 dark:border-gray-800/80 dark:bg-gray-900 dark:hover:border-accent/40">
+    <div className="flex items-center gap-3 border border-rule bg-paper p-2.5 transition-colors hover:border-accent/40 ">
       <PlaceImage
         src={hotel.image}
         alt={hotel.name}
         kind="hotel"
-        className="h-14 w-14 shrink-0 rounded-lg"
+        className="h-14 w-14 shrink-0 "
       />
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-accent-strong dark:text-accent">
+        <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-accent ">
           <BedIcon className="h-3.5 w-3.5" />
           Stayed at
         </div>
-        <h4 className="truncate font-semibold text-gray-900 dark:text-gray-100">
+        <h4 className="truncate font-semibold text-ink ">
           {hotel.name}
         </h4>
         {hotel.note && (
-          <p className="truncate text-sm text-gray-500 dark:text-gray-400">{hotel.note}</p>
+          <p className="truncate text-sm text-muted ">{hotel.note}</p>
         )}
       </div>
     </div>
@@ -158,7 +158,7 @@ function HotelRow({ hotel }: { hotel: Place }) {
 
 function RestaurantCard({ place }: { place: Place }) {
   const inner = (
-    <div className="group overflow-hidden rounded-xl border border-gray-200/80 bg-white shadow-sm transition-all hover:border-accent/40 hover:shadow-md dark:border-gray-800/80 dark:bg-gray-900 dark:hover:border-accent/40">
+    <div className="group overflow-hidden border border-rule bg-paper transition-all hover:border-accent/40 hover:">
       <PlaceImage
         src={place.image}
         alt={place.name}
@@ -166,17 +166,17 @@ function RestaurantCard({ place }: { place: Place }) {
         className="h-32 w-full"
       />
       <div className="space-y-0.5 p-3">
-        <h4 className="font-semibold leading-tight text-gray-900 dark:text-gray-100">
+        <h4 className="font-semibold leading-tight text-ink ">
           {place.name}
         </h4>
         {place.dish && (
-          <p className="flex items-start gap-1.5 text-sm text-accent-strong dark:text-accent">
+          <p className="flex items-start gap-1.5 text-sm text-accent ">
             <ForkIcon className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>{place.dish}</span>
           </p>
         )}
         {place.note && (
-          <p className="text-sm text-gray-500 dark:text-gray-400">{place.note}</p>
+          <p className="text-sm text-muted ">{place.note}</p>
         )}
       </div>
     </div>
@@ -199,7 +199,7 @@ function PhotoGallery({ photos, alt }: { photos: string[]; alt: string }) {
           href={src}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200/80 dark:border-gray-800/80"
+          className="group relative aspect-square overflow-hidden border border-rule "
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -221,30 +221,30 @@ function DayBlock({ day, last }: { day: TravelDay; last: boolean }) {
     <div className="relative pl-7">
       {/* timeline rail */}
       <span
-        className="absolute left-[7px] top-2 h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-white dark:ring-gray-950"
+        className="absolute left-[7px] top-2 h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-white "
         aria-hidden
       />
       {!last && (
         <span
-          className="absolute left-[11px] top-5 bottom-[-1.25rem] w-px bg-gray-200 dark:bg-gray-800"
+          className="absolute left-[11px] top-5 bottom-[-1.25rem] w-px bg-rule "
           aria-hidden
         />
       )}
 
       <div className="space-y-3">
         <div>
-          <p className="font-mono text-xs uppercase tracking-wider text-gray-400 dark:text-gray-500">
+          <p className="font-mono text-xs uppercase tracking-wider text-faint ">
             {formatDayLabel(day.date)}
           </p>
           {day.title && (
-            <h3 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100">
+            <h3 className="headline text-[21px] text-ink">
               {day.title}
             </h3>
           )}
         </div>
 
         {day.notes && (
-          <p className="text-[15px] leading-relaxed text-gray-600 dark:text-gray-300">
+          <p className="text-[15px] leading-relaxed text-muted ">
             {day.notes}
           </p>
         )}
@@ -253,7 +253,7 @@ function DayBlock({ day, last }: { day: TravelDay; last: boolean }) {
 
         {restaurants.length > 0 && (
           <div className="space-y-2">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-500">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-faint ">
               <ForkIcon className="h-3.5 w-3.5" />
               Ate
             </div>
@@ -267,7 +267,7 @@ function DayBlock({ day, last }: { day: TravelDay; last: boolean }) {
 
         {photos.length > 0 && (
           <div className="space-y-2">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-500">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-faint ">
               <CameraIcon className="h-3.5 w-3.5" />
               Photos
             </div>
@@ -285,12 +285,12 @@ function TripSection({ trip, index }: { trip: Trip; index: number }) {
   );
   return (
     <section
-      className="space-y-5 animate-fade-in"
+      className="space-y-5 "
       style={{ animationDelay: `${200 + index * 80}ms` }}
     >
       {/* Cover or header */}
       {trip.cover ? (
-        <div className="relative overflow-hidden rounded-2xl border border-gray-200/80 shadow-sm dark:border-gray-800/80">
+        <div className="relative overflow-hidden border border-rule ">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={trip.cover}
@@ -300,7 +300,7 @@ function TripSection({ trip, index }: { trip: Trip; index: number }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            <h2 className="headline text-[28px] text-white sm:text-[34px]">
               {trip.title}
             </h2>
             <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-white/80">
@@ -317,11 +317,11 @@ function TripSection({ trip, index }: { trip: Trip; index: number }) {
         </div>
       ) : (
         <div className="space-y-1.5">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h2 className="headline text-[28px] sm:text-[34px]">
             {trip.title}
           </h2>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-gray-500 dark:text-gray-400">
-            <span className="inline-flex items-center gap-1 text-accent-strong dark:text-accent">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-muted ">
+            <span className="inline-flex items-center gap-1 text-accent ">
               <MapPinIcon className="h-3.5 w-3.5" />
               {trip.location}
             </span>
@@ -334,7 +334,7 @@ function TripSection({ trip, index }: { trip: Trip; index: number }) {
       )}
 
       {trip.summary && (
-        <p className="text-[15px] leading-relaxed text-gray-600 dark:text-gray-300">
+        <p className="text-[15px] leading-relaxed text-muted ">
           {trip.summary}
         </p>
       )}
@@ -346,7 +346,7 @@ function TripSection({ trip, index }: { trip: Trip; index: number }) {
           ))}
         </div>
       ) : (
-        <p className="rounded-xl border border-dashed border-gray-200 px-4 py-6 text-center text-sm text-gray-400 dark:border-gray-800 dark:text-gray-500">
+        <p className="border border-dashed border-rule px-4 py-6 text-center text-sm text-faint ">
           Day-by-day log coming soon.
         </p>
       )}
@@ -356,11 +356,11 @@ function TripSection({ trip, index }: { trip: Trip; index: number }) {
 
 function Stat({ value, label }: { value: number; label: string }) {
   return (
-    <div className="rounded-xl border border-gray-200/80 bg-white px-3 py-2.5 text-center shadow-sm dark:border-gray-800/80 dark:bg-gray-900">
-      <div className="font-mono text-xl font-bold tabular-nums text-gray-900 dark:text-gray-100">
+    <div className="border border-rule bg-paper px-3 py-2.5 text-center ">
+      <div className="font-mono text-xl font-bold tabular-nums text-ink ">
         {value}
       </div>
-      <div className="text-[11px] uppercase tracking-wider text-gray-400 dark:text-gray-500">
+      <div className="text-[11px] uppercase tracking-wider text-faint ">
         {label}
       </div>
     </div>
@@ -375,11 +375,11 @@ export default async function TravelsPage() {
   const stats = travelStats(data);
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 px-4 py-10 sm:px-11">
       {/* Hero */}
-      <header className="hero-fx space-y-3">
-        <div className="animate-fade-in" style={{ animationDelay: "100ms" }}>
-          <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-1 font-mono text-xs text-gray-500 shadow-sm backdrop-blur dark:border-gray-800 dark:bg-gray-900/80 dark:text-gray-400">
+      <header className="space-y-3">
+        <div className="" style={{ animationDelay: "100ms" }}>
+          <span className="inline-flex items-center gap-2 rounded-full border border-rule bg-paper px-3 py-1 font-mono text-xs text-muted backdrop-blur ">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
@@ -389,11 +389,11 @@ export default async function TravelsPage() {
           </span>
         </div>
 
-        <div className="space-y-2 animate-fade-in" style={{ animationDelay: "200ms" }}>
-          <h1 className="text-3xl font-bold sm:text-4xl" style={{ letterSpacing: "-0.04em" }}>
+        <div className="space-y-2 " style={{ animationDelay: "200ms" }}>
+          <h1 className="headline" style={{ fontSize: "clamp(40px, 6vw, 74px)" }}>
             Travels
           </h1>
-          <p className="max-w-lg text-lg leading-relaxed text-gray-500 dark:text-gray-400">
+          <p className="max-w-lg text-lg leading-relaxed text-muted ">
             A running log of where I&apos;ve been, where I stayed, and (mostly)
             what I ate.
           </p>
@@ -401,24 +401,24 @@ export default async function TravelsPage() {
       </header>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-2 animate-fade-in" style={{ animationDelay: "250ms" }}>
+      <div className="grid grid-cols-4 gap-2 " style={{ animationDelay: "250ms" }}>
         <Stat value={stats.trips} label="Trips" />
         <Stat value={stats.days} label="Days" />
         <Stat value={stats.restaurants} label="Eats" />
         <Stat value={stats.photos} label="Photos" />
       </div>
 
-      <div className="divider" />
+      <div className="h-px bg-rule" />
 
       {/* Trips */}
       {trips.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-gray-200 px-6 py-16 text-center dark:border-gray-800">
-          <MapPinIcon className="mx-auto h-8 w-8 text-gray-300 dark:text-gray-600" />
-          <p className="mt-3 text-gray-500 dark:text-gray-400">
+        <div className="border border-dashed border-rule px-6 py-16 text-center ">
+          <MapPinIcon className="mx-auto h-8 w-8 text-faint " />
+          <p className="mt-3 text-muted ">
             No trips logged yet.
           </p>
           {admin && (
-            <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
+            <p className="mt-1 text-sm text-faint ">
               Tap the edit button to add your first trip.
             </p>
           )}

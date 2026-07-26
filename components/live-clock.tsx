@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export default function LiveClock() {
-  const [time, setTime] = useState<string>("");
+  const [time, setTime] = useState("");
 
   useEffect(() => {
     const update = () => {
@@ -13,7 +13,7 @@ export default function LiveClock() {
           minute: "2-digit",
           second: "2-digit",
           hour12: false,
-        })
+        }),
       );
     };
     update();
@@ -21,11 +21,10 @@ export default function LiveClock() {
     return () => clearInterval(id);
   }, []);
 
-  if (!time) return null;
-
+  // Placeholder keeps the dateline from twitching on first paint.
   return (
-    <span className="mono text-xs tabular-nums text-gray-400 dark:text-gray-500">
-      {time}
+    <span className="mono tabular-nums tracking-[0.06em] text-faint">
+      {time || "00:00:00"}
     </span>
   );
 }
