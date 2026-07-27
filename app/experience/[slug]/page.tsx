@@ -1,6 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { experience, getExperience } from "@/lib/experience";
+import { experience } from "@/lib/experience";
+import { getExperienceEntries, getExperienceEntry } from "@/lib/experience-store";
+import { isAdmin } from "@/lib/admin-auth";
+import DetailEditor from "@/components/detail-editor";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return experience.map((e) => ({ slug: e.slug }));
@@ -12,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const e = getExperience(slug);
+  const e = await getExperienceEntry(slug);
   if (!e) return {};
   return { title: `${e.role} — ${e.org}`, description: e.note };
 }
@@ -23,7 +28,11 @@ export default async function ExperiencePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const e = getExperience(slug);
+  const [e, all, admin] = await Promise.all([
+    getExperienceEntry(slug),
+    getExperienceEntries(),
+    isAdmin(),
+  ]);
   if (!e) notFound();
 
   return (
@@ -61,6 +70,18 @@ export default async function ExperiencePage({
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
+
+        {admin && (
+          <div className="max-w-[900px]">
+            <DetailEditor
+              kind="experience"
+              slug={slug}
+              doc={all}
+              body={e.body}
+              media={e.media}
+            />
+          </div>
+        )}
 
         {e.media.length > 0 && (
           <div className="mt-10 max-w-[900px]">

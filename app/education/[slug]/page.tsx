@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getAboutData, educationSlug } from "@/lib/about";
 import { isAdmin } from "@/lib/admin-auth";
 import OrgMark from "@/components/org-mark";
-import EducationUploader from "@/components/education-uploader";
+import DetailEditor from "@/components/detail-editor";
 
 export const dynamic = "force-dynamic";
 
@@ -122,7 +122,13 @@ export default async function EducationPage({
 
         {admin && (
           <div className="max-w-[900px]">
-            <EducationUploader about={about} slug={slug} />
+            <DetailEditor
+              kind="education"
+              slug={slug}
+              doc={about}
+              body={entry.body ?? []}
+              media={entry.media ?? []}
+            />
           </div>
         )}
       </div>

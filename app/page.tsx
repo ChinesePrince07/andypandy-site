@@ -11,7 +11,7 @@ import { selectVisibleLiveSites } from "@/lib/live-sites";
 import { getLiveSitesConfig, getProjectsWithPins } from "@/lib/projects";
 import { isAdmin } from "@/lib/admin-auth";
 import { getFrontPageConfig } from "@/lib/front-page-store";
-import { experience } from "@/lib/experience";
+import { getExperienceEntries } from "@/lib/experience-store";
 import {
   GROUPS,
   isHidden,
@@ -106,7 +106,7 @@ function orderedForAdmin(group: GroupId, config: FrontPageConfig): BlockId[] {
 }
 
 export default async function FrontPage() {
-  const [about, posts, projects, liveConfig, admin, frontPage] =
+  const [about, posts, projects, liveConfig, admin, frontPage, experience] =
     await Promise.all([
       getAboutData(),
       // The notebook is a section of the front page, not the point of it —
@@ -116,6 +116,7 @@ export default async function FrontPage() {
       getLiveSitesConfig(),
       isAdmin(),
       getFrontPageConfig(),
+      getExperienceEntries(),
     ]);
   const live = selectVisibleLiveSites(projects, liveConfig);
 
