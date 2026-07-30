@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getProjectsWithPins } from "@/lib/projects";
+import { StaggerReveal } from "@/components/stagger-reveal";
 
 export const dynamic = "force-dynamic";
 
@@ -61,12 +62,9 @@ export default async function ProjectsPage() {
 
       {/* The row is a container, not one big link: the live-site link has to
           sit beside the entry link, and an <a> inside an <a> is invalid. */}
-      {projects.map((project) => (
-        <div
-          key={project.slug}
-          data-reveal
-          className="grid grid-cols-[1fr_16px] items-start gap-x-4 border-b border-hairline px-4 py-5 transition-colors hover:bg-wash sm:grid-cols-[1fr_200px_24px] sm:px-11"
-        >
+      {projects.map((project, i) => (
+        <StaggerReveal key={project.slug} index={i}>
+          <div className="grid grid-cols-[1fr_16px] items-start gap-x-4 border-b border-hairline px-4 py-5 transition-colors hover:bg-wash sm:grid-cols-[1fr_200px_24px] sm:px-11">
           <div className="min-w-0">
             <div className="flex items-baseline gap-2.5">
               <h3 className="headline text-[23px] leading-tight">
@@ -109,7 +107,8 @@ export default async function ProjectsPage() {
           >
             &rarr;
           </Link>
-        </div>
+          </div>
+        </StaggerReveal>
       ))}
     </div>
   );

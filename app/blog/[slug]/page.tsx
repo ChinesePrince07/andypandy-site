@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getPostBySlug } from "@/lib/blog";
 import { isAdmin } from "@/lib/admin-auth";
 import Comments from "@/components/comments";
+import ReadingProgress from "@/components/reading-progress";
 
 export const revalidate = 3600;
 
@@ -54,6 +55,7 @@ export default async function BlogPostPage({
 
   return (
     <article>
+      <ReadingProgress />
       <header className="border-b border-rule px-4 py-8 sm:px-11 sm:py-12">
         <div className="mono flex items-center justify-between gap-4 text-[10px] uppercase tracking-[0.16em]">
           <Link

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
+import { StaggerReveal } from "@/components/stagger-reveal";
 
 export const revalidate = 3600;
 
@@ -56,13 +57,12 @@ export default async function BlogPage() {
           No dispatches filed yet. Check back soon.
         </p>
       ) : (
-        posts.map((post) => (
-          <Link
-            key={post.slug}
-            href={`/blog/${post.slug}`}
-            data-reveal
-            className="grid gap-2 border-b border-hairline px-4 py-7 transition-colors hover:bg-wash sm:grid-cols-[158px_1fr] sm:gap-6 sm:px-11 sm:py-9"
-          >
+        posts.map((post, i) => (
+          <StaggerReveal key={post.slug} index={i}>
+            <Link
+              href={`/blog/${post.slug}`}
+              className="grid gap-2 border-b border-hairline px-4 py-7 transition-colors hover:bg-wash sm:grid-cols-[158px_1fr] sm:gap-6 sm:px-11 sm:py-9"
+            >
             <div className="mono text-[10.5px] uppercase leading-relaxed tracking-[0.12em] text-faint">
               {longDate(post.date)}
               {post.pinned && (
@@ -92,7 +92,8 @@ export default async function BlogPage() {
                 Read the dispatch
               </span>
             </div>
-          </Link>
+            </Link>
+          </StaggerReveal>
         ))
       )}
     </div>
