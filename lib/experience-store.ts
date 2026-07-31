@@ -14,7 +14,17 @@ function merge(raw: unknown): Experience[] {
       saved.set((e as Experience).slug, e as Partial<Experience>);
     }
   }
-  return defaults.map((d) => ({ ...d, ...(saved.get(d.slug) ?? {}) }));
+  return defaults.map((d) => {
+    const s = saved.get(d.slug) ?? {};
+    const body = d.body && d.body.length > 0 ? d.body : (s.body ?? []);
+    const media = d.media && d.media.length > 0 ? d.media : (s.media ?? []);
+    return {
+      ...d,
+      ...s,
+      body,
+      media,
+    };
+  });
 }
 
 const load = unstable_cache(

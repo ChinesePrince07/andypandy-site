@@ -51,10 +51,33 @@ export const experience: Experience[] = [
     location: "Chicago, Illinois",
     note: "PHIL 20218, Philosophy of Life and Death. Grade A.",
     body: [
-      "A university-level philosophy seminar taken alongside undergraduates: PHIL 20218, Introduction to the Philosophy of Life and Death.",
-      "Finished with a grade of A and a 4.0 GPA for the programme.",
+      "The autumn air outside the heavy stone windows of Hyde Park was already turning sharp when I first cracked open Plato. Sitting at a scuffed oak desk with a lukewarm coffee, I remember reading the Republic and feeling the weird, uncomfortable prickle of the Cave allegory sinking in. Suddenly, walking across campus wasn’t just walking to class anymore—it felt like watching shadows dance across a wall, wondering if anyone around me was actually seeing the light. A few weeks later, Aristotle forced me into an internal audit, making me look at my own daily routines to figure out whether I was actually practicing virtue or just going through the motions of being a good student.",
+      "By the time the mid-semester rain set in, we had moved into the 17th century, and the readings started haunting my late nights. I remember sitting under a desk lamp at 2 a.m., reading René Descartes by the hum of the radiator. He was huddled by his fireplace four hundred years ago, methodically stripping away every belief he had until he was left with nothing but his own doubting mind. For an hour, I stared at my own hands, genuinely wondering if I was dreaming. Then came Hobbes, Locke, and Hume—a chaotic intellectual free-for-all. Hobbes made me look at my peers with sudden suspicion during chaotic group assignments, Locke made me question where my identity even lived, and Hume calmly dismantled the concept of cause and effect until I half-expected the sun to forget to rise the next morning.",
+      "Then came the mountain: Immanuel Kant. Trying to hack my way through his endless, dense sentences felt like trying to swim through wet concrete. But somewhere around page forty, in the middle of a silent library study room, something clicked. Kant’s idea of the categorical imperative—that you can never treat another human being as a mere stepping stone for your own goals—hit like a physical weight. Philosophy was no longer just an academic exercise; it was a mirror held up to every choice I made.",
+      "By the final weeks of the course, we reached the modern agitators, and the room was electric. Karl Marx made me look at every commercial exchange on my walk to the train with a sharp, critical lens. Friedrich Nietzsche’s declaration that \"God is dead\" echoed in the back of my mind as the semester wound down, warning us of the terrifying vacuum left behind when old truths collapse. Finally, the existentialists left us standing at the edge of the cliff: the universe wasn't going to hand me a purpose, which meant I had to step up and forge one myself. Closing that final textbook on the last day felt less like finishing a class and more like stepping out of a long, transformative fever dream.",
     ],
-    media: [],
+    media: [
+      {
+        type: "image",
+        src: "/experience/plato.jpg",
+        caption: "Shadows on the cave wall... is any of this real? 🕯️",
+      },
+      {
+        type: "image",
+        src: "/experience/descartes.jpg",
+        caption: "Descartes at 2 AM: \"Cogito ergo sum\" 🔥",
+      },
+      {
+        type: "image",
+        src: "/experience/kant.jpg",
+        caption: "Kant's 100-word sentences in the library 📚",
+      },
+      {
+        type: "image",
+        src: "/experience/nietzsche.jpg",
+        caption: "Staring into the abyss... time to forge my own purpose 🌄",
+      },
+    ],
   },
   {
     slug: "innobridge-mit",
