@@ -96,6 +96,22 @@ export default function DetailEditor({
     }
   }
 
+  function moveMedia(index: number, direction: "up" | "down") {
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= media.length) return;
+    const next = [...media];
+    const temp = next[index];
+    next[index] = next[targetIndex];
+    next[targetIndex] = temp;
+    void run(() => save(paragraphs(text), next), "Reordered");
+  }
+
+  function updateCaption(index: number, caption: string) {
+    if (media[index]?.caption === caption) return;
+    const next = media.map((m, i) => (i === index ? { ...m, caption } : m));
+    void run(() => save(paragraphs(text), next), "Caption updated");
+  }
+
   return (
     <div className="mt-10 border-t border-rule pt-5">
       <div className="kicker">Admin</div>
@@ -163,30 +179,76 @@ export default function DetailEditor({
       </div>
 
       {media.length > 0 && (
-        <ul className="mono mt-3 flex flex-col gap-1 text-[9.5px] text-faint">
-          {media.map((m) => (
-            <li key={m.src} className="flex items-center gap-3">
-              <span className="truncate">{m.src.split("/").pop()}</span>
-              <button
-                onClick={() =>
-                  confirm("Remove this plate?") &&
-                  void run(
-                    () =>
-                      save(
-                        paragraphs(text),
-                        media.filter((x) => x.src !== m.src),
-                      ),
-                    "Removed",
-                  )
-                }
-                disabled={busy}
-                className="shrink-0 cursor-pointer uppercase tracking-[0.14em] text-accent disabled:opacity-40"
+        <div className="mt-5 max-w-[760px] space-y-2">
+          <div className="mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            Re-order & Edit Media Plates ({media.length})
+          </div>
+          <ul className="space-y-2">
+            {media.map((m, i) => (
+              <li
+                key={m.src}
+                className="mono flex flex-wrap items-center justify-between gap-3 border border-rule bg-paper p-2.5 text-[11px] text-body"
               >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={m.src}
+                    alt=""
+                    className="h-10 w-12 border border-rule object-cover shrink-0"
+                  />
+                  <div className="truncate min-w-0 flex-1">
+                    <span className="font-semibold text-ink block truncate">
+                      {m.src.split("/").pop()}
+                    </span>
+                    <input
+                      type="text"
+                      defaultValue={m.caption ?? ""}
+                      placeholder="Add caption..."
+                      onBlur={(e) => updateCaption(i, e.target.value)}
+                      className="mt-1 w-full border-b border-hairline bg-transparent text-[10px] text-faint focus:border-accent focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    onClick={() => moveMedia(i, "up")}
+                    disabled={busy || i === 0}
+                    className="cursor-pointer border border-rule px-2 py-1 text-[10px] uppercase tracking-[0.1em] text-ink hover:border-accent hover:text-accent disabled:opacity-30"
+                    title="Move Up"
+                  >
+                    ↑ Up
+                  </button>
+                  <button
+                    onClick={() => moveMedia(i, "down")}
+                    disabled={busy || i === media.length - 1}
+                    className="cursor-pointer border border-rule px-2 py-1 text-[10px] uppercase tracking-[0.1em] text-ink hover:border-accent hover:text-accent disabled:opacity-30"
+                    title="Move Down"
+                  >
+                    ↓ Down
+                  </button>
+                  <button
+                    onClick={() =>
+                      confirm("Remove this plate?") &&
+                      void run(
+                        () =>
+                          save(
+                            paragraphs(text),
+                            media.filter((_, idx) => idx !== i),
+                          ),
+                        "Removed",
+                      )
+                    }
+                    disabled={busy}
+                    className="cursor-pointer border border-rule px-2 py-1 text-[10px] uppercase tracking-[0.1em] text-accent hover:bg-accent hover:text-paper disabled:opacity-30"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );
