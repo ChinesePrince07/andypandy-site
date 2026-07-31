@@ -56,28 +56,7 @@ export const experience: Experience[] = [
       "Then came the mountain: Immanuel Kant. Trying to hack my way through his endless, dense sentences felt like trying to swim through wet concrete. But somewhere around page forty, in the middle of a silent library study room, something clicked. Kant’s idea of the categorical imperative—that you can never treat another human being as a mere stepping stone for your own goals—hit like a physical weight. Philosophy was no longer just an academic exercise; it was a mirror held up to every choice I made.",
       "By the final weeks of the course, we reached the modern agitators, and the room was electric. Karl Marx made me look at every commercial exchange on my walk to the train with a sharp, critical lens. Friedrich Nietzsche’s declaration that \"God is dead\" echoed in the back of my mind as the semester wound down, warning us of the terrifying vacuum left behind when old truths collapse. Finally, the existentialists left us standing at the edge of the cliff: the universe wasn't going to hand me a purpose, which meant I had to step up and forge one myself. Closing that final textbook on the last day felt less like finishing a class and more like stepping out of a long, transformative fever dream.",
     ],
-    media: [
-      {
-        type: "image",
-        src: "/experience/plato.jpg",
-        caption: "Shadows on the cave wall... is any of this real? 🕯️",
-      },
-      {
-        type: "image",
-        src: "/experience/descartes.jpg",
-        caption: "Descartes at 2 AM: \"Cogito ergo sum\" 🔥",
-      },
-      {
-        type: "image",
-        src: "/experience/kant.jpg",
-        caption: "Kant's 100-word sentences in the library 📚",
-      },
-      {
-        type: "image",
-        src: "/experience/nietzsche.jpg",
-        caption: "Staring into the abyss... time to forge my own purpose 🌄",
-      },
-    ],
+    media: [],
   },
   {
     slug: "innobridge-mit",
