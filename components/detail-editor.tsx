@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface DetailMedia {
   type: "image" | "video";
@@ -122,6 +122,94 @@ export default function DetailEditor({
     void run(() => save(paragraphs(text), next), "Frame focus updated");
   }
 
+  /* ── Crop modal state ─────────────────────────────────────────────── */
+  const [cropIdx, setCropIdx] = useState<number | null>(null);
+  const [bitmap, setBitmap] = useState<ImageBitmap | null>(null);
+  const [panX, setPanX] = useState(0);
+  const [panY, setPanY] = useState(0);
+  const [cropZoom, setCropZoom] = useState(1);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const drag = useRef<{ startX: number; startY: number; origPanX: number; origPanY: number } | null>(null);
+
+  // Redraw preview whenever pan/zoom/bitmap changes
+  const paint = useCallback(() => {
+    const c = canvasRef.current;
+    const b = bitmap;
+    if (!c || !b) return;
+    const ctx = c.getContext("2d");
+    if (!ctx) return;
+    const W = c.width, H = c.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#0a0a0a";
+    ctx.fillRect(0, 0, W, H);
+    // "cover" fit then user zoom
+    const scale = Math.max(W / b.width, H / b.height) * cropZoom;
+    const dw = b.width * scale, dh = b.height * scale;
+    const dx = (W - dw) / 2 + panX;
+    const dy = (H - dh) / 2 + panY;
+    ctx.drawImage(b, dx, dy, dw, dh);
+  }, [bitmap, panX, panY, cropZoom]);
+
+  useEffect(() => { paint(); }, [paint]);
+
+  function openCrop(i: number) {
+    setCropIdx(i);
+    setPanX(0); setPanY(0); setCropZoom(1); setBitmap(null);
+    // Same-origin fetch avoids CORS tainting the canvas
+    fetch(media[i].src)
+      .then(r => r.blob())
+      .then(b => createImageBitmap(b))
+      .then(bmp => setBitmap(bmp))
+      .catch(() => alert("Could not load image"));
+  }
+
+  function closeCrop() { setCropIdx(null); setBitmap(null); }
+
+  function onPointerDown(e: React.PointerEvent) {
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    drag.current = { startX: e.clientX, startY: e.clientY, origPanX: panX, origPanY: panY };
+  }
+  function onPointerMove(e: React.PointerEvent) {
+    const d = drag.current;
+    if (!d) return;
+    setPanX(d.origPanX + (e.clientX - d.startX));
+    setPanY(d.origPanY + (e.clientY - d.startY));
+  }
+  function onPointerUp() { drag.current = null; }
+
+  async function applyCrop() {
+    if (cropIdx === null || !bitmap) return;
+    const bmp = bitmap, idx = cropIdx;
+    await run(async () => {
+      const OW = 800, OH = 500;
+      const cvs = document.createElement("canvas");
+      cvs.width = OW; cvs.height = OH;
+      const ctx = cvs.getContext("2d")!;
+      ctx.fillStyle = "#0a0a0a";
+      ctx.fillRect(0, 0, OW, OH);
+      // Map preview pan to export dimensions
+      const p = canvasRef.current;
+      const pW = p?.width ?? OW, pH = p?.height ?? OH;
+      const rx = OW / pW, ry = OH / pH;
+      const scale = Math.max(OW / bmp.width, OH / bmp.height) * cropZoom;
+      const dw = bmp.width * scale, dh = bmp.height * scale;
+      ctx.drawImage(bmp, (OW - dw) / 2 + panX * rx, (OH - dh) / 2 + panY * ry, dw, dh);
+      // Export
+      const blob = await new Promise<Blob | null>(r => cvs.toBlob(r, "image/jpeg", 0.92));
+      if (!blob) throw new Error("Export failed");
+      const form = new FormData();
+      form.append("file", new File([blob], `crop-${slug}-${Date.now()}.jpg`, { type: "image/jpeg" }));
+      const res = await fetch("/api/admin/upload-blob/", { method: "POST", body: form });
+      if (!res.ok) throw new Error(`Upload failed (${res.status})`);
+      const { url } = (await res.json()) as { url: string };
+      const next: DetailMedia[] = media.map((m, i) =>
+        i === idx ? { ...m, src: url, position: "center" as const } : m,
+      );
+      await save(paragraphs(text), next);
+      closeCrop();
+    }, "Cropped & saved");
+  }
+
   return (
     <div className="mt-10 border-t border-rule pt-5">
       <div className="kicker">Admin</div>
@@ -221,6 +309,16 @@ export default function DetailEditor({
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0">
+                  {m.type === "image" && (
+                    <button
+                      onClick={() => openCrop(i)}
+                      disabled={busy}
+                      className="cursor-pointer border border-rule px-2 py-1 text-[10px] uppercase tracking-[0.1em] text-ink hover:border-accent hover:text-accent disabled:opacity-30"
+                      title="Crop Photo"
+                    >
+                      ✂️ Crop
+                    </button>
+                  )}
                   <select
                     value={m.position ?? "center"}
                     onChange={(e) =>
@@ -282,6 +380,53 @@ export default function DetailEditor({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* ── Crop modal ──────────────────────────────────────────────── */}
+      {cropIdx !== null && media[cropIdx] && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="mono w-full max-w-[640px] border border-rule bg-paper p-5 shadow-2xl text-ink">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-rule pb-3 mb-3">
+              <span className="text-[12px] font-bold uppercase tracking-[0.14em]">Crop Photo</span>
+              <button onClick={closeCrop} className="cursor-pointer text-[11px] uppercase tracking-[0.12em] text-faint hover:text-accent">✕ Close</button>
+            </div>
+
+            <p className="text-[10px] text-faint uppercase tracking-[0.1em] mb-2">Drag to pan · Zoom slider below</p>
+
+            {/* Canvas — WYSIWYG: what you see = what gets saved */}
+            <canvas
+              ref={canvasRef}
+              width={576}
+              height={360}
+              className="w-full border border-rule cursor-grab active:cursor-grabbing touch-none"
+              style={{ aspectRatio: "8/5", background: "#0a0a0a" }}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+            />
+            {!bitmap && <p className="mt-2 text-center text-[10px] text-faint uppercase tracking-[0.1em]">Loading…</p>}
+
+            {/* Zoom */}
+            <div className="mt-4 flex items-center gap-3 text-[10px] uppercase tracking-[0.12em]">
+              <span className="w-14 text-faint">Zoom</span>
+              <input type="range" min="1" max="4" step="0.05" value={cropZoom} onChange={e => setCropZoom(parseFloat(e.target.value))} className="flex-1 accent-accent" />
+              <span className="w-14 text-right">{Math.round(cropZoom * 100)}%</span>
+            </div>
+
+            {/* Actions */}
+            <div className="mt-4 flex items-center justify-between border-t border-rule pt-3">
+              <button onClick={() => { setPanX(0); setPanY(0); setCropZoom(1); }} className="cursor-pointer text-[10px] uppercase tracking-[0.12em] text-faint hover:text-ink">↺ Reset</button>
+              <div className="flex items-center gap-3">
+                <button onClick={closeCrop} className="cursor-pointer border border-rule px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-faint hover:text-ink">Cancel</button>
+                <button onClick={() => void applyCrop()} disabled={busy || !bitmap} className="cursor-pointer border border-accent bg-accent px-4 py-1.5 text-[10px] uppercase tracking-[0.14em] text-paper font-bold hover:opacity-90 disabled:opacity-40">
+                  {busy ? "Saving…" : "Apply Crop"}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
