@@ -97,6 +97,13 @@ export default function DetailEditor({
     }
   }
 
+  const [cropIndex, setCropIndex] = useState<number | null>(null);
+  const [cropZoom, setCropZoom] = useState(1);
+  const [cropPanX, setCropPanX] = useState(0);
+  const [cropPanY, setCropPanY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStart = useRef<{ x: number; y: number; px: number; py: number } | null>(null);
+
   function moveMedia(index: number, direction: "up" | "down") {
     const targetIndex = direction === "up" ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= media.length) return;
@@ -120,6 +127,100 @@ export default function DetailEditor({
     if (media[index]?.position === position) return;
     const next = media.map((m, i) => (i === index ? { ...m, position } : m));
     void run(() => save(paragraphs(text), next), "Frame focus updated");
+  }
+
+  function openCropModal(i: number) {
+    setCropIndex(i);
+    setCropZoom(1);
+    setCropPanX(0);
+    setCropPanY(0);
+  }
+
+  async function applyCrop() {
+    if (cropIndex === null || !media[cropIndex]) return;
+    const targetMedia = media[cropIndex];
+
+    await run(async () => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = targetMedia.src;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      const canvas = document.createElement("canvas");
+      const canvasWidth = 800;
+      const canvasHeight = 500;
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Could not initialize canvas");
+
+      ctx.fillStyle = "#faf7f0";
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      const imgAspect = img.width / img.height;
+      const canvasAspect = canvasWidth / canvasHeight;
+
+      let baseW = img.width;
+      let baseH = img.height;
+
+      if (imgAspect > canvasAspect) {
+        baseW = img.height * canvasAspect;
+      } else {
+        baseH = img.width / canvasAspect;
+      }
+
+      const cropW = baseW / cropZoom;
+      const cropH = baseH / cropZoom;
+
+      const maxShiftX = (img.width - cropW) / 2;
+      const maxShiftY = (img.height - cropH) / 2;
+
+      const sourceX = (img.width - cropW) / 2 - (cropPanX / 100) * maxShiftX;
+      const sourceY = (img.height - cropH) / 2 - (cropPanY / 100) * maxShiftY;
+
+      const clampedX = Math.max(0, Math.min(img.width - cropW, sourceX));
+      const clampedY = Math.max(0, Math.min(img.height - cropH, sourceY));
+
+      ctx.drawImage(
+        img,
+        clampedX,
+        clampedY,
+        cropW,
+        cropH,
+        0,
+        0,
+        canvasWidth,
+        canvasHeight,
+      );
+
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/jpeg", 0.92),
+      );
+      if (!blob) throw new Error("Failed to export cropped image");
+
+      const file = new File([blob], `crop-${slug}-${Date.now()}.jpg`, {
+        type: "image/jpeg",
+      });
+      const form = new FormData();
+      form.append("file", file);
+
+      const res = await fetch("/api/admin/upload-blob/", {
+        method: "POST",
+        body: form,
+      });
+      if (!res.ok) throw new Error(`Upload failed (${res.status})`);
+      const { url } = (await res.json()) as { url: string };
+
+      const next: DetailMedia[] = media.map((m, idx) =>
+        idx === cropIndex ? { ...m, src: url, position: "center" } : m,
+      );
+      await save(paragraphs(text), next);
+      setCropIndex(null);
+    }, "Image cropped & saved");
   }
 
   return (
@@ -221,6 +322,16 @@ export default function DetailEditor({
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0">
+                  {m.type === "image" && (
+                    <button
+                      onClick={() => openCropModal(i)}
+                      disabled={busy}
+                      className="cursor-pointer border border-rule px-2 py-1 text-[10px] uppercase tracking-[0.1em] text-ink hover:border-accent hover:text-accent disabled:opacity-30"
+                      title="Crop Photo"
+                    >
+                      ✂️ Crop
+                    </button>
+                  )}
                   <select
                     value={m.position ?? "center"}
                     onChange={(e) =>
@@ -282,6 +393,130 @@ export default function DetailEditor({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Interactive Photo Crop Modal */}
+      {cropIndex !== null && media[cropIndex] && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+          <div className="mono w-full max-w-[620px] border border-rule bg-paper p-5 shadow-2xl text-ink">
+            <div className="flex items-center justify-between border-b border-rule pb-3">
+              <div className="text-[12px] font-bold uppercase tracking-[0.14em]">
+                Precise Photo Cropper — Sticky Frame
+              </div>
+              <button
+                onClick={() => setCropIndex(null)}
+                className="cursor-pointer text-[11px] uppercase tracking-[0.12em] text-faint hover:text-accent"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            <div className="mt-3 text-[10px] text-faint uppercase tracking-[0.1em]">
+              Drag image inside frame or use sliders to set exact crop:
+            </div>
+
+            {/* Interactive Sticky Frame Canvas Preview */}
+            <div
+              className="relative mt-3 h-[220px] w-full overflow-hidden border border-rule bg-black/5 select-none cursor-grab active:cursor-grabbing"
+              onMouseDown={(e) => {
+                setIsDragging(true);
+                dragStart.current = {
+                  x: e.clientX,
+                  y: e.clientY,
+                  px: cropPanX,
+                  py: cropPanY,
+                };
+              }}
+              onMouseMove={(e) => {
+                if (!isDragging || !dragStart.current) return;
+                const dx = e.clientX - dragStart.current.x;
+                const dy = e.clientY - dragStart.current.y;
+                setCropPanX(
+                  Math.max(-100, Math.min(100, dragStart.current.px + dx * 0.8)),
+                );
+                setCropPanY(
+                  Math.max(-100, Math.min(100, dragStart.current.py + dy * 0.8)),
+                );
+              }}
+              onMouseUp={() => setIsDragging(false)}
+              onMouseLeave={() => setIsDragging(false)}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={media[cropIndex].src}
+                alt=""
+                draggable={false}
+                className="h-full w-full object-cover pointer-events-none transition-transform"
+                style={{
+                  transform: `scale(${cropZoom}) translate(${cropPanX / cropZoom}%, ${cropPanY / cropZoom}%)`,
+                }}
+              />
+
+              {/* Sticky Note Frame Border Overlay */}
+              <div className="pointer-events-none absolute inset-0 border-2 border-dashed border-accent/70" />
+            </div>
+
+            {/* Controls Sliders */}
+            <div className="mt-4 space-y-3 text-[10px] uppercase tracking-[0.12em]">
+              <div className="flex items-center justify-between gap-3">
+                <span className="w-20 text-faint">Zoom:</span>
+                <input
+                  type="range"
+                  min="1"
+                  max="3"
+                  step="0.05"
+                  value={cropZoom}
+                  onChange={(e) => setCropZoom(parseFloat(e.target.value))}
+                  className="flex-1 accent-accent"
+                />
+                <span className="w-12 text-right">{Math.round(cropZoom * 100)}%</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-3">
+                <span className="w-20 text-faint">Pan Horiz:</span>
+                <input
+                  type="range"
+                  min="-100"
+                  max="100"
+                  value={cropPanX}
+                  onChange={(e) => setCropPanX(parseFloat(e.target.value))}
+                  className="flex-1 accent-accent"
+                />
+                <span className="w-12 text-right">{Math.round(cropPanX)}</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-3">
+                <span className="w-20 text-faint">Pan Vert:</span>
+                <input
+                  type="range"
+                  min="-100"
+                  max="100"
+                  value={cropPanY}
+                  onChange={(e) => setCropPanY(parseFloat(e.target.value))}
+                  className="flex-1 accent-accent"
+                />
+                <span className="w-12 text-right">{Math.round(cropPanY)}</span>
+              </div>
+            </div>
+
+            {/* Footer buttons */}
+            <div className="mt-5 flex items-center justify-end gap-3 border-t border-rule pt-3">
+              <button
+                onClick={() => setCropIndex(null)}
+                className="cursor-pointer border border-rule px-3 py-1.5 uppercase text-[10px] tracking-[0.14em] text-faint hover:text-ink"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => void applyCrop()}
+                disabled={busy}
+                className="cursor-pointer border border-accent bg-accent px-4 py-1.5 uppercase text-[10px] tracking-[0.14em] text-paper font-bold hover:opacity-90 disabled:opacity-40"
+              >
+                {busy ? "Cropping…" : "Apply & Save Crop"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
