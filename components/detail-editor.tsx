@@ -7,6 +7,7 @@ export interface DetailMedia {
   type: "image" | "video";
   src: string;
   caption?: string;
+  position?: "center" | "top" | "bottom" | "left" | "right" | "contain";
 }
 
 /**
@@ -112,6 +113,15 @@ export default function DetailEditor({
     void run(() => save(paragraphs(text), next), "Caption updated");
   }
 
+  function updatePosition(
+    index: number,
+    position: "center" | "top" | "bottom" | "left" | "right" | "contain",
+  ) {
+    if (media[index]?.position === position) return;
+    const next = media.map((m, i) => (i === index ? { ...m, position } : m));
+    void run(() => save(paragraphs(text), next), "Frame focus updated");
+  }
+
   return (
     <div className="mt-10 border-t border-rule pt-5">
       <div className="kicker">Admin</div>
@@ -211,6 +221,30 @@ export default function DetailEditor({
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0">
+                  <select
+                    value={m.position ?? "center"}
+                    onChange={(e) =>
+                      updatePosition(
+                        i,
+                        e.target.value as
+                          | "center"
+                          | "top"
+                          | "bottom"
+                          | "left"
+                          | "right"
+                          | "contain",
+                      )
+                    }
+                    className="cursor-pointer border border-rule bg-paper px-1.5 py-1 text-[9.5px] uppercase tracking-[0.08em] text-ink focus:border-accent focus:outline-none"
+                    title="Choose frame focus / crop"
+                  >
+                    <option value="center">Crop: Center</option>
+                    <option value="top">Crop: Top</option>
+                    <option value="bottom">Crop: Bottom</option>
+                    <option value="left">Crop: Left</option>
+                    <option value="right">Crop: Right</option>
+                    <option value="contain">Fit Entire Image</option>
+                  </select>
                   <button
                     onClick={() => moveMedia(i, "up")}
                     disabled={busy || i === 0}

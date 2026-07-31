@@ -3,6 +3,7 @@ export interface ExperienceMedia {
   /** Anything the browser can load: /experience/foo.jpg, an R2 URL, an mp4. */
   src: string;
   caption?: string;
+  position?: "center" | "top" | "bottom" | "left" | "right" | "contain";
 }
 
 export interface Experience {

@@ -89,22 +89,37 @@ export default async function ExperiencePage({
                       <div
                         className={`sticky-note-card ${bgClass} ${tiltClass} w-full max-w-[320px]`}
                       >
-                        {m.type === "video" ? (
-                          <video
-                            src={m.src}
-                            controls
-                            playsInline
-                            className="h-[200px] w-full border border-rule object-cover"
-                          />
-                        ) : (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={m.src}
-                            alt={m.caption ?? ""}
-                            loading="lazy"
-                            className="h-[200px] w-full border border-rule object-cover"
-                          />
-                        )}
+                        {(() => {
+                          const posClass =
+                            m.position === "top"
+                              ? "object-cover object-top"
+                              : m.position === "bottom"
+                              ? "object-cover object-bottom"
+                              : m.position === "left"
+                              ? "object-cover object-left"
+                              : m.position === "right"
+                              ? "object-cover object-right"
+                              : m.position === "contain"
+                              ? "object-contain bg-paper p-1"
+                              : "object-cover object-center";
+
+                          return m.type === "video" ? (
+                            <video
+                              src={m.src}
+                              controls
+                              playsInline
+                              className={`h-[200px] w-full border border-rule ${posClass}`}
+                            />
+                          ) : (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={m.src}
+                              alt={m.caption ?? ""}
+                              loading="lazy"
+                              className={`h-[200px] w-full border border-rule ${posClass}`}
+                            />
+                          );
+                        })()}
                         {m.caption && (
                           <div className="mono mt-2.5 text-center text-[9.5px] uppercase tracking-[0.14em] text-faint">
                             {m.caption}
