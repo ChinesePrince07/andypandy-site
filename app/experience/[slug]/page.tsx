@@ -70,7 +70,7 @@ export default async function ExperiencePage({
       <div className="px-4 py-10 sm:px-11">
         {e.media.length > 0 ? (
           <div className="max-w-[1100px] space-y-12 sm:space-y-16">
-            {e.body.map((paragraph, idx) => {
+            {e.body.slice(0, e.media.length).map((paragraph, idx) => {
               const m = e.media[idx];
               const bgClass = `sticky-bg-${idx % 4}`;
               const tiltClass = `sticky-tilt-${idx % 4}`;
@@ -131,6 +131,14 @@ export default async function ExperiencePage({
                 </div>
               );
             })}
+
+            {e.body.length > e.media.length && (
+              <div className="prose max-w-[760px] text-body text-base sm:text-lg leading-relaxed">
+                {e.body.slice(e.media.length).map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+            )}
 
             {e.media.length > e.body.length && (
               <div className="mt-12 max-w-[900px]">
