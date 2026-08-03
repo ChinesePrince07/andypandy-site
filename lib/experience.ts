@@ -68,9 +68,10 @@ export const experience: Experience[] = [
     location: "Cambridge, Massachusetts",
     note: "Neural-network models predicting stroke risk from clinical biomarkers.",
     body: [
+      "The year before, my grandfather had a stroke. He survived, but it took his speech and most of his recognition of the family. That's what put me on this project.",
       "Research on stroke-risk prediction under Dr. Shalaginov, building neural-network models over clinical biomarker datasets.",
       "I owned the data preprocessing pipeline — the unglamorous half, where most of the signal is won or lost — and built the clinician-facing web application that put the model in front of someone who could actually use it.",
-      "The work became a research paper, which I co-authored.",
+      "The model reached 89.3% test accuracy. Digging into why, I found the training data underrepresented whole groups of patients — my first real lesson in asking \"accurate for whom?\". The work became a research paper, which I co-authored.",
     ],
     media: [],
   },
@@ -85,6 +86,7 @@ export const experience: Experience[] = [
     body: [
       "The PwC YouPlus Programme: accounting fundamentals, Power BI, and advanced Excel for business analysis.",
       "The main project was a business plan for Buy42, a donation-based charity shop in Shanghai that employs people with disabilities. I ran market surveys with the owners and their customers, then presented the recommendations to PwC mentors.",
+      "It was also a reality check. I was sixteen — the youngest in the programme — and nearly every clever idea we pitched, the owner had already tried or considered. Running a business, especially a non-profit, is far harder than any classroom version of it.",
     ],
     media: [],
   },

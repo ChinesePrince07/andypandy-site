@@ -8,13 +8,24 @@
       "school": "UC Berkeley",
       "location": "Berkeley, California",
       "year": "Class of 2030",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Seal_of_University_of_California%2C_Berkeley.svg"
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Seal_of_University_of_California%2C_Berkeley.svg",
+      "body": [
+        "My first time in the States was a summer coding camp at Berkeley in 2019, when I was twelve. What stuck was not the curriculum — it was how kind and encouraging the teachers and other kids were, a world away from the sterner classrooms I grew up with. I decided more or less on the spot that this was where I wanted to end up.",
+        "Seven years later, it worked out. I start at Cal in Fall 2026 in the College of Letters & Science, headed toward philosophy and business.",
+        "Outside class: chess, piano, and the bouldering gym two minutes from my apartment."
+      ]
     },
     {
       "school": "Suffield Academy",
       "location": "Suffield, Connecticut",
       "year": "Class of 2026",
-      "logo": "https://www.assistscholars.org/wp-content/uploads/2025/09/Suffield-Academy.png"
+      "logo": "https://www.assistscholars.org/wp-content/uploads/2025/09/Suffield-Academy.png",
+      "body": [
+        "I left Hong Kong at sixteen to board at Suffield, a small school in the Connecticut countryside — first time living away from family, first time in an American classroom.",
+        "Crew defined most of it. I joined as a sophomore having never held an oar, ended up rowing stroke seat, and our boat won the Founders League Regatta. Turns out 5 a.m. practice on a foggy Connecticut River is a decent cure for homesickness.",
+        "The rest of my time went to chess (club president, ~2140 USCF), a math study hall I ran for freshmen who hated the subject, a badminton club I started because I kept seeing rackets with no partners, and the robotics room — where the TI-84 ChatGPT hack was born.",
+        "Class of 2026. Multivariable calculus, a stack of APs, and a philosophy habit I picked up along the way."
+      ]
     }
   ],
   "skills": [
