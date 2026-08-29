@@ -12,6 +12,7 @@ export interface Project {
   tags: string[];
   emoji: string;
   demo?: string;
+  appStore?: string;
   repo: string;
   pinned?: boolean;
   liveSiteOrder?: number;
@@ -24,10 +25,11 @@ export const projects: Project[] = [
     slug: "composerdle",
     repo: "ChinesePrince07/composerdle",
     description:
-      "A daily classical-composer guessing game with fact clues and public-domain recordings with redacted scores.",
-    tags: ["JavaScript", "Web", "Music"],
+      "A daily classical-composer guessing game with fact clues and public-domain recordings with redacted scores. Shipped to the App Store as a native SwiftUI client over the same live API.",
+    tags: ["JavaScript", "Swift", "iOS", "Web", "Music"],
     emoji: "🎼",
     demo: "https://composerdle.andypandy.org",
+    appStore: "https://apps.apple.com/us/app/composerdle/id6794768172",
   },
   {
     name: "AI Usage Monitor",

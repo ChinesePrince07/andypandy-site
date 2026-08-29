@@ -123,6 +123,16 @@ export default async function ProjectPage({
               Live demo &#8599;
             </a>
           )}
+          {project.appStore && (
+            <a
+              href={project.appStore}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-b border-accent pb-px text-accent"
+            >
+              App Store &#8599;
+            </a>
+          )}
         </div>
       </header>
 

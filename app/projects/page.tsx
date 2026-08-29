@@ -87,6 +87,12 @@ export default async function ProjectsPage() {
                   Live
                 </span>
               )}
+              {project.appStore && (
+                <span className="mono flex shrink-0 items-center gap-1.5 text-[8.5px] uppercase tracking-[0.14em] text-faint">
+                  <span className="h-1 w-1 rounded-full bg-accent" />
+                  App Store
+                </span>
+              )}
             </div>
 
             <p className="mt-1 max-w-[620px] text-[14.5px] leading-snug text-body-soft">
