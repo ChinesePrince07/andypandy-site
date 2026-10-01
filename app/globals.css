@@ -2,6 +2,18 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ---------------- Andy's handwriting (blog posts) ---------------- *
+ * 8 fonts, each from a different handwritten sample; components/handwritten.tsx
+ * picks one per letter (no repeated shape within a word). */
+@font-face { font-family: "AndyHand0"; src: url("/fonts/andyhand/v0.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "AndyHand1"; src: url("/fonts/andyhand/v1.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "AndyHand2"; src: url("/fonts/andyhand/v2.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "AndyHand3"; src: url("/fonts/andyhand/v3.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "AndyHand4"; src: url("/fonts/andyhand/v4.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "AndyHand5"; src: url("/fonts/andyhand/v5.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "AndyHand6"; src: url("/fonts/andyhand/v6.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "AndyHand7"; src: url("/fonts/andyhand/v7.woff2") format("woff2"); font-display: swap; }
+
 /* ------------------------------------------------------------------ *
  * Broadsheet — newsprint palette. Light = cream stock / oxide red.
  * Dark = pressroom black / ember. Everything downstream reads these.
@@ -180,6 +192,24 @@
   }
 
   /* ------------------------- prose (posts) ---------------------------- */
+
+  /* handwriting sits small on the em box; scale it up and loosen the leading */
+  .prose.handwritten {
+    font-size: 21px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+  .prose.handwritten strong {
+    -webkit-text-stroke: 0.5px currentColor;
+  }
+  .prose.handwritten h1,
+  .prose.handwritten h2,
+  .prose.handwritten h3 {
+    letter-spacing: 0;
+  }
+  .headline.handwritten {
+    letter-spacing: 0;
+  }
 
   .prose {
     color: var(--body);

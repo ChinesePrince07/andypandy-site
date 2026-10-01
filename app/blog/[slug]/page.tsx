@@ -4,6 +4,10 @@ import { getPostBySlug } from "@/lib/blog";
 import { isAdmin } from "@/lib/admin-auth";
 import Comments from "@/components/comments";
 import ReadingProgress from "@/components/reading-progress";
+import Handwritten from "@/components/handwritten";
+
+const escapeHtml = (t: string) =>
+  t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 export const revalidate = 3600;
 
@@ -77,13 +81,13 @@ export default async function BlogPostPage({
         <div data-reveal className="kicker mt-8">
           Dispatch
         </div>
-        <h1
-          data-reveal
+        <Handwritten
+          as="h1"
+          seed={`${slug}:title`}
+          html={escapeHtml(post.title)}
           className="headline mt-2.5 max-w-[900px]"
-          style={{ fontSize: "clamp(34px, 5.4vw, 64px)", lineHeight: 1.02 }}
-        >
-          {post.title}
-        </h1>
+          style={{ fontSize: "clamp(40px, 6.2vw, 74px)", lineHeight: 1.05 }}
+        />
         <p
           data-reveal
           className="mono mt-4 text-[10px] uppercase tracking-[0.14em] text-faint"
@@ -103,9 +107,10 @@ export default async function BlogPostPage({
       </header>
 
       <div className="px-4 py-10 sm:px-11">
-        <div
+        <Handwritten
+          seed={slug}
+          html={post.content}
           className="prose max-w-[760px]"
-          dangerouslySetInnerHTML={{ __html: post.content }}
         />
         <div className="max-w-[760px]">
           <Comments slug={slug} isAdmin={admin} />
