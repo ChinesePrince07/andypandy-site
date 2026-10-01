@@ -107,10 +107,9 @@ export default async function BlogPostPage({
       </header>
 
       <div className="px-4 py-10 sm:px-11">
-        <Handwritten
-          seed={slug}
-          html={post.content}
+        <div
           className="prose max-w-[760px]"
+          dangerouslySetInnerHTML={{ __html: post.content }}
         />
         <div className="max-w-[760px]">
           <Comments slug={slug} isAdmin={admin} />

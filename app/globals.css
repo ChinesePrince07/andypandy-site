@@ -2,17 +2,22 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ---------------- Andy's handwriting: whole site ----------------- *
+/* ---------------- Andy's handwriting: headings ------------------- *
  * andyhand.woff2 = all 8 handwriting variants in one font; its `calt` feature
- * rotates variants letter by letter, so plain text varies with no JS.
- * Code keeps the mono font. font-size-adjust evens out the small x-height. */
+ * rotates variants letter by letter. Used for big titles (.headline), section
+ * labels (.kicker), post subheads, and anything inside .hand (e.g. About).
+ * Body content keeps the original fonts. */
 @font-face { font-family: "AndyHand"; src: url("/fonts/andyhand/andyhand.woff2") format("woff2"); font-display: swap; }
-html body :where(*:not(code, pre, kbd, samp, pre *, code *)) {
+.headline, .kicker, .prose h1, .prose h2, .prose h3, .hand, .hand * {
   font-family: "AndyHand", var(--font-instrument-serif), Georgia, serif !important;
   font-size-adjust: ex-height 0.5;
   letter-spacing: 0.01em !important;
   font-style: normal;
 }
+
+/* handwritten section labels read small at the mono 10px size */
+.kicker { font-size: 19px !important; text-transform: none !important; letter-spacing: 0.02em !important; }
+.kicker.hand, .hand .kicker { font-size: 19px !important; }
 
 /* ---------------- Andy's handwriting (blog posts) ---------------- *
  * 8 fonts, each from a different handwritten sample; components/handwritten.tsx

@@ -24,7 +24,7 @@ export default async function Rail() {
       className="hidden w-[226px] shrink-0 border-r border-rule py-5 lg:block"
     >
       <div className="mono mx-5 mb-3 flex items-baseline justify-between border-b-2 border-ink pb-2 text-[10px] uppercase tracking-[0.2em]">
-        <span className="text-accent">Live now</span>
+        <span className="hand text-[18px] normal-case tracking-normal text-accent">Live now</span>
         <span className="tabular-nums text-faint">{live.length}</span>
       </div>
 
@@ -41,7 +41,7 @@ export default async function Rail() {
             {String(i + 1).padStart(2, "0")}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block text-[15.5px] leading-tight">
+            <span className="hand block text-[16.5px] leading-tight">
               {project.name}
             </span>
             {/* selectVisibleLiveSites only returns entries with a demo. */}
@@ -54,7 +54,7 @@ export default async function Rail() {
       ))}
 
       <div className="mono mx-5 mb-2.5 mt-5 flex items-baseline justify-between border-b-2 border-ink pb-2 text-[10px] uppercase tracking-[0.2em]">
-        <span className="text-accent">In the workshop</span>
+        <span className="hand text-[18px] normal-case tracking-normal text-accent">In the workshop</span>
         <span className="tabular-nums text-faint">{workshop.length}</span>
       </div>
 
@@ -67,7 +67,7 @@ export default async function Rail() {
           <span className="mono w-[15px] shrink-0 text-[9.5px] tabular-nums text-faint">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span className="min-w-0 flex-1 truncate text-[14px] leading-tight">
+          <span className="hand min-w-0 flex-1 truncate text-[15px] leading-tight">
             {project.name}
           </span>
           <span className="text-[10px] text-faint">&rarr;</span>

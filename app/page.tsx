@@ -144,7 +144,7 @@ export default async function FrontPage() {
 
   const mainBlocks: Record<string, React.ReactNode> = {
     about: (
-      <div key="about" data-block="about" data-block-hidden={hiddenAttr("about")}>
+      <div key="about" data-block="about" data-block-hidden={hiddenAttr("about")} className="hand">
         <div data-reveal className="kicker">
           <Copy k="about.kicker" config={frontPage} />
         </div>

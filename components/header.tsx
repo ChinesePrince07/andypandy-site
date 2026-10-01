@@ -162,9 +162,9 @@ export default function Header() {
             {dateline.long ? (
               <>
                 <span className="hidden sm:inline">
-                  {dateline.long} · Hong Kong
+                  {dateline.long} · Berkeley
                 </span>
-                <span className="sm:hidden">Hong Kong · {dateline.short}</span>
+                <span className="sm:hidden">Berkeley · {dateline.short}</span>
               </>
             ) : (
               " "
