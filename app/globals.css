@@ -2,6 +2,18 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ---------------- Andy's handwriting: whole site ----------------- *
+ * andyhand.woff2 = all 8 handwriting variants in one font; its `calt` feature
+ * rotates variants letter by letter, so plain text varies with no JS.
+ * Code keeps the mono font. font-size-adjust evens out the small x-height. */
+@font-face { font-family: "AndyHand"; src: url("/fonts/andyhand/andyhand.woff2") format("woff2"); font-display: swap; }
+html body :where(*:not(code, pre, kbd, samp, pre *, code *)) {
+  font-family: "AndyHand", var(--font-instrument-serif), Georgia, serif !important;
+  font-size-adjust: ex-height 0.5;
+  letter-spacing: 0.01em !important;
+  font-style: normal;
+}
+
 /* ---------------- Andy's handwriting (blog posts) ---------------- *
  * 8 fonts, each from a different handwritten sample; components/handwritten.tsx
  * picks one per letter (no repeated shape within a word). */
@@ -195,7 +207,7 @@
 
   /* handwriting sits small on the em box; scale it up and loosen the leading */
   .prose.handwritten {
-    font-size: 21px;
+    font-size: 19px;
     line-height: 1.75;
     color: var(--ink);
   }

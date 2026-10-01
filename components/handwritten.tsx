@@ -62,7 +62,7 @@ function handwrite(root: HTMLElement, samples: SampleMap, rand: () => number) {
           const v = pool[Math.floor(rand() * pool.length)];
           seen.add(options[v]!);
           const extra = fresh.length ? 1 : 2; // out of distinct samples: disguise the repeat more
-          g.style.fontFamily = `AndyHand${v}, var(--font-serif, serif)`;
+          g.style.setProperty("font-family", `AndyHand${v}, AndyHand, serif`, "important");
           g.style.transform = `translateY(${((rand() - 0.5) * 0.08 * extra).toFixed(3)}em) rotate(${((rand() - 0.5) * 4 * extra).toFixed(2)}deg)`;
           g.style.fontSize = `${(0.96 + rand() * 0.08 * extra).toFixed(3)}em`;
         }
