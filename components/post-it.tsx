@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 
 const KEY = "postit-composerdle-dismissed";
 
-/** A little sticky note stuck in the left rail, inviting you to play Composerdle. */
-export default function PostIt() {
+/** A little sticky note stuck next to the profile picture, inviting you to play Composerdle. */
+export default function PostIt({ className = "" }: { className?: string }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function PostIt() {
   };
 
   return (
-    <div className="postit relative mx-auto mt-8 w-fit">
+    <div className={`postit relative w-fit ${className}`}>
       <a
         href="https://composerdle.andypandy.org"
         target="_blank"

@@ -12,6 +12,7 @@ import { getLiveSitesConfig, getProjectsWithPins } from "@/lib/projects";
 import { isAdmin } from "@/lib/admin-auth";
 import { getFrontPageConfig } from "@/lib/front-page-store";
 import { getExperienceEntries } from "@/lib/experience-store";
+import PostIt from "@/components/post-it";
 import {
   GROUPS,
   isHidden,
@@ -151,7 +152,7 @@ export default async function FrontPage() {
         <div data-rule className="rule-bar mt-1.5" />
         <div
           data-reveal
-          className="mt-3 flex flex-col gap-2.5 text-[14px] leading-[1.55] text-body"
+          className="hand mt-3 flex flex-col gap-2.5 text-[17px] leading-[1.5] text-body"
         >
           {about.bio.map((paragraph, i) => (
             <p key={i} className={i === 0 ? "dropcap overflow-hidden" : ""}>
@@ -378,6 +379,8 @@ export default async function FrontPage() {
                 </span>
               </div>
             </div>
+
+            <PostIt className="-mb-10 ml-auto mr-3 hidden shrink-0 origin-top-right scale-[0.82] md:block" />
 
             {(!isHidden("portrait", frontPage) || admin) && (
               <div
