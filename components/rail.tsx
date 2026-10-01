@@ -3,6 +3,7 @@ import { selectVisibleLiveSites } from "@/lib/live-sites";
 import { getLiveSitesConfig, getProjectsWithPins } from "@/lib/projects";
 import { getFrontPageConfig } from "@/lib/front-page-store";
 import { isHidden } from "@/lib/front-page";
+import PostIt from "@/components/post-it";
 
 /** Standing "Live now" column down the left edge of every page. */
 export default async function Rail() {
@@ -73,6 +74,7 @@ export default async function Rail() {
           <span className="text-[10px] text-faint">&rarr;</span>
         </Link>
       ))}
+      <PostIt />
     </aside>
   );
 }
