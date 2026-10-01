@@ -144,7 +144,7 @@ export default async function FrontPage() {
 
   const mainBlocks: Record<string, React.ReactNode> = {
     about: (
-      <div key="about" data-block="about" data-block-hidden={hiddenAttr("about")} className="hand">
+      <div key="about" data-block="about" data-block-hidden={hiddenAttr("about")}>
         <div data-reveal className="kicker">
           <Copy k="about.kicker" config={frontPage} />
         </div>
@@ -342,7 +342,7 @@ export default async function FrontPage() {
               <h1
                 data-reveal
                 data-parallax="0.04"
-                className="headline mt-1.5"
+                className="headline hand mt-1.5"
                 style={{
                   fontSize: "clamp(40px, 5.2vw, 72px)",
                   lineHeight: 0.88,
@@ -353,7 +353,7 @@ export default async function FrontPage() {
               </h1>
               <p
                 data-reveal
-                className="headline mt-1.5 max-w-[640px]"
+                className="headline hand mt-1.5 max-w-[640px]"
                 style={{
                   fontSize: "clamp(18px, 1.85vw, 22px)",
                   lineHeight: 1.14,

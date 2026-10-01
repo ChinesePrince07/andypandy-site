@@ -85,7 +85,7 @@ export default async function BlogPostPage({
           as="h1"
           seed={`${slug}:title`}
           html={escapeHtml(post.title)}
-          className="headline mt-2.5 max-w-[900px]"
+          className="headline hand mt-2.5 max-w-[900px]"
           style={{ fontSize: "clamp(40px, 6.2vw, 74px)", lineHeight: 1.05 }}
         />
         <p

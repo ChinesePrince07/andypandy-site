@@ -69,7 +69,7 @@ export default function Header() {
           <span
             data-ghost
             aria-hidden="true"
-            className="headline pointer-events-none absolute left-0 top-0 whitespace-nowrap text-accent opacity-50"
+            className="headline hand pointer-events-none absolute left-0 top-0 whitespace-nowrap text-accent opacity-50"
             style={{
               fontSize: "clamp(23px, 4vw, 29px)",
               letterSpacing: "-0.005em",
@@ -78,7 +78,7 @@ export default function Header() {
             ANDY ZHANG
           </span>
           <span
-            className="headline relative whitespace-nowrap"
+            className="headline hand relative whitespace-nowrap"
             style={{
               fontSize: "clamp(23px, 4vw, 29px)",
               letterSpacing: "-0.005em",

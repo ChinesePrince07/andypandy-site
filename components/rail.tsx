@@ -41,7 +41,7 @@ export default async function Rail() {
             {String(i + 1).padStart(2, "0")}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="hand block text-[16.5px] leading-tight">
+            <span className="block text-[15.5px] leading-tight">
               {project.name}
             </span>
             {/* selectVisibleLiveSites only returns entries with a demo. */}
@@ -67,7 +67,7 @@ export default async function Rail() {
           <span className="mono w-[15px] shrink-0 text-[9.5px] tabular-nums text-faint">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span className="hand min-w-0 flex-1 truncate text-[15px] leading-tight">
+          <span className="min-w-0 flex-1 truncate text-[14px] leading-tight">
             {project.name}
           </span>
           <span className="text-[10px] text-faint">&rarr;</span>
