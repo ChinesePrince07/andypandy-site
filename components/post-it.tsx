@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const KEY = "postit-composerdle-dismissed";
 
 /** A little sticky note stuck next to the profile picture, inviting you to play Composerdle. */
-export default function PostIt({ className = "" }: { className?: string }) {
+export default function PostIt({ className = "", mini = false }: { className?: string; mini?: boolean }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function PostIt({ className = "" }: { className?: string }) {
   };
 
   return (
-    <div className={`postit relative w-fit ${className}`}>
+    <div className={`postit relative w-fit ${mini ? "postit-mini" : ""} ${className}`}>
       <a
         href="https://composerdle.andypandy.org"
         target="_blank"
@@ -35,13 +35,24 @@ export default function PostIt({ className = "" }: { className?: string }) {
         aria-label="Play Composerdle, a daily classical-composer guessing game"
       >
         <span className="postit-tape" aria-hidden="true" />
-        <span className="hand block text-[19px] leading-[1.15]">psst! guess today&apos;s composer</span>
-        <span className="hand mt-1.5 block text-[15px] leading-tight opacity-80">
-          a new piece every day &#9835;
-        </span>
-        <span className="hand mt-2 block text-[17px] underline decoration-[1.5px] underline-offset-[3px]">
-          play Composerdle &rarr;
-        </span>
+        {mini ? (
+          <>
+            <span className="hand block text-[13px] leading-[1.1]">guess today&apos;s composer</span>
+            <span className="hand mt-1 block whitespace-nowrap text-[11.5px] underline decoration-1 underline-offset-2">
+              Composerdle&nbsp;&rarr;
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="hand block text-[19px] leading-[1.15]">psst! guess today&apos;s composer</span>
+            <span className="hand mt-1.5 block text-[15px] leading-tight opacity-80">
+              a new piece every day &#9835;
+            </span>
+            <span className="hand mt-2 block text-[17px] underline decoration-[1.5px] underline-offset-[3px]">
+              play Composerdle &rarr;
+            </span>
+          </>
+        )}
       </a>
       <button type="button" onClick={dismiss} className="postit-close" aria-label="Dismiss note">
         &times;

@@ -398,6 +398,7 @@ export default async function FrontPage() {
                 className="sm:hidden"
               >
                 <Portrait size={92} config={frontPage} />
+                <PostIt mini className="-mb-14 ml-auto mt-3" />
               </div>
             )}
           </div>

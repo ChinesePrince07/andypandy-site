@@ -497,9 +497,11 @@
 @media (hover: none) {
   .postit-close { opacity: 1; }
 }
-@media (max-width: 640px) {
-  .postit-note { width: 140px; padding: 14px 12px 10px; }
-}
+/* phone version: tucked under the portrait */
+.postit-mini .postit-note { width: 92px; padding: 12px 8px 8px; transform: rotate(4deg); border-bottom-right-radius: 16px 4px; }
+.postit-mini .postit-note:hover, .postit-mini .postit-note:focus-visible { transform: rotate(1deg) translateY(-2px); }
+.postit-mini .postit-tape { width: 36px; height: 12px; top: -6px; }
+.postit-mini .postit-close { width: 18px; height: 18px; font-size: 11px; top: -8px; right: -8px; }
 @media (prefers-reduced-motion: reduce) {
   .postit-note { transition: none; }
 }
