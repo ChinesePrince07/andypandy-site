@@ -15,9 +15,6 @@
   font-style: normal;
 }
 
-/* About bio: tighter handwriting */
-.about-hand, .about-hand * { letter-spacing: -0.07em !important; word-spacing: 0.08em; }
-
 /* handwritten section labels read small at the mono 10px size */
 .kicker { font-size: 19px !important; text-transform: none !important; letter-spacing: 0.02em !important; }
 .kicker.hand, .hand .kicker { font-size: 19px !important; }

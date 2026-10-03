@@ -89,7 +89,7 @@ export default function Header() {
         </Link>
 
         <div className="mono flex items-center gap-[22px] text-[10.5px] uppercase tracking-[0.2em]">
-          <nav className="hidden items-center gap-[22px] md:flex">
+          <nav className="hand hidden items-center gap-[22px] text-[19px] normal-case tracking-normal md:flex">
             {LINKS.map((link) =>
               link.external ? (
                 <a
@@ -125,7 +125,7 @@ export default function Header() {
       </div>
 
       {/* tab bar — stands in for the masthead nav on narrow stock */}
-      <nav className="mono flex items-stretch border-b border-rule text-[9.5px] uppercase tracking-[0.16em] md:hidden">
+      <nav className="hand flex items-stretch border-b border-rule text-[17px] normal-case tracking-normal md:hidden">
         {LINKS.map((link) =>
           link.external ? (
             <a

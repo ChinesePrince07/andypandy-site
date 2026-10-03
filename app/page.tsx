@@ -152,7 +152,7 @@ export default async function FrontPage() {
         <div data-rule className="rule-bar mt-1.5" />
         <div
           data-reveal
-          className="hand about-hand mt-3 flex flex-col gap-2.5 text-[15px] leading-[1.5] text-body"
+          className="mt-3 flex flex-col gap-2.5 text-[14px] leading-[1.55] text-body"
         >
           {about.bio.map((paragraph, i) => (
             <p key={i} className={i === 0 ? "dropcap overflow-hidden" : ""}>
